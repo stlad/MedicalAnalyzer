@@ -59,7 +59,7 @@
    </column>
    <column>
     <property name="text">
-     <string>Значение</string>
+     <string>Результат</string>
     </property>
    </column>
    <column>
@@ -205,7 +205,7 @@
     <item row="1" column="0">
      <widget class="QLabel" name="label_2">
       <property name="text">
-       <string>Дата взятия аналоизов</string>
+       <string>Дата взятия анализов</string>
       </property>
      </widget>
     </item>

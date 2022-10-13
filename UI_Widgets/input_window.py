@@ -1,6 +1,5 @@
 from PyQt5.QtWidgets import *
 from PyQt5.uic import loadUi
-import parameters
 from UI_Widgets.parameter_input_widget import *
 from parameters import *
 
@@ -14,18 +13,24 @@ class ParameterInputWindow(QWidget):
         self.open_btn.clicked.connect(lambda: self.load_data())
 
     def load_data(self, patient = get_TEST_PATIENT()):
+        self.personal_info_table.setItem(0,0, QTableWidgetItem(str(patient.surname)))
+        self.personal_info_table.setItem(1,0, QTableWidgetItem(str(patient.name)))
+        self.personal_info_table.setItem(2,0, QTableWidgetItem(str(patient.patronymic)))
 
         table =self.main_table
         for row, param_key in enumerate(patient.main_parameters):
             line = patient.main_parameters[param_key]
             #print(key, line)
             for col, col_key in enumerate(line):
-                table.setItem(row,col, QTableWidgetItem(str(patient.main_parameters[param_key][col_key])))
+                str_item = str(patient.main_parameters[param_key][col_key])
+                table.setItem(row,col, QTableWidgetItem(str_item))
 
     def save_data(self):
-        test_patient = get_TEST_PATIENT()
+        #test_patient = get_TEST_PATIENT()
 
-        print('Hello')
+        table =self.main_table
+
+        print(table.item(0,1).text())
 
 
 

@@ -9,7 +9,7 @@ class Patient:
         self.surname =surname
         self.patronymic =patron
         self.main_parameters = {}
-        self.cytokine_status = []
+        self.cytokine_status = {}
 
         self._set_empty_main_params()
 
@@ -34,20 +34,19 @@ class Patient:
     def save_patient_to_DB(self):
         PersonalDB.append(self)
 
-
+    def get_all_params_in_dct(self):
+        return {**self.main_parameters, **self.cytokine_status}
 
 
 def get_TEST_PATIENT():
     p = Patient()
     p.name = 'Иван'
-    p.Surname = 'Иванов'
+    p.surname = 'Иванов'
     p.patronymic = 'Иванович'
     p.main_parameters['Нейтрофилы (NEU)']['Результат'] = 69.70
+    p.main_parameters['Нейтрофилы (NEU)']['Реф.интервал от'] = 40
+    p.main_parameters['Нейтрофилы (NEU)']['Реф.интервал до'] = 70
+    p.main_parameters['Нейтрофилы (NEU)']['Отклонение'] = '<'
     return p
 
 #p = get_TEST_PATIENT()
-#print(1)
-
-d = get_TEST_PATIENT()
-for index, i in enumerate(d.main_parameters['Нейтрофилы (NEU)']):
-    print(index, i)
