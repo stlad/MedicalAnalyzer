@@ -1,9 +1,9 @@
-import os, sys
+import sys
 from PyQt5.QtWidgets import *
-import  input_form
+from UI_Widgets import main_window
 
 if __name__ == '__main__':
 
     app = QApplication(sys.argv)
-    ex = input_form.MainWindow()
+    ex = main_window.MainWindow()
     sys.exit(app.exec_())
