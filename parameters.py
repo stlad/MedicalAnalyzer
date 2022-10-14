@@ -1,4 +1,4 @@
-PersonalDB = []
+import json
 
 
 
@@ -12,6 +12,8 @@ class Patient:
         self.cytokine_status = {}
 
         self._set_empty_main_params()
+        self._set_empty_cytocine_params()
+
 
     def _set_empty_main_params(self):
         self.main_parameters = {}
@@ -22,6 +24,9 @@ class Patient:
         self.main_parameters['Т-цитотоксические лимфоциты (CD45+CD3+СD8+)'] = self._get_template_line()
         self.main_parameters['Общие В-лимфоциты (CD45+CD19+)'] = self._get_template_line()
 
+
+    def _set_empty_cytocine_params(self):
+        pass
     def _get_template_line(self, param_name=''):
         return {
             'Отклонение': '',
@@ -34,10 +39,18 @@ class Patient:
     def save_patient_to_DB(self):
         PersonalDB.append(self)
 
-    def get_all_params_in_dct(self):
-        return {**self.main_parameters, **self.cytokine_status}
+    def _get_all_params_in_dct(self):
+        return {'Имя': self.name,
+                'Фамилия': self.surname,
+                'Отчество':self.patronymic,
+                **self.main_parameters,
+                **self.cytokine_status}
+    def serialyze_to_json(self):
+        with open(f'{self.surname} {self.name}.json', 'w') as outfile:
+            json.dump(self._get_all_params_in_dct(), outfile)
 
-
+def get_BLANK_PATIENT():
+    return Patient()
 def get_TEST_PATIENT():
     p = Patient()
     p.name = 'Иван'
@@ -50,3 +63,4 @@ def get_TEST_PATIENT():
     return p
 
 #p = get_TEST_PATIENT()
+PersonalDB = [get_BLANK_PATIENT(), get_TEST_PATIENT()]

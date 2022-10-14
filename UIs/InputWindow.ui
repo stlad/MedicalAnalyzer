@@ -214,7 +214,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="QTableWidget" name="main_table_2">
+  <widget class="QTableWidget" name="cytokine_table">
    <property name="geometry">
     <rect>
      <x>70</x>
@@ -358,7 +358,7 @@
   <widget class="QPushButton" name="open_btn">
    <property name="geometry">
     <rect>
-     <x>1040</x>
+     <x>1030</x>
      <y>80</y>
      <width>131</width>
      <height>41</height>
