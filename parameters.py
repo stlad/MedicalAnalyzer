@@ -27,6 +27,7 @@ class Patient:
 
     def _set_empty_cytocine_params(self):
         pass
+
     def _get_template_line(self, param_name=''):
         return {
             'Отклонение': '',
@@ -45,12 +46,14 @@ class Patient:
                 'Отчество':self.patronymic,
                 **self.main_parameters,
                 **self.cytokine_status}
+
     def serialyze_to_json(self):
         with open(f'{self.surname} {self.name}.json', 'w') as outfile:
             json.dump(self._get_all_params_in_dct(), outfile)
 
 def get_BLANK_PATIENT():
     return Patient()
+
 def get_TEST_PATIENT():
     p = Patient()
     p.name = 'Иван'
@@ -62,5 +65,21 @@ def get_TEST_PATIENT():
     p.main_parameters['Нейтрофилы (NEU)']['Отклонение'] = '<'
     return p
 
+def load_Patient_from_Json(filename):
+    with open(filename) as json_file:
+        data = json.load(json_file)
+    patient = Patient()
+    patient.name = data['Имя']
+    patient.surname = data['Фамилия']
+    patient.patronymic = data['Отчество']
+
+    for index, key in enumerate(data):
+        if index >=3 and index <=8:
+            patient.main_parameters[key] = data[key]
+    return patient
+
+
 #p = get_TEST_PATIENT()
 PersonalDB = [get_BLANK_PATIENT(), get_TEST_PATIENT()]
+
+

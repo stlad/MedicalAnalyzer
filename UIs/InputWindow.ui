@@ -368,6 +368,19 @@
     <string>открыть</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="graph_btn">
+   <property name="geometry">
+    <rect>
+     <x>1040</x>
+     <y>230</y>
+     <width>111</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Графики</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

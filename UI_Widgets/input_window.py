@@ -2,15 +2,16 @@ from PyQt5.QtWidgets import *
 from PyQt5.uic import loadUi
 from UI_Widgets.parameter_input_widget import *
 from parameters import *
-
+from diagrams import *
 
 class ParameterInputWindow(QWidget):
     def __init__(self):
         super().__init__()
         loadUi('UIs\InputWindow.ui',self)
-        self.current_patient = get_TEST_PATIENT()
+        self.current_patient = load_Patient_from_Json('Иванов Иван.json')
         self.save_btn.clicked.connect(lambda: self.save_data())
         self.open_btn.clicked.connect(lambda: self.load_data())
+        self.graph_btn.clicked.connect(lambda:self.get_graphs())
 
     def load_data(self):
         patient = self.current_patient
@@ -34,7 +35,7 @@ class ParameterInputWindow(QWidget):
         patient.name = self.personal_info_table.item(1,0).text()
         patient.patronymic = self.personal_info_table.item(2,0).text()
 
-        #self.current_patient.serialyze_to_json()
+        self.current_patient.serialyze_to_json()
 
     def _parameter_table_to_person(self, table, patient_param_dct):
         for row, param_key in enumerate(patient_param_dct):
@@ -49,7 +50,9 @@ class ParameterInputWindow(QWidget):
 
         print(patient_param_dct)
 
-
+    def get_graphs(self):
+        patient = self.current_patient
+        get_diagrams(f'{patient.surname} {patient.name}.json')
 
 
 
