@@ -1,16 +1,13 @@
 import json
 
-
-
-
 class Patient:
-    def __init__(self, name='', surname = '', patron = ''):
+    def __init__(self, name='', surname = '', patron = '', id=1):
         self.name =name
+        self.id = id
         self.surname =surname
         self.patronymic =patron
         self.main_parameters = {}
         self.cytokine_status = {}
-
         self._set_empty_main_params()
         self._set_empty_cytocine_params()
 
@@ -41,14 +38,15 @@ class Patient:
         PersonalDB.append(self)
 
     def _get_all_params_in_dct(self):
-        return {'Имя': self.name,
+        return {'id':self.id,
+                'Имя': self.name,
                 'Фамилия': self.surname,
                 'Отчество':self.patronymic,
                 **self.main_parameters,
                 **self.cytokine_status}
 
-    def serialyze_to_json(self):
-        with open(f'{self.surname} {self.name}.json', 'w') as outfile:
+    def serialyze_to_json(self, filename):
+        with open(filename+'.json', 'w') as outfile:
             json.dump(self._get_all_params_in_dct(), outfile)
 
 def get_BLANK_PATIENT():
@@ -56,6 +54,7 @@ def get_BLANK_PATIENT():
 
 def get_TEST_PATIENT():
     p = Patient()
+    p.id = 0
     p.name = 'Иван'
     p.surname = 'Иванов'
     p.patronymic = 'Иванович'
@@ -69,12 +68,13 @@ def load_Patient_from_Json(filename):
     with open(filename) as json_file:
         data = json.load(json_file)
     patient = Patient()
+    patient.id = data['id']
     patient.name = data['Имя']
     patient.surname = data['Фамилия']
     patient.patronymic = data['Отчество']
 
     for index, key in enumerate(data):
-        if index >=3 and index <=8:
+        if index >=4 and index <=9:
             patient.main_parameters[key] = data[key]
     return patient
 

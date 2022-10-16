@@ -120,7 +120,7 @@
      <x>70</x>
      <y>50</y>
      <width>151</width>
-     <height>111</height>
+     <height>141</height>
     </rect>
    </property>
    <property name="verticalScrollBarPolicy">
@@ -129,6 +129,11 @@
    <property name="horizontalScrollBarPolicy">
     <enum>Qt::ScrollBarAlwaysOff</enum>
    </property>
+   <row>
+    <property name="text">
+     <string>ID</string>
+    </property>
+   </row>
    <row>
     <property name="text">
      <string>Фамилия</string>
@@ -149,7 +154,7 @@
      <string>Значение</string>
     </property>
    </column>
-   <item row="0" column="0">
+   <item row="1" column="0">
     <property name="text">
      <string/>
     </property>
@@ -371,14 +376,27 @@
   <widget class="QPushButton" name="graph_btn">
    <property name="geometry">
     <rect>
-     <x>1040</x>
-     <y>230</y>
+     <x>1050</x>
+     <y>720</y>
      <width>111</width>
      <height>51</height>
     </rect>
    </property>
    <property name="text">
     <string>Графики</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="new_patient_btn">
+   <property name="geometry">
+    <rect>
+     <x>780</x>
+     <y>30</y>
+     <width>131</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Новый пациент</string>
    </property>
   </widget>
  </widget>
