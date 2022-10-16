@@ -13,7 +13,16 @@ class ParameterInputWindow(QWidget):
         self.open_btn.clicked.connect(lambda: self.load_data_from_file())
         self.graph_btn.clicked.connect(lambda:self.get_graphs())
         self.new_patient_btn.clicked.connect(lambda : self.load_new_patient())
-        self.active_file = ''
+        self._active_file = ''
+
+    @property
+    def active_file(self):
+        return self._active_file
+
+    @active_file.setter
+    def active_file(self, new_name):
+        self._active_file = new_name
+        self.setWindowTitle(self.active_file)
 
     def load_data_from_file(self):
         fileName, _ = QFileDialog.getOpenFileName(self,"QFileDialog.getOpenFileName()", "","All Files (*);")

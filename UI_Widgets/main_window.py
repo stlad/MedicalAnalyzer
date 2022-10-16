@@ -24,6 +24,8 @@ class MainWindow(QMainWindow):
             print('Error')
             return
 
+        get_diagrams(fileName)
+
     def input_form_window(self):
         input_win = ParameterInputWindow()
         self.child_windows.append(input_win)
