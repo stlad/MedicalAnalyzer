@@ -13,17 +13,20 @@ class ParameterInputWindow(QWidget):
         self.open_btn.clicked.connect(lambda: self.load_data_from_file())
         self.graph_btn.clicked.connect(lambda:self.get_graphs())
         self.new_patient_btn.clicked.connect(lambda : self.load_new_patient())
+        self.active_file = ''
 
     def load_data_from_file(self):
         fileName, _ = QFileDialog.getOpenFileName(self,"QFileDialog.getOpenFileName()", "","All Files (*);")
         if not fileName:
             print('Error')
             return
+        self.active_file = fileName
         self.current_patient = load_Patient_from_Json(fileName)
         self._fill_main_table_from_current_patient()
 
     def load_new_patient(self):
         self.current_patient = Patient()
+        self.active_file = ''
         self._fill_main_table_from_current_patient()
 
     def _fill_main_table_from_current_patient(self):
@@ -54,7 +57,7 @@ class ParameterInputWindow(QWidget):
         if not fileName:
             print('Error')
             return
-
+        self.active_file = fileName
         self.current_patient.serialyze_to_json(fileName)
 
     def _parameter_table_to_person(self, table, patient_param_dct):
@@ -72,7 +75,11 @@ class ParameterInputWindow(QWidget):
 
     def get_graphs(self):
         patient = self.current_patient
-        get_diagrams(f'{patient.surname} {patient.name}.json')
+
+        if self.active_file =='':
+            QMessageBox.about(self, "Ошибка", "Для построения графиков нужно сохранить информацию о пациенте")
+            return
+        get_diagrams(self.active_file)
 
 
 

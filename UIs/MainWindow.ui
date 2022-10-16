@@ -17,14 +17,27 @@
    <widget class="QPushButton" name="input_form_btn">
     <property name="geometry">
      <rect>
-      <x>60</x>
-      <y>240</y>
+      <x>190</x>
+      <y>150</y>
       <width>141</width>
       <height>51</height>
      </rect>
     </property>
     <property name="text">
      <string>Форма ввода</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="graphs_btn">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>310</y>
+      <width>131</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Графики</string>
     </property>
    </widget>
   </widget>
