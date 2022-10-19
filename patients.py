@@ -1,6 +1,6 @@
 import json
 
-class Patient:
+class Analysis:
     def __init__(self, name='', surname = '', patron = '', id=1):
         self.name =name
         self.id = id
@@ -49,11 +49,11 @@ class Patient:
         with open(filename+'.json', 'w') as outfile:
             json.dump(self._get_all_params_in_dct(), outfile)
 
-def get_BLANK_PATIENT():
-    return Patient()
+def get_BLACK_ANALYSIS():
+    return Analysis()
 
-def get_TEST_PATIENT():
-    p = Patient()
+def get_TEST_ANALYSIS():
+    p = Analysis()
     p.id = 0
     p.name = 'Иван'
     p.surname = 'Иванов'
@@ -67,7 +67,7 @@ def get_TEST_PATIENT():
 def load_Patient_from_Json(filename):
     with open(filename) as json_file:
         data = json.load(json_file)
-    patient = Patient()
+    patient = Analysis()
     patient.id = data['id']
     patient.name = data['Имя']
     patient.surname = data['Фамилия']
@@ -80,6 +80,6 @@ def load_Patient_from_Json(filename):
 
 
 #p = get_TEST_PATIENT()
-PersonalDB = [get_BLANK_PATIENT(), get_TEST_PATIENT()]
+PersonalDB = [get_BLACK_ANALYSIS(), get_TEST_ANALYSIS()]
 
 

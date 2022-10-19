@@ -1,14 +1,14 @@
 from PyQt5.QtWidgets import *
 from PyQt5.uic import loadUi
 from UI_Widgets.parameter_input_widget import *
-from parameters import *
+from patients import *
 from diagrams import *
 
 class ParameterInputWindow(QWidget):
     def __init__(self):
         super().__init__()
         loadUi('UIs\InputWindow.ui',self)
-        self.current_patient = Patient() #load_Patient_from_Json('Иванов Иван.json')
+        self.current_patient = Analysis() #load_Patient_from_Json('Иванов Иван.json')
         self.save_btn.clicked.connect(lambda: self.save_data())
         self.open_btn.clicked.connect(lambda: self.load_data_from_file())
         self.graph_btn.clicked.connect(lambda:self.get_graphs())
@@ -25,6 +25,7 @@ class ParameterInputWindow(QWidget):
         self.setWindowTitle(self.active_file)
 
     def load_data_from_file(self):
+        '''Выгружет пациента из файла и делает его активным'''
         fileName, _ = QFileDialog.getOpenFileName(self,"QFileDialog.getOpenFileName()", "","All Files (*);")
         if not fileName:
             print('Error')
@@ -34,11 +35,13 @@ class ParameterInputWindow(QWidget):
         self._fill_main_table_from_current_patient()
 
     def load_new_patient(self):
-        self.current_patient = Patient()
+        '''Создает нового пациента и делает его атктивным'''
+        self.current_patient = Analysis()
         self.active_file = ''
         self._fill_main_table_from_current_patient()
 
     def _fill_main_table_from_current_patient(self):
+        '''Берет активного пациента и заполняет таблицу его данными'''
         patient = self.current_patient
         self.personal_info_table.setItem(0,0, QTableWidgetItem(str(patient.id)))
         self.personal_info_table.setItem(1,0, QTableWidgetItem(str(patient.surname)))
@@ -84,7 +87,6 @@ class ParameterInputWindow(QWidget):
 
     def get_graphs(self):
         patient = self.current_patient
-
         if self.active_file =='':
             QMessageBox.about(self, "Ошибка", "Для построения графиков нужно сохранить информацию о пациенте")
             return

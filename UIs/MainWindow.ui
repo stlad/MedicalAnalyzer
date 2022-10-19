@@ -1,57 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>539</width>
-    <height>706</height>
+    <width>471</width>
+    <height>661</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MedicalApp</string>
+   <string>Form</string>
   </property>
-  <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="input_form_btn">
-    <property name="geometry">
-     <rect>
-      <x>190</x>
-      <y>150</y>
-      <width>141</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Форма ввода</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="graphs_btn">
-    <property name="geometry">
-     <rect>
-      <x>200</x>
-      <y>310</y>
-      <width>131</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Графики</string>
-    </property>
-   </widget>
-  </widget>
-  <widget class="QMenuBar" name="menubar">
+  <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>0</x>
+     <x>180</x>
      <y>0</y>
-     <width>539</width>
-     <height>21</height>
+     <width>91</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Medical Analyzer</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>520</y>
+     <width>111</width>
+     <height>131</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ваганов Владислав&lt;/p&gt;&lt;p&gt;Ершов Дмитрий&lt;/p&gt;&lt;p&gt;Попович Иван &lt;/p&gt;&lt;p&gt;РИ-300022&lt;/p&gt;&lt;p&gt;2022 год&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="create_patient_btn">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>580</y>
+     <width>121</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Новый пациент</string>
+   </property>
+  </widget>
+  <widget class="QListWidget" name="listWidget">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>130</y>
+     <width>301</width>
+     <height>301</height>
     </rect>
    </property>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>
