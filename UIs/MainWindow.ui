@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>833</width>
+    <height>702</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>10</y>
+      <width>341</width>
+      <height>511</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Пациенты</string>
+    </property>
+    <widget class="QListWidget" name="patients_list">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>20</y>
+       <width>301</width>
+       <height>381</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="patient_select_btn">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>410</y>
+       <width>131</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Выбрать</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="patient_create_btn">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>450</y>
+       <width>131</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Создать</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="patient_delete_btn">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>410</y>
+       <width>131</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Удалить</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_2">
+    <property name="geometry">
+     <rect>
+      <x>450</x>
+      <y>10</y>
+      <width>341</width>
+      <height>511</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Анализы</string>
+    </property>
+    <widget class="QListWidget" name="analysis_list">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>20</y>
+       <width>301</width>
+       <height>381</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="analisys_select_btn">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>410</y>
+       <width>131</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Просмотреть</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="analysis_create_btn">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>450</y>
+       <width>131</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Создать</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="analysis_delete_btn">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>410</y>
+       <width>131</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Удалить</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>530</y>
+      <width>181</width>
+      <height>121</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ваганов Владислав &lt;/p&gt;&lt;p&gt;Ершов Дмитрий&lt;/p&gt;&lt;p&gt;Попович Иван&lt;/p&gt;&lt;p&gt;ИРИТ-РТФ, РИ-300022&lt;/p&gt;&lt;p&gt;2022&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>833</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
