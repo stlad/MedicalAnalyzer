@@ -13,13 +13,20 @@ class MainWindow(QMainWindow):
         self.child_windows = []
 
         self.patients = []
-        self.refresh_patients_list()
+        self.current_patient_id = 0
+        self.analysis = []
+
+        self.refresh_all_lists()
         self.patient_create_btn.clicked.connect(lambda :self.open_patient_creation())
         self.patient_delete_btn.clicked.connect(lambda: self.delete_chosen_patient())
-        self.patient_select_btn.clicked.connect(lambda: self.print_choosen_patient())
+        self.patient_select_btn.clicked.connect(lambda: self.get_selected_patient_id())
         self.show()
 
-    def refresh_patients_list(self)-> list:
+    def refresh_all_lists(self):
+        self.refresh_patients_list()
+        self.refresh_analysis_list()
+
+    def refresh_patients_list(self):
         """Заполнит таблицу пациентов и вернет их полный список"""
         self.patients_list.clear()
         patients= MainDBController.GetAllPatients()
@@ -29,15 +36,32 @@ class MainWindow(QMainWindow):
             line = f'{pat[2]} {pat[1]} {pat[3]} {str(pat[4])} |{pat[0]}'
             self.patients_list.addItem(line)
 
+    def refresh_analysis_list(self):
+        """Заполнит таблицу анализов и вернет их полный список"""
+        if self.current_patient_id == 0:
+            return
+
+        self.analysis_list.clear()
+        self.analysis = []
+        analysis= MainDBController.GetAllAnalysisByPatientID(self.current_patient_id)
+        for an in analysis:
+            self.analysis.append(an)
+            line = f'{an[2]}'
+            print(an)
+            self.analysis_list.addItem(line)
+
+
     def open_patient_creation(self):
         creation_window = CreatePatientWindow(self)
         self.child_windows.append(creation_window)
         creation_window.show()
 
-    def print_choosen_patient(self):
+    def get_selected_patient_id(self):
         index = self.patients_list.currentRow()
         current_patient = self.patients[index]
-        print(current_patient)
+        print(current_patient[0])
+        self.current_patient_id = current_patient[0]
+        self.refresh_analysis_list()
 
 
     def delete_chosen_patient(self):
@@ -49,6 +73,6 @@ class MainWindow(QMainWindow):
 
         if reply == QMessageBox.Yes:
             MainDBController.DeletePatientById(current_patient[0])
-        self.refresh_patients_list()
+        self.refresh_all_lists()
         return
 

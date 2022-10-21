@@ -27,6 +27,6 @@ class CreatePatientWindow(QWidget):
         self.close()
 
     def closeEvent(self, event):
-        self._parent_main_window.refresh_patients_list()
+        self._parent_main_window.refresh_all_lists()
 
 
