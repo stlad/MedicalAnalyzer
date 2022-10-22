@@ -136,6 +136,6 @@ MainDBController = DBController()
 for r in rows:
     print(r)'''
 #MainBDUser.InsertPatinet(['Пучков','Дмитрий','Юрьевич','1961-11-25','что-то страшное','что-тоужасное',''])
-#print(MainBDUser.GetAllPatients())
+#print(MainDBController.GetAllPatients())
 #print(MainDBController.GetAllAnalysisByPatinetIDandDate(2,'2001-11-10'))
-
+print(MainDBController.GetAllParameterCatalog()[0])

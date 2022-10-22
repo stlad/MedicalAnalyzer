@@ -3,6 +3,8 @@ from PyQt5.QtWidgets import *
 from  PyQt5.uic import loadUi
 from DB_Module.db_module import *
 from  UI_Widgets.CreatePatient_window import *
+from UI_Widgets.Analysis_Window import *
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -25,6 +27,7 @@ class MainWindow(QMainWindow):
         self.analysis_create_btn.clicked.connect(lambda :self.create_analysis())
         self.analysis_list.currentItemChanged.connect(lambda: self.get_selected_analysis_id())
         self.analysis_delete_btn.clicked.connect(lambda :self.delete_chosen_analysis())
+        self.analisys_select_btn.clicked.connect(lambda:self.open_analysis_creation())
         self.show()
 
     def refresh_all_lists(self):
@@ -60,6 +63,13 @@ class MainWindow(QMainWindow):
         creation_window = CreatePatientWindow(self)
         self.child_windows.append(creation_window)
         creation_window.show()
+
+    def open_analysis_creation(self):
+        patient_index = self.patients_list.currentRow()
+        analysis_index = self.analysis_list.currentRow()
+        analysis_window = AnalysisWindow(self.patients[patient_index], self.analysis[analysis_index])
+        self.child_windows.append(analysis_window)
+        analysis_window.show()
 
     def get_selected_patient_id(self):
         index = self.patients_list.currentRow()
