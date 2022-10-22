@@ -29,11 +29,11 @@ class DBController():
         """Добавить пациента в базу
         :parameter patient_info:
         Список полей пациента формата -
-        [фамилия,имя, отчество, день рождения(YYYY-MM-DD), осн диагноз, сопутсв. диагноз, гены]"""
+        [фамилия,имя, отчество, день рождения(YYYY-MM-DD), осн диагноз, сопутсв. диагноз, гены, пол]"""
         con = self._create_connection_to_DB()
         cur = con.cursor()
-        sql=' '.join([f"insert into patients(surname, name,patronymic,birthday,main_diagnosis,concomitant_diagnosis,genes)",
-            f"values('{patient_info[0]}','{patient_info[1]}','{patient_info[2]}','{patient_info[3]}', '{patient_info[4]}', '{patient_info[5]}', '{patient_info[6]}')"])
+        sql=' '.join([f"insert into patients(surname, name,patronymic,birthday,main_diagnosis,concomitant_diagnosis,genes, gender)",
+            f"values('{patient_info[0]}','{patient_info[1]}','{patient_info[2]}','{patient_info[3]}', '{patient_info[4]}', '{patient_info[5]}', '{patient_info[6]}', '{patient_info[7]}')"])
         cur.execute(sql)
         con.commit()
         cur.close()
@@ -43,6 +43,15 @@ class DBController():
         con = self._create_connection_to_DB()
         cur = con.cursor()
         sql = f"delete from patients where patient_id ={id}"
+        cur.execute(sql)
+        con.commit()
+        cur.close()
+
+    def DeleteAnalysisByID(self, id:int):
+        """Удалить анализ из базы по его ID"""
+        con = self._create_connection_to_DB()
+        cur = con.cursor()
+        sql = f"delete from analysis where analysis_id ={id}"
         cur.execute(sql)
         con.commit()
         cur.close()
@@ -101,16 +110,31 @@ class DBController():
         return rows
 
 
-
-
+    def GetAllParameterCatalog(self):
+        """Все параметры из каталога"""
+        con = self._create_connection_to_DB()
+        with con.cursor() as cur:
+            sql = f"select * from parameter_catalog"
+            cur.execute(sql)
+            rows = cur.fetchall()
+        return rows
 
 
 def date_text_to_sql_format(text):
-    splitted_text = text.split('.')
-    return f'{splitted_text[2]}-{splitted_text[1]}-{splitted_text[0]}'
-
+    try:
+        splitted_text = text.split('.')
+        return f'{splitted_text[2]}-{splitted_text[1]}-{splitted_text[0]}'
+    except IndexError:
+        return None
 
 MainDBController = DBController()
+
+
+#print(date_text_to_sql_format('asdasd'))
+'''rows = MainDBController.GetAllPatients()
+
+for r in rows:
+    print(r)'''
 #MainBDUser.InsertPatinet(['Пучков','Дмитрий','Юрьевич','1961-11-25','что-то страшное','что-тоужасное',''])
 #print(MainBDUser.GetAllPatients())
 #print(MainDBController.GetAllAnalysisByPatinetIDandDate(2,'2001-11-10'))

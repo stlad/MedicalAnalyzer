@@ -21,9 +21,10 @@ class CreatePatientWindow(QWidget):
         diag = self.lineEdit_5.text()
         diag2 = self.lineEdit_6.text()
         genes = self.lineEdit_7.text()
+        gender = self.lineEdit_8.text()
 
         if(birth != None):
-            MainDBController.InsertPatient([surname,name,patron,birth,diag,diag2,genes])
+            MainDBController.InsertPatient([surname,name,patron,birth,diag,diag2,genes,gender])
         self.close()
 
     def closeEvent(self, event):

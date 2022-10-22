@@ -14,12 +14,17 @@ class MainWindow(QMainWindow):
 
         self.patients = []
         self.current_patient_id = 0
+        self.current_analysis_id = 0
         self.analysis = []
 
         self.refresh_all_lists()
         self.patient_create_btn.clicked.connect(lambda :self.open_patient_creation())
         self.patient_delete_btn.clicked.connect(lambda: self.delete_chosen_patient())
         self.patient_select_btn.clicked.connect(lambda: self.get_selected_patient_id())
+        self.patients_list.currentItemChanged.connect(lambda : self.get_selected_patient_id() )
+        self.analysis_create_btn.clicked.connect(lambda :self.create_analysis())
+        self.analysis_list.currentItemChanged.connect(lambda: self.get_selected_analysis_id())
+        self.analysis_delete_btn.clicked.connect(lambda :self.delete_chosen_analysis())
         self.show()
 
     def refresh_all_lists(self):
@@ -59,10 +64,15 @@ class MainWindow(QMainWindow):
     def get_selected_patient_id(self):
         index = self.patients_list.currentRow()
         current_patient = self.patients[index]
-        print(current_patient[0])
+        #print(current_patient[0])
         self.current_patient_id = current_patient[0]
         self.refresh_analysis_list()
 
+    def get_selected_analysis_id(self):
+        index = self.analysis_list.currentRow()
+        current_anal = self.analysis[index]
+        self.current_analysis_id = current_anal[0]
+        print(self.current_analysis_id)
 
     def delete_chosen_patient(self):
         index = self.patients_list.currentRow()
@@ -75,4 +85,22 @@ class MainWindow(QMainWindow):
             MainDBController.DeletePatientById(current_patient[0])
         self.refresh_all_lists()
         return
+
+    def create_analysis(self):
+        dialog = QInputDialog(self)
+        a_date, ok = dialog.getText(self, 'Введите дату анализа', 'Дата',QLineEdit.Normal)
+        a_date = date_text_to_sql_format(a_date)
+        if not ok or a_date is None:
+            return
+        MainDBController.InsertAnalysis([self.current_patient_id, a_date])
+        self.refresh_analysis_list()
+
+    def delete_chosen_analysis(self):
+        index = self.analysis_list.currentRow()
+        current_analysis = self.analysis[index]
+        reply = QMessageBox.question(self, 'Удалить ', f'Удалить анализ от {current_analysis[2]}?',
+                                        QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            MainDBController.DeleteAnalysisByID(self.current_analysis_id)
+        self.refresh_analysis_list()
 
