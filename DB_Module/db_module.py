@@ -69,6 +69,27 @@ class DBController():
         con.commit()
         cur.close()
 
+    def InsertListOfParametersByAnalysisId(self,analysis_id:int, parameters_list:list):
+        """Добавить список параметров в БД
+        :parameter analysis_id ID анализа
+        :parameter parameters_list в формате [[ID параметра из каталога, значение, отклонение],....]
+        """
+        con = self._create_connection_to_DB()
+        with con.cursor() as cur:
+            for index, param in enumerate(parameters_list):
+                sql = f"insert into parameter_results(analysis_id, parameter_id, value, deviation) values({analysis_id}, {param[0]}, {param[1]},'{param[2]}')"
+                cur.execute(sql)
+                con.commit()
+
+    def GetAllParametersByAnalysisID(self, id:int):
+        """Получить список всех пациентов в базе"""
+        con = self._create_connection_to_DB()
+        with con.cursor() as cur:
+            sql = f"select * from parameter_results where analysis_id = {id}"
+            cur.execute(sql)
+            rows = cur.fetchall()
+        return rows
+
     def GetAllPatients(self):
         """Получить список всех пациентов в базе"""
         con = self._create_connection_to_DB()

@@ -55,7 +55,7 @@ class MainWindow(QMainWindow):
         for an in analysis:
             self.analysis.append(an)
             line = f'{an[2]}'
-            print(an)
+            #print(an)
             self.analysis_list.addItem(line)
 
 
@@ -82,12 +82,12 @@ class MainWindow(QMainWindow):
         index = self.analysis_list.currentRow()
         current_anal = self.analysis[index]
         self.current_analysis_id = current_anal[0]
-        print(self.current_analysis_id)
+        #print(self.current_analysis_id)
 
     def delete_chosen_patient(self):
         index = self.patients_list.currentRow()
         current_patient = self.patients[index]
-        print(current_patient)
+        #print(current_patient)
         reply = QMessageBox.question(self, 'Удалить ', f'Удалить пациента {current_patient[1]} {current_patient[2]} {current_patient[3]}?',
                                         QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
 

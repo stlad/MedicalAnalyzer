@@ -200,12 +200,15 @@
    </widget>
   </widget>
   <widget class="QTableWidget" name="tableWidget">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>320</y>
+     <x>70</x>
+     <y>270</y>
      <width>1151</width>
-     <height>371</height>
+     <height>621</height>
     </rect>
    </property>
    <column>
@@ -238,6 +241,32 @@
      <string>Реф. инт ДО</string>
     </property>
    </column>
+  </widget>
+  <widget class="QPushButton" name="save_btn">
+   <property name="geometry">
+    <rect>
+     <x>1014</x>
+     <y>40</y>
+     <width>101</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Сохранить</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="is_saved_label">
+   <property name="geometry">
+    <rect>
+     <x>1030</x>
+     <y>240</y>
+     <width>161</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Не сохранено</string>
+   </property>
   </widget>
  </widget>
  <resources/>
