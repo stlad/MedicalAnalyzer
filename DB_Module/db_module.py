@@ -148,6 +148,9 @@ def date_text_to_sql_format(text):
     except IndexError:
         return None
 
+
+
+
 MainDBController = DBController()
 
 
@@ -159,4 +162,5 @@ for r in rows:
 #MainBDUser.InsertPatinet(['Пучков','Дмитрий','Юрьевич','1961-11-25','что-то страшное','что-тоужасное',''])
 #print(MainDBController.GetAllPatients())
 #print(MainDBController.GetAllAnalysisByPatinetIDandDate(2,'2001-11-10'))
-print(MainDBController.GetAllParameterCatalog()[0])
+
+#print(MainDBController.GetAllAnalysisByPatientID(5))

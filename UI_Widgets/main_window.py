@@ -37,11 +37,11 @@ class MainWindow(QMainWindow):
     def refresh_patients_list(self):
         """Заполнит таблицу пациентов и вернет их полный список"""
         self.patients_list.clear()
-        patients= MainDBController.GetAllPatients()
+        patients = MainDBController.GetAllPatients()
         self.patients = []
         for pat in patients:
             self.patients.append(pat)
-            line = f'{pat[2]} {pat[1]} {pat[3]} {str(pat[4])} |{pat[0]}'
+            line = f'{pat[2]} {pat[1]} {pat[3]} {date_sql_to_text_format(str(pat[4]))} |{pat[0]}'
             self.patients_list.addItem(line)
 
     def refresh_analysis_list(self):
@@ -54,7 +54,7 @@ class MainWindow(QMainWindow):
         analysis= MainDBController.GetAllAnalysisByPatientID(self.current_patient_id)
         for an in analysis:
             self.analysis.append(an)
-            line = f'{an[2]}'
+            line = date_sql_to_text_format(str(an[2]))
             #print(an)
             self.analysis_list.addItem(line)
 

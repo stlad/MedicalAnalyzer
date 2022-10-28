@@ -4,7 +4,7 @@ from  PyQt5.uic import loadUi
 from DB_Module.db_module import *
 from  UI_Widgets.CreatePatient_window import *
 from PyQt5.QtCore import Qt
-
+from utilits import *
 
 class AnalysisWindow(QWidget):
     def __init__(self, patient:list, analysis:list):
@@ -24,7 +24,7 @@ class AnalysisWindow(QWidget):
         self.fill_table_widget_from_catalog()
         self.get_parameters()
         self.save_btn.clicked.connect(lambda :self.save_to_db())
-        print(self.params)
+        #print(self.params)
 
     def save_to_db(self):
         result_list = []
@@ -91,7 +91,7 @@ class AnalysisWindow(QWidget):
         self.name_edit.setText(self.patient[1])
         self.patron_edit.setText(self.patient[3])
         self.gender_edit.setText(self.patient[8])
-        self.birthday_edit.setText(str(self.patient[4]))
+        self.birthday_edit.setText(date_sql_to_text_format(str(self.patient[4])))
         age = int(self.patient[9].days / 365)
         self.age_edit.setText(f'{age} полных лет')
         self.diag_edit.setText(self.patient[5])
@@ -103,5 +103,5 @@ class AnalysisWindow(QWidget):
         else:
             season = 'Осень-зима'
 
-        self.analysis_date.setText(str(self.analysis[2]))
+        self.analysis_date.setText(date_sql_to_text_format(str(self.analysis[2])))
         self.season_edit.setText(season)
