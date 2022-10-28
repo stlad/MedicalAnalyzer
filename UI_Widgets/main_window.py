@@ -4,6 +4,9 @@ from  PyQt5.uic import loadUi
 from DB_Module.db_module import *
 from  UI_Widgets.CreatePatient_window import *
 from UI_Widgets.Analysis_Window import *
+from Diagram_Module.Diagram_Processing import *
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -19,6 +22,8 @@ class MainWindow(QMainWindow):
         self.current_analysis_id = 0
         self.analysis = []
 
+        self.diagram_processor = DiagramProcessor()
+
         self.refresh_all_lists()
         self.patient_create_btn.clicked.connect(lambda :self.open_patient_creation())
         self.patient_delete_btn.clicked.connect(lambda: self.delete_chosen_patient())
@@ -28,6 +33,7 @@ class MainWindow(QMainWindow):
         self.analysis_list.currentItemChanged.connect(lambda: self.get_selected_analysis_id())
         self.analysis_delete_btn.clicked.connect(lambda :self.delete_chosen_analysis())
         self.analisys_select_btn.clicked.connect(lambda:self.open_analysis_creation())
+        self.tb_graph_btn.clicked.connect(lambda:self.create_radars())
         self.show()
 
     def refresh_all_lists(self):
@@ -114,3 +120,21 @@ class MainWindow(QMainWindow):
             MainDBController.DeleteAnalysisByID(self.current_analysis_id)
         self.refresh_analysis_list()
 
+    def create_radars(self):
+        for i in reversed(range(self.graph_layout.count())):
+            print(i)
+            self.graph_layout.itemAt(i).widget().deleteLater()
+
+        pat_id = self.current_patient_id
+
+        index = self.analysis_list.currentRow()
+        if index ==-1:
+            return
+
+        current_anal_date = self.analysis[index][2]
+
+        figs = self.diagram_processor.MakeRadar(pat_id, current_anal_date)
+        self.graph_layout.addWidget(figs[0])
+        self.graph_layout.addWidget(figs[1])
+        '''self.a = QVBoxLayout()
+        self.a.c'''

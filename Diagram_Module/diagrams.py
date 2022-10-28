@@ -71,10 +71,10 @@ def make_radar_diagram(data, output_dir, date, file_name):
         radar.plot(prepared_vals, vals[i], graph_max, "-", lw=2, color=colors[i], alpha=1, label=labels[i])
     radar.ax.legend(loc='best', bbox_to_anchor=(0.5, 0., 0.5, 0.5))
     pl.title(file_name, pad=30)
-    plt.show()
+    #plt.show()
 
     #fig.savefig("{}\\{}\\{}.png".format(output_dir, date, file_name), bbox_inches='tight')
-
+    return  fig
 
 def make_radars(data, date, output_dir):
     make_radar_diagram(
@@ -87,6 +87,20 @@ def make_radars(data, date, output_dir):
         output_dir,
         date,
         'Показатели T - клеточного звена иммунитета')
+
+def get_radars(data, date, output_dir):
+    b_diag = make_radar_diagram(
+        data['b'],
+        output_dir,
+        date,
+        'Показатели В - клеточного звена иммунитета')
+    t_diag = make_radar_diagram(
+        data['t'],
+        output_dir,
+        date,
+        'Показатели T - клеточного звена иммунитета')
+
+    return (b_diag, t_diag)
 
 
 def make_time_diagram(arr, dates, labels, path, name):

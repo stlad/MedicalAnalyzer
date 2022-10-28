@@ -1,7 +1,10 @@
 from DB_Module.db_module import *
 import datetime
 from utilits import *
-from diagrams import *
+from Diagram_Module.diagrams import *
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT, FigureCanvasQTAgg as FigureCanvas
+from matplotlib.figure import Figure
+
 
 
 # пациент [ID имя, фамилия, отчество, дата, рождения, диаг, диаг2, гены, пол, возраст]
@@ -42,15 +45,33 @@ class DiagramProcessor:
             #print(param_name)
 
     def MakeRadar(self, patient_id:int, analysis_date:datetime):
+
         analysis_dct = self.fill_patients([patient_id])
         self.fill_patient_with_dates(analysis_dct,patient_id, [analysis_date])
         name, dates, line_data, radars_data = prepare_data(self.prepared_data)
-        for i in range(len(radars_data)):
-            make_radars(radars_data[i], dates[i], os.getcwd())
-        a = 5
 
-d = DiagramProcessor()
-d.MakeRadar(5,datetime.date(2001,9,12))
+        for i in range(len(radars_data)):
+            t,b = get_radars(radars_data[i], dates[i], os.getcwd())
+            t_conv = MplCanvas(fig=t)
+            b_conv = MplCanvas(fig=b)
+        return t_conv, b_conv
+
+
+
+
+class MplCanvas(FigureCanvas):
+    def __init__(self, parent=None, width=1, height=1, dpi=100, fig=None):
+        if fig is None:
+            return
+        super(MplCanvas, self).__init__(fig)
+
+
+
+
+
+
+'''d = DiagramProcessor()
+d.MakeRadar(5,datetime.date(2001,9,12))'''
 #print(list(d.prepared_data.keys()))
 #cat = MainDBController.GetAllParameterCatalog()
 #for index, param in enumerate(cat):

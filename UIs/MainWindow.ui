@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>833</width>
-    <height>702</height>
+    <width>1269</width>
+    <height>867</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,8 +19,8 @@
      <rect>
       <x>50</x>
       <y>10</y>
-      <width>341</width>
-      <height>511</height>
+      <width>201</width>
+      <height>541</height>
      </rect>
     </property>
     <property name="title">
@@ -31,7 +31,7 @@
       <rect>
        <x>20</x>
        <y>20</y>
-       <width>301</width>
+       <width>171</width>
        <height>381</height>
       </rect>
      </property>
@@ -65,8 +65,8 @@
     <widget class="QPushButton" name="patient_delete_btn">
      <property name="geometry">
       <rect>
-       <x>190</x>
-       <y>410</y>
+       <x>20</x>
+       <y>490</y>
        <width>131</width>
        <height>31</height>
       </rect>
@@ -79,10 +79,10 @@
    <widget class="QGroupBox" name="groupBox_2">
     <property name="geometry">
      <rect>
-      <x>450</x>
+      <x>260</x>
       <y>10</y>
-      <width>341</width>
-      <height>511</height>
+      <width>171</width>
+      <height>311</height>
      </rect>
     </property>
     <property name="title">
@@ -93,8 +93,8 @@
       <rect>
        <x>20</x>
        <y>20</y>
-       <width>301</width>
-       <height>381</height>
+       <width>131</width>
+       <height>151</height>
       </rect>
      </property>
     </widget>
@@ -102,7 +102,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>410</y>
+       <y>180</y>
        <width>131</width>
        <height>31</height>
       </rect>
@@ -115,7 +115,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>450</y>
+       <y>220</y>
        <width>131</width>
        <height>31</height>
       </rect>
@@ -127,8 +127,8 @@
     <widget class="QPushButton" name="analysis_delete_btn">
      <property name="geometry">
       <rect>
-       <x>190</x>
-       <y>410</y>
+       <x>20</x>
+       <y>260</y>
        <width>131</width>
        <height>31</height>
       </rect>
@@ -141,8 +141,8 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>60</x>
-      <y>530</y>
+      <x>30</x>
+      <y>650</y>
       <width>181</width>
       <height>121</height>
      </rect>
@@ -151,6 +151,30 @@
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ваганов Владислав &lt;/p&gt;&lt;p&gt;Ершов Дмитрий&lt;/p&gt;&lt;p&gt;Попович Иван&lt;/p&gt;&lt;p&gt;ИРИТ-РТФ, РИ-300022&lt;/p&gt;&lt;p&gt;2022&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="tb_graph_btn">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>690</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>графики</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>50</y>
+      <width>721</width>
+      <height>711</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="graph_layout"/>
+   </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QMenuBar" name="menubar">
@@ -158,7 +182,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>833</width>
+     <width>1269</width>
      <height>21</height>
     </rect>
    </property>
