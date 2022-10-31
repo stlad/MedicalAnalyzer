@@ -112,7 +112,7 @@ class DBController():
         """Получить все анализы одного человека"""
         con = self._create_connection_to_DB()
         with con.cursor() as cur:
-            sql = f"select * from analysis where owner_id = {patient_id}"
+            sql = f"select * from analysis where owner_id = {patient_id} order by analysis_date"
             cur.execute(sql)
             rows = cur.fetchall()
         return rows
@@ -125,7 +125,7 @@ class DBController():
         """
         con = self._create_connection_to_DB()
         with con.cursor() as cur:
-            sql = f"select * from analysis where owner_id = {patient_id} and analysis_date ='{analysis_date}'"
+            sql = f"select * from analysis where owner_id = {patient_id} and analysis_date ='{analysis_date}' "
             cur.execute(sql)
             rows = cur.fetchall()
         return rows
@@ -155,10 +155,10 @@ MainDBController = DBController()
 
 
 #print(date_text_to_sql_format('asdasd'))
-'''rows = MainDBController.GetAllPatients()
+rows = MainDBController.GetAllAnalysisByPatientID(5)
 
 for r in rows:
-    print(r)'''
+    print(r)
 #MainBDUser.InsertPatinet(['Пучков','Дмитрий','Юрьевич','1961-11-25','что-то страшное','что-тоужасное',''])
 #print(MainDBController.GetAllPatients())
 #print(MainDBController.GetAllAnalysisByPatinetIDandDate(2,'2001-11-10'))

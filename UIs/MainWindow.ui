@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1269</width>
-    <height>867</height>
+    <width>1326</width>
+    <height>843</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <rect>
       <x>50</x>
       <y>10</y>
-      <width>201</width>
+      <width>261</width>
       <height>541</height>
      </rect>
     </property>
@@ -31,7 +31,7 @@
       <rect>
        <x>20</x>
        <y>20</y>
-       <width>171</width>
+       <width>221</width>
        <height>381</height>
       </rect>
      </property>
@@ -79,7 +79,7 @@
    <widget class="QGroupBox" name="groupBox_2">
     <property name="geometry">
      <rect>
-      <x>260</x>
+      <x>310</x>
       <y>10</y>
       <width>171</width>
       <height>311</height>
@@ -154,8 +154,8 @@
    <widget class="QPushButton" name="tb_graph_btn">
     <property name="geometry">
      <rect>
-      <x>300</x>
-      <y>690</y>
+      <x>360</x>
+      <y>350</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -182,7 +182,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1269</width>
+     <width>1326</width>
      <height>21</height>
     </rect>
    </property>

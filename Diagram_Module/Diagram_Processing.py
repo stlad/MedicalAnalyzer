@@ -34,28 +34,35 @@ class DiagramProcessor:
         for date in dates:
             analysis_by_date = MainDBController.GetAllAnalysisByPatinetIDandDate(patient_id, str(date))[0]
             param_dct = dct[str(analysis_by_date[2])] = {}
-            self.fill_analysis_with_parameters(param_dct, analysis_by_date[0])
+            isValid = self.fill_analysis_with_parameters(param_dct, analysis_by_date[0])
+
+
 
     def fill_analysis_with_parameters(self, dct, analysis_id):
         params = MainDBController.GetAllParametersByAnalysisID(analysis_id)
+        if(len(params) ==0):
+            return False
         for param in params:
-            param_name = self.catalog[param[0]-1][1]
+            param_name = self.catalog[param[1]-1][1]
             dct[param_name]= {}
             dct[param_name]['Результат'] = param[2]
-            #print(param_name)
+        return True
+
 
     def MakeRadar(self, patient_id:int, analysis_date:datetime):
-
         analysis_dct = self.fill_patients([patient_id])
         self.fill_patient_with_dates(analysis_dct,patient_id, [analysis_date])
-        name, dates, line_data, radars_data = prepare_data(self.prepared_data)
+        try:
+            name, dates, line_data, radars_data = prepare_data(self.prepared_data)
+        except KeyError:
+            print("Что-то не заполнено")
+            return
 
         for i in range(len(radars_data)):
             t,b = get_radars(radars_data[i], dates[i], os.getcwd())
-            t_conv = MplCanvas(fig=t)
-            b_conv = MplCanvas(fig=b)
-        return t_conv, b_conv
-
+            t_canvas = MplCanvas(fig=t)
+            b_canvas = MplCanvas(fig=b)
+        return t_canvas, b_canvas
 
 
 

@@ -122,7 +122,6 @@ class MainWindow(QMainWindow):
 
     def create_radars(self):
         for i in reversed(range(self.graph_layout.count())):
-            print(i)
             self.graph_layout.itemAt(i).widget().deleteLater()
 
         pat_id = self.current_patient_id
@@ -134,7 +133,13 @@ class MainWindow(QMainWindow):
         current_anal_date = self.analysis[index][2]
 
         figs = self.diagram_processor.MakeRadar(pat_id, current_anal_date)
-        self.graph_layout.addWidget(figs[0])
-        self.graph_layout.addWidget(figs[1])
-        '''self.a = QVBoxLayout()
-        self.a.c'''
+        try:
+            toolbar = NavigationToolbar2QT(figs[0],self)
+            self.graph_layout.addWidget(figs[0])
+            self.graph_layout.addWidget(toolbar)
+
+            toolbar1 = NavigationToolbar2QT(figs[1],self)
+            self.graph_layout.addWidget(figs[1])
+            self.graph_layout.addWidget(toolbar1)
+        except TypeError:
+            print('невозможно построить графики')
