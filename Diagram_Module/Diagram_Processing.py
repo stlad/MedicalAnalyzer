@@ -1,13 +1,14 @@
 from DB_Module.db_module import *
-import datetime
+import datetime, json
 from utilits import *
 from Diagram_Module.diagrams import *
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT, FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
+from PyQt5.QtWidgets import QSizePolicy
 
 
 
-# пациент [ID имя, фамилия, отчество, дата, рождения, диаг, диаг2, гены, пол, возраст]
+# пациент [ID, имя, фамилия, отчество, дата, рождения, диаг, диаг2, гены, пол, возраст]
 # анализ [ID, ID_пациента, дата]
 # каталог [ID, название, ед, от, до]
 # параметр [ID, ID_по_каталогу, значение, ID_анализа, отклонение]
@@ -33,7 +34,12 @@ class DiagramProcessor:
         #dates = MainDBController.GetAllAnalysisByPatientID(patient_id)
         for date in dates:
             analysis_by_date = MainDBController.GetAllAnalysisByPatinetIDandDate(patient_id, str(date))[0]
+
+            current_patient = MainDBController.GetPatientByID(patient_id)[0]
+            patient_birthday = current_patient[4]
+            age_on_date = int((date - patient_birthday).days/365)
             param_dct = dct[str(analysis_by_date[2])] = {}
+            param_dct['Возраст'] = age_on_date
             isValid = self.fill_analysis_with_parameters(param_dct, analysis_by_date[0])
 
 
@@ -64,6 +70,20 @@ class DiagramProcessor:
             b_canvas = MplCanvas(fig=b)
         return t_canvas, b_canvas
 
+    def MakeTimeDiagram(self, patient_id:int, start_date, end_date):
+        pass
+
+    def GetJsonByPatient(self, patient_id:int):
+        analysis_dct = self.fill_patients([patient_id])
+        dates = MainDBController.GetAllAnalysisByPatientID(patient_id)
+        dates = [date[2] for date in dates]
+        self.fill_patient_with_dates(analysis_dct,patient_id, dates)
+        print(self.prepared_data)
+        return self.prepared_data
+
+    def _save_to_json(self, filename):
+        with open(filename, 'w') as file:
+            file.write(json.dumps(self.prepared_data))
 
 
 class MplCanvas(FigureCanvas):
@@ -72,13 +92,10 @@ class MplCanvas(FigureCanvas):
             return
         super(MplCanvas, self).__init__(fig)
 
+d = DiagramProcessor()
 
-
-
-
-
-'''d = DiagramProcessor()
-d.MakeRadar(5,datetime.date(2001,9,12))'''
+#d.GetJsonByPatient(5)
+#d._save_to_json('analysis.json')
 #print(list(d.prepared_data.keys()))
 #cat = MainDBController.GetAllParameterCatalog()
 #for index, param in enumerate(cat):

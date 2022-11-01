@@ -105,7 +105,7 @@ class MainWindow(QMainWindow):
     def create_analysis(self):
         dialog = QInputDialog(self)
         a_date, ok = dialog.getText(self, 'Введите дату анализа', 'Дата',QLineEdit.Normal)
-        a_date = date_text_to_sql_format(a_date)
+        a_date = date_to_sql_format(a_date)
         if not ok or a_date is None:
             return
         MainDBController.InsertAnalysis([self.current_patient_id, a_date])
@@ -121,25 +121,30 @@ class MainWindow(QMainWindow):
         self.refresh_analysis_list()
 
     def create_radars(self):
-        for i in reversed(range(self.graph_layout.count())):
-            self.graph_layout.itemAt(i).widget().deleteLater()
+        #for i in reversed(range(self.graph_layout.count())):
+        #    self.graph_layout.itemAt(i).widget().deleteLater()
+
+        for row in range(self.graph_layout.rowCount()):
+            for col in range(self.graph_layout.columnCount()):
+                w = self.graph_layout.itemAtPosition(row, col)
+                if w is not None:
+                    w.widget().deleteLater()
 
         pat_id = self.current_patient_id
-
         index = self.analysis_list.currentRow()
         if index ==-1:
             return
 
         current_anal_date = self.analysis[index][2]
-
+        #self.graph_layout.setSpacing(10)
         figs = self.diagram_processor.MakeRadar(pat_id, current_anal_date)
         try:
             toolbar = NavigationToolbar2QT(figs[0],self)
-            self.graph_layout.addWidget(figs[0])
-            self.graph_layout.addWidget(toolbar)
+            self.graph_layout.addWidget(toolbar, 1, 0)
+            self.graph_layout.addWidget(figs[0], 0, 0)
 
-            toolbar1 = NavigationToolbar2QT(figs[1],self)
-            self.graph_layout.addWidget(figs[1])
-            self.graph_layout.addWidget(toolbar1)
+            toolbar1 = NavigationToolbar2QT(figs[1], self)
+            self.graph_layout.addWidget(toolbar1, 1, 1)
+            self.graph_layout.addWidget(figs[1], 0, 1)
         except TypeError:
             print('невозможно построить графики')

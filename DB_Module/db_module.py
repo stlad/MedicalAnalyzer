@@ -1,4 +1,5 @@
 import psycopg2
+from utilits import *
 
 class DBController():
     def __init__(self,database = 'MedicalAnalysis_DB', user = 'postgres', password='admin', host='localhost', port='5432'):
@@ -140,25 +141,35 @@ class DBController():
             rows = cur.fetchall()
         return rows
 
+    def GetAllAnalysisBetweenDates(self, patient_id:int, start, end):
+        start = date_to_sql_format(start)
+        end = date_to_sql_format(end)
+        con = self._create_connection_to_DB()
+        with con.cursor() as cur:
+            sql = f"select * from analysis where owner_id = {patient_id} and analysis_date between '{start}' and '{end}'"
+            cur.execute(sql)
+            rows = cur.fetchall()
+        return rows
 
-def date_text_to_sql_format(text):
+
+'''def date_text_to_sql_format(text):
     try:
         splitted_text = text.split('.')
         return f'{splitted_text[2]}-{splitted_text[1]}-{splitted_text[0]}'
     except IndexError:
-        return None
+        return None'''
 
 
 
 
 MainDBController = DBController()
 
-
+'''
 #print(date_text_to_sql_format('asdasd'))
 rows = MainDBController.GetAllAnalysisByPatientID(5)
 
 for r in rows:
-    print(r)
+    print(r)'''
 #MainBDUser.InsertPatinet(['Пучков','Дмитрий','Юрьевич','1961-11-25','что-то страшное','что-тоужасное',''])
 #print(MainDBController.GetAllPatients())
 #print(MainDBController.GetAllAnalysisByPatinetIDandDate(2,'2001-11-10'))

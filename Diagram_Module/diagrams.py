@@ -220,7 +220,7 @@ def prepare_data(data):
         radars_data.append({
             'b': {
                 'min': [
-                    9.6, 1.67, 0.53, 0.16
+                    9.6, 1.67, 0.31, 0.16
                 ],
                 'res': [
                     reduce_dec_num(LYMF / CD19),
@@ -230,14 +230,14 @@ def prepare_data(data):
                 ],
                 'max':
                     [
-                        10, 1.8, 0.31, 0.77
+                        10, 1.8, 0.53, 0.77
                     ],
                 'names': ['LYMF/CD19', 'NEU/LYMF', 'CD19/CD8', 'CD19/CD4']
             },
             't': {
                 'min':
                     [
-                        2.25, 1.67, 3, 9.47
+                        2.25, 1.67, 3, 5
                     ],
                 'res': [
                     reduce_dec_num(NEU / CD3),
@@ -247,7 +247,7 @@ def prepare_data(data):
                 ],
                 'max':
                     [
-                        3.63, 1.8, 12.3, 5
+                        3.63, 1.8, 12.3, 9.47
                     ],
                 'names': ['NEU/CD3', 'NEU/LYMF', 'NEU/CD8', 'NEU/CD4']
             },
