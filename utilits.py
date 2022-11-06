@@ -16,6 +16,9 @@ def date_sql_to_text_format(sql_date):
     except IndexError:
         return None
 
-#print(date_to_sql_format('a'))
-
-
+def str_to_date(text):
+    s = text.split('.')
+    y = int(s[2])
+    m = int(s[1])
+    d = int(s[0])
+    return  datetime.date(y,m,d)

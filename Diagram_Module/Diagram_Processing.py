@@ -70,13 +70,13 @@ class DiagramProcessor:
         b_canvas = MplCanvas(fig=b)
         return t_canvas, b_canvas
 
-    def MakeTimeDiagram(self, patient_id:int, start_date, end_date):
+    def MakeTimeDiagram(self, patient_id:int, start_date:datetime, end_date:datetime):
         analysis_dct = self.fill_patients([patient_id])
-        dates = MainDBController.GetAllAnalysisBetweenDates(start_date,end_date)
+        dates = MainDBController.GetAllAnalysisBetweenDates(patient_id,start_date,end_date)
         dates = [date[2] for date in dates]
-        self.fill_patient_with_dates(analysis_dct,patient_id, [dates])
+        self.fill_patient_with_dates(analysis_dct,patient_id, dates)
         try:
-            t,b = make_radars_from_dic(self.prepared_data)
+            t,b = make_time_diagrams_from_dic(self.prepared_data)
         except KeyError:
             print('Не заполнены анализы')
             return

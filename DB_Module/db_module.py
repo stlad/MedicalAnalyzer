@@ -141,9 +141,7 @@ class DBController():
             rows = cur.fetchall()
         return rows
 
-    def GetAllAnalysisBetweenDates(self, patient_id:int, start, end):
-        start = date_to_sql_format(start)
-        end = date_to_sql_format(end)
+    def GetAllAnalysisBetweenDates(self, patient_id:int, start:datetime, end:datetime):
         con = self._create_connection_to_DB()
         with con.cursor() as cur:
             sql = f"select * from analysis where owner_id = {patient_id} and analysis_date between '{start}' and '{end}'"

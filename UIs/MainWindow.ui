@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1607</width>
-    <height>943</height>
+    <width>1641</width>
+    <height>949</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -48,7 +48,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="page">
      <property name="geometry">
@@ -245,6 +245,9 @@
        </item>
       </widget>
       <widget class="QLineEdit" name="graph_start_edit">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="geometry">
         <rect>
          <x>40</x>
@@ -255,6 +258,9 @@
        </property>
       </widget>
       <widget class="QLineEdit" name="graph_end_edit">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="geometry">
         <rect>
          <x>40</x>
@@ -291,19 +297,6 @@
        </property>
       </widget>
      </widget>
-     <widget class="QLabel" name="analysis_block_name_label">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>0</y>
-        <width>231</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
     </widget>
    </widget>
   </widget>
@@ -313,7 +306,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1607</width>
+     <width>1641</width>
      <height>21</height>
     </rect>
    </property>

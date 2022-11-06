@@ -28,13 +28,23 @@ class MainWindow(QMainWindow):
         self.patient_create_btn.clicked.connect(lambda :self.open_patient_creation())
         self.patient_delete_btn.clicked.connect(lambda: self.delete_chosen_patient())
         self.patient_select_btn.clicked.connect(lambda: self.get_selected_patient_id())
-        self.patients_list.currentItemChanged.connect(lambda : self.get_selected_patient_id() )
+        self.patients_list.currentItemChanged.connect(lambda : (self.get_selected_patient_id() ,self.update_patients_toolbox_name()))
         self.analysis_create_btn.clicked.connect(lambda :self.create_analysis())
-        self.analysis_list.currentItemChanged.connect(lambda: self.get_selected_analysis_id())
+        self.analysis_list.currentItemChanged.connect(lambda: (self.get_selected_analysis_id(),self.update_analysis_toolbox_name()))
         self.analysis_delete_btn.clicked.connect(lambda :self.delete_chosen_analysis())
         self.analisys_select_btn.clicked.connect(lambda:self.open_analysis_creation())
         self.tb_graph_btn.clicked.connect(lambda:self.create_radars())
+        self.comboBox.currentIndexChanged.connect(lambda: self.graph_preparation())
         self.show()
+
+    def graph_preparation(self):
+        if self.comboBox.currentIndex()==0:
+            self.graph_start_edit.setEnabled(False)
+            self.graph_end_edit.setEnabled(False)
+        else:
+            self.graph_start_edit.setEnabled(True)
+            self.graph_end_edit.setEnabled(True)
+
 
     def refresh_all_lists(self):
         self.refresh_patients_list()
@@ -84,6 +94,12 @@ class MainWindow(QMainWindow):
         self.current_patient_id = current_patient[0]
         self.refresh_analysis_list()
 
+    def update_patients_toolbox_name(self):
+        self.toolBox.setItemText(0,self.patients_list.currentItem().text())
+
+    def update_analysis_toolbox_name(self):
+        self.toolBox.setItemText(1,self.analysis_list.currentItem().text())
+
     def get_selected_analysis_id(self):
         index = self.analysis_list.currentRow()
         current_anal = self.analysis[index]
@@ -120,6 +136,7 @@ class MainWindow(QMainWindow):
             MainDBController.DeleteAnalysisByID(self.current_analysis_id)
         self.refresh_analysis_list()
 
+
     def create_radars(self):
         #for i in reversed(range(self.graph_layout.count())):
         #    self.graph_layout.itemAt(i).widget().deleteLater()
@@ -132,19 +149,33 @@ class MainWindow(QMainWindow):
 
         pat_id = self.current_patient_id
         index = self.analysis_list.currentRow()
-        if index ==-1:
-            return
 
-        current_anal_date = self.analysis[index][2]
-        #self.graph_layout.setSpacing(10)
-        figs = self.diagram_processor.MakeRadar(pat_id, current_anal_date)
-        try:
-            toolbar = NavigationToolbar2QT(figs[0],self)
-            self.graph_layout.addWidget(toolbar, 1, 0)
-            self.graph_layout.addWidget(figs[0], 0, 0)
+        if self.comboBox.currentIndex() == 0:
+            if index ==-1:
+                return
+            current_anal_date = self.analysis[index][2]
+            figs = self.diagram_processor.MakeRadar(pat_id, current_anal_date)
+            try:
+                toolbar = NavigationToolbar2QT(figs[0],self)
+                self.graph_layout.addWidget(toolbar, 1, 0)
+                self.graph_layout.addWidget(figs[0], 0, 0)
 
-            toolbar1 = NavigationToolbar2QT(figs[1], self)
-            self.graph_layout.addWidget(toolbar1, 1, 1)
-            self.graph_layout.addWidget(figs[1], 0, 1)
-        except TypeError:
-            print('невозможно построить графики')
+                toolbar1 = NavigationToolbar2QT(figs[1], self)
+                self.graph_layout.addWidget(toolbar1, 1, 1)
+                self.graph_layout.addWidget(figs[1], 0, 1)
+            except TypeError:
+                print('невозможно построить графики')
+        else:
+            start_date =str_to_date(self.graph_start_edit.text())
+            end_date =str_to_date(self.graph_end_edit.text())
+            figs = self.diagram_processor.MakeTimeDiagram(pat_id, start_date,end_date)
+            try:
+                toolbar = NavigationToolbar2QT(figs[0],self)
+                self.graph_layout.addWidget(toolbar, 0, 0)
+                self.graph_layout.addWidget(figs[0], 1, 0)
+
+                toolbar1 = NavigationToolbar2QT(figs[1], self)
+                self.graph_layout.addWidget(toolbar1, 2, 0)
+                self.graph_layout.addWidget(figs[1], 3, 0)
+            except TypeError:
+                print('невозможно построить графики')
