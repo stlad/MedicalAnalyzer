@@ -17,3 +17,5 @@ def date_sql_to_text_format(sql_date):
         return None
 
 #print(date_to_sql_format('a'))
+
+

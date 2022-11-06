@@ -36,10 +36,13 @@ class DiagramProcessor:
             analysis_by_date = MainDBController.GetAllAnalysisByPatinetIDandDate(patient_id, str(date))[0]
 
             current_patient = MainDBController.GetPatientByID(patient_id)[0]
+            patient_diagnosis = current_patient[6]
             patient_birthday = current_patient[4]
             age_on_date = int((date - patient_birthday).days/365)
+
             param_dct = dct[str(analysis_by_date[2])] = {}
             param_dct['Возраст'] = age_on_date
+            param_dct['Диагноз'] = patient_diagnosis
             isValid = self.fill_analysis_with_parameters(param_dct, analysis_by_date[0])
 
 
@@ -59,19 +62,28 @@ class DiagramProcessor:
         analysis_dct = self.fill_patients([patient_id])
         self.fill_patient_with_dates(analysis_dct,patient_id, [analysis_date])
         try:
-            name, dates, line_data, radars_data = prepare_data(self.prepared_data)
+            t,b = make_radars_from_dic(self.prepared_data)
         except KeyError:
-            print("Что-то не заполнено")
+            print('Не заполнены анализы')
             return
-
-        for i in range(len(radars_data)):
-            t,b = get_radars(radars_data[i], dates[i], os.getcwd())
-            t_canvas = MplCanvas(fig=t)
-            b_canvas = MplCanvas(fig=b)
+        t_canvas = MplCanvas(fig=t)
+        b_canvas = MplCanvas(fig=b)
         return t_canvas, b_canvas
 
     def MakeTimeDiagram(self, patient_id:int, start_date, end_date):
-        pass
+        analysis_dct = self.fill_patients([patient_id])
+        dates = MainDBController.GetAllAnalysisBetweenDates(start_date,end_date)
+        dates = [date[2] for date in dates]
+        self.fill_patient_with_dates(analysis_dct,patient_id, [dates])
+        try:
+            t,b = make_radars_from_dic(self.prepared_data)
+        except KeyError:
+            print('Не заполнены анализы')
+            return
+        t_canvas = MplCanvas(fig=t)
+        b_canvas = MplCanvas(fig=b)
+        return t_canvas, b_canvas
+
 
     def GetJsonByPatient(self, patient_id:int):
         analysis_dct = self.fill_patients([patient_id])
@@ -92,10 +104,10 @@ class MplCanvas(FigureCanvas):
             return
         super(MplCanvas, self).__init__(fig)
 
-d = DiagramProcessor()
+'''d = DiagramProcessor()
 
-#d.GetJsonByPatient(5)
-#d._save_to_json('analysis.json')
+d.GetJsonByPatient(5)
+d._save_to_json('analysis.json')'''
 #print(list(d.prepared_data.keys()))
 #cat = MainDBController.GetAllParameterCatalog()
 #for index, param in enumerate(cat):

@@ -9,11 +9,11 @@ from matplotlib import pyplot as plt
 def reduce_dec_num(val):
     return math.ceil(val * 10) / 10
 
+
 class Radar(object):
 
     def __init__(self, fig, titles, labels, rect=None):
         if rect is None:
-            # rect = [0.05, 0.05, 0.95, 0.95]
             rect = [0.15, 0.1, 0.70, 0.70]
 
         self.n = len(titles)
@@ -47,7 +47,15 @@ class Radar(object):
                              )
 
 
-def make_radar_diagram(data, output_dir, date, file_name):
+def get_age_ending(age):
+    if age // 10 == 1:
+        return 'год'
+    elif 2 <= age // 10 <= 4:
+        return 'года'
+    return 'лет'
+
+
+def make_radar_diagram(data, title):
     names = data['names']
     fig = pl.figure(figsize=(6, 6))
     vals = (data['min'], data['res'], data['max'])
@@ -70,96 +78,130 @@ def make_radar_diagram(data, output_dir, date, file_name):
             prepared_vals.append(vals[i][j] / graph_max[j] * 5)
         radar.plot(prepared_vals, vals[i], graph_max, "-", lw=2, color=colors[i], alpha=1, label=labels[i])
     radar.ax.legend(loc='best', bbox_to_anchor=(0.5, 0., 0.5, 0.5))
-    pl.title(file_name, pad=30)
-    #plt.show()
+    pl.title(title, pad=40)
+    return fig
 
-    #fig.savefig("{}\\{}\\{}.png".format(output_dir, date, file_name), bbox_inches='tight')
-    return  fig
 
-def make_radars(data, date, output_dir):
-    make_radar_diagram(
+def make_radars(data, name, date, age, diagnos):
+    diagram_types = ['Показатели В - клеточного звена иммунитета', 'Показатели T - клеточного звена иммунитета']
+    fig = make_radar_diagram(
         data['b'],
-        output_dir,
-        date,
-        'Показатели В - клеточного звена иммунитета')
-    make_radar_diagram(
+        "Пациент: {} \n"
+        "Возраст на момент сдачи анализов: {} {}. \n"
+        "Дата сдачи анализов: {}\n"
+        "Диагноз: {}\n"
+        "График: {}".format(
+            name,
+            age, get_age_ending(age),
+            date,
+            diagnos,
+            diagram_types[0]
+        ))
+
+    fig1 = make_radar_diagram(
         data['t'],
-        output_dir,
-        date,
-        'Показатели T - клеточного звена иммунитета')
-
-def get_radars(data, date, output_dir):
-    b_diag = make_radar_diagram(
-        data['b'],
-        output_dir,
-        date,
-        'Показатели В - клеточного звена иммунитета')
-    t_diag = make_radar_diagram(
-        data['t'],
-        output_dir,
-        date,
-        'Показатели T - клеточного звена иммунитета')
-
-    return (b_diag, t_diag)
+        "Пациент: {} \n"
+        "Возраст на момент сдачи анализов: {} {}. \n"
+        "Дата сдачи анализов: {}\n"
+        "Диагноз: {}\n"
+        "График: {}".format(
+            name,
+            age, get_age_ending(age),
+            date,
+            diagnos,
+            diagram_types[1]
+        ))
+    return fig, fig1
 
 
-def make_time_diagram(arr, dates, labels, path, name):
-    fig, ax = plt.subplots()
-    colors = ['blue', 'green', 'red', 'orange', 'purple']
-    for i in range(arr):
-        marker = '-'
+def make_time_diagram(arr, dates, labels, diagram_type, name):
+    fig, ax = plt.subplots(figsize=(len(arr), len(dates)))
+    colors = ['blue', 'green', 'red', 'orange', 'purple', 'black', 'yellow']
+    for i in range(len(arr)):
+        linestyle = 'solid'
         if i % 3 >= 1:
-            marker = '--'
-        ax.plot(dates, arr[i], label=labels[i], color=colors[i // 3], marker=marker)
-    ax.legend()
-    plt.savefig('{}\\{}.png'.format(path, name))
+            linestyle = 'dashed'
+        ax.plot(dates, arr[i], label=labels[i], color=colors[i // 3], linestyle=linestyle)
+    ax.legend(bbox_to_anchor=(1.01, 1), loc='upper left', borderaxespad=0)
+    plt.xticks(rotation=40)
+    plt.title("Пациент: {}\nГрафик: {}".format(name, diagram_type), pad=25)
+    return fig
 
 
-def prepare_data(data):
-    data_keys = list(data.keys())
-    name = data_keys[0]
+def prepare_data(json_path):
+    with open(json_path) as json_file:
+        data = json.load(json_file)
+    return dic_prepare_data(data)
+
+
+def make_time_diagrams(data, dates, name):
+    keys = list(data['t'].keys())
+    arr = []
+    for key in keys:
+        arr.append(data['t'][key])
+
+    fig = make_time_diagram(arr, dates, keys, 'Т-клеточное звено', name)
+    # save_and_close(fig, path,  'Т-клеточное звено')
+
+    keys = list(data['b'].keys())
+    arr = []
+    for key in keys:
+        arr.append(data['b'][key])
+    fig1 = make_time_diagram(arr, dates, keys, 'B-клеточное звено', name)
+    # save_and_close(fig1, path, 'B-клеточное звено')
+    return fig, fig1
+
+
+def dic_prepare_data(data):
+    name = list(data.keys())[0]
     data = data[name]
-    dates = copy(list(data.keys()))
+
+    dates = list(data.keys())
+    ages = []
+    diagnoses = []
+    for d in dates:
+        ages.append(data[d]['Возраст'])
+        diagnoses.append(data[d]['Диагноз'])
     line_data = {
         't': {
+            'CD8': [],
             'ref_min_CD8': [],
             'ref_max_CD8': [],
+            'CD4': [],
             'ref_min_CD4': [],
             'ref_max_CD4': [],
+            'NEU / LYMF': [],
             'ref_min_NEU/LYMF': [],
             'ref_max_NEU/LYMF': [],
+            'NEU / CD3': [],
             'ref_min_NEU/CD3': [],
             'ref_max_NEU/CD3': [],
+            'NEU / CD4': [],
             'ref_min_NEU/CD4': [],
             'ref_max_NEU/CD4': [],
+            'NEU / CD8': [],
             'ref_min_NEU/CD8': [],
             'ref_max_NEU/CD8': [],
-            'CD8': [],
-            'CD4': [],
-            'NEU / LYMF': [],
-            'NEU / CD3': [],
-            'NEU / CD4': [],
-            'NEU / CD8': [],
         },
         'b': {
+            'CD8': [],
             'ref_min_CD8': [],
             'ref_max_CD8': [],
+            'CD4': [],
             'ref_min_CD4': [],
             'ref_max_CD4': [],
+            'NEU / LYMF': [],
             'ref_min_NEU/LYMF': [],
             'ref_max_NEU/LYMF': [],
+            'LYMF / CD19': [],
             'ref_min_LYMF/CD19': [],
             'ref_max_LYMF/CD19': [],
+            'CD19 / CD4': [],
             'ref_min_CD19/CD4': [],
             'ref_max_CD19/CD4': [],
+            'CD19 / CD8': [],
             'ref_min_CD19/CD8': [],
             'ref_max_CD19/CD8': [],
-            'CD8': [],
-            'CD4': [],
-            'NEU / LYMF': [],
-            'LYMF / CD19': [],
-            'CD19 / CD4': [],
-            'CD19 / CD8': [],
         }
     }
     radars_data = []
@@ -220,7 +262,7 @@ def prepare_data(data):
         radars_data.append({
             'b': {
                 'min': [
-                    9.6, 1.67, 0.31, 0.16
+                    9.6, 1.67, 0.53, 0.16
                 ],
                 'res': [
                     reduce_dec_num(LYMF / CD19),
@@ -230,14 +272,14 @@ def prepare_data(data):
                 ],
                 'max':
                     [
-                        10, 1.8, 0.53, 0.77
+                        10, 1.8, 0.77, 0.31
                     ],
                 'names': ['LYMF/CD19', 'NEU/LYMF', 'CD19/CD8', 'CD19/CD4']
             },
             't': {
                 'min':
                     [
-                        2.25, 1.67, 3, 5
+                        2.25, 1.67, 9.47, 3
                     ],
                 'res': [
                     reduce_dec_num(NEU / CD3),
@@ -247,31 +289,26 @@ def prepare_data(data):
                 ],
                 'max':
                     [
-                        3.63, 1.8, 12.3, 9.47
+                        3.63, 1.8, 12.3, 5
                     ],
                 'names': ['NEU/CD3', 'NEU/LYMF', 'NEU/CD8', 'NEU/CD4']
             },
         })
-    return name, dates, line_data, radars_data
+    return name, diagnoses, dates, ages, line_data, radars_data
 
 
-def make_time_diagrams(data, dates, path):
-    keys = copy(data['t'].keys())
-    arr = []
-    for key in keys:
-        arr.append(data['t'][key])
-    make_time_diagram(arr, dates, keys, path, 'Т-клеточное звено')
-    keys = copy(data['b'].keys())
-    arr = []
-    for key in keys:
-        arr.append(data['b'][key])
-    make_time_diagram(arr, dates, keys, path, 'B-клеточное звено')
+def make_radars_from_dic(data):
+    name, diagnoses, dates, ages, line_data, radars_data = dic_prepare_data(data)
+    return make_radars(radars_data[0], name, dates[0], ages[0], diagnoses[0])
 
-def smth():
-#if __name__ == "__main__":
-    path = "C:\\Users\\edvso\\PycharmProjects\\HelthProject"
-    json_name = "data"
-    name, dates, line_data, radars_data = prepare_data("{}\\{}.json".format(path, json_name))
-    for i in range(len(radars_data)):
-        make_radars(radars_data[i], dates[i], "{}\\{}".format(path, name))
-    make_time_diagrams(line_data, dates, "{}\\{}".format(path, name))
+
+def make_time_diagrams_from_dic(data):
+    name, diagnoses, dates, ages, line_data, radars_data = dic_prepare_data(data)
+    return make_time_diagrams(line_data, dates, name)
+
+
+def save_and_close(fig, dir_path, diagram_type):
+    if not os.path.isdir(dir_path):
+        os.mkdir(dir_path)
+    fig.savefig("{}.png".format(dir_path, diagram_type), bbox_inches='tight')
+    plt.close(fig)
