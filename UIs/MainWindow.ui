@@ -14,291 +14,277 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>1410</x>
-      <y>740</y>
-      <width>181</width>
-      <height>121</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ваганов Владислав &lt;/p&gt;&lt;p&gt;Ершов Дмитрий&lt;/p&gt;&lt;p&gt;Попович Иван&lt;/p&gt;&lt;p&gt;ИРИТ-РТФ, РИ-300022&lt;/p&gt;&lt;p&gt;2022&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-   </widget>
-   <widget class="QWidget" name="gridLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>30</y>
-      <width>1211</width>
-      <height>851</height>
-     </rect>
-    </property>
-    <layout class="QGridLayout" name="graph_layout"/>
-   </widget>
-   <widget class="QToolBox" name="toolBox">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>341</width>
-      <height>651</height>
-     </rect>
-    </property>
-    <property name="currentIndex">
-     <number>0</number>
-    </property>
-    <widget class="QWidget" name="page">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>0</y>
-       <width>341</width>
-       <height>597</height>
-      </rect>
-     </property>
-     <attribute name="label">
-      <string>Page 1</string>
-     </attribute>
-     <widget class="QGroupBox" name="groupBox">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>261</width>
-        <height>311</height>
-       </rect>
+   <layout class="QGridLayout" name="gridLayout" columnstretch="2,8,1">
+    <item row="0" column="0">
+     <widget class="QToolBox" name="toolBox">
+      <property name="currentIndex">
+       <number>0</number>
       </property>
-      <property name="title">
-       <string>Пациенты</string>
-      </property>
-      <widget class="QListWidget" name="patients_list">
+      <widget class="QWidget" name="page">
        <property name="geometry">
         <rect>
-         <x>20</x>
-         <y>20</y>
-         <width>221</width>
-         <height>151</height>
+         <x>0</x>
+         <y>0</y>
+         <width>293</width>
+         <height>717</height>
         </rect>
        </property>
-      </widget>
-      <widget class="QPushButton" name="patient_select_btn">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>190</y>
-         <width>131</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Выбрать</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="patient_create_btn">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>230</y>
-         <width>131</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Создать</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="patient_delete_btn">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>270</y>
-         <width>131</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Удалить</string>
-       </property>
-      </widget>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="page_2">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>0</y>
-       <width>341</width>
-       <height>597</height>
-      </rect>
-     </property>
-     <attribute name="label">
-      <string>Page 2</string>
-     </attribute>
-     <widget class="QGroupBox" name="groupBox_2">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>30</y>
-        <width>171</width>
-        <height>311</height>
-       </rect>
-      </property>
-      <property name="title">
-       <string>Анализы</string>
-      </property>
-      <widget class="QListWidget" name="analysis_list">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>20</y>
-         <width>131</width>
-         <height>151</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="analisys_select_btn">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>180</y>
-         <width>131</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Просмотреть</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="analysis_create_btn">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>220</y>
-         <width>131</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Создать</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="analysis_delete_btn">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>260</y>
-         <width>131</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Удалить</string>
-       </property>
-      </widget>
-     </widget>
-     <widget class="QGroupBox" name="groupBox_3">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>350</y>
-        <width>171</width>
-        <height>201</height>
-       </rect>
-      </property>
-      <property name="title">
-       <string>Графики</string>
-      </property>
-      <widget class="QPushButton" name="tb_graph_btn">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>160</y>
-         <width>75</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Построить</string>
-       </property>
-      </widget>
-      <widget class="QComboBox" name="comboBox">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>20</y>
-         <width>151</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <item>
-        <property name="text">
-         <string>Радиальные</string>
+       <attribute name="label">
+        <string>Page 1</string>
+       </attribute>
+       <widget class="QGroupBox" name="groupBox">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>261</width>
+          <height>311</height>
+         </rect>
         </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Линейный по времени</string>
+        <property name="title">
+         <string>Пациенты</string>
         </property>
-       </item>
+        <widget class="QListWidget" name="patients_list">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>20</y>
+           <width>221</width>
+           <height>151</height>
+          </rect>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="patient_select_btn">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>190</y>
+           <width>131</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Выбрать</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="patient_create_btn">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>230</y>
+           <width>131</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Создать</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="patient_delete_btn">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>270</y>
+           <width>131</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Удалить</string>
+         </property>
+        </widget>
+       </widget>
       </widget>
-      <widget class="QLineEdit" name="graph_start_edit">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
+      <widget class="QWidget" name="page_2">
        <property name="geometry">
         <rect>
-         <x>40</x>
-         <y>60</y>
-         <width>121</width>
-         <height>21</height>
+         <x>0</x>
+         <y>0</y>
+         <width>293</width>
+         <height>717</height>
         </rect>
        </property>
-      </widget>
-      <widget class="QLineEdit" name="graph_end_edit">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="geometry">
-        <rect>
-         <x>40</x>
-         <y>90</y>
-         <width>121</width>
-         <height>21</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_2">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>60</y>
-         <width>47</width>
-         <height>13</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>От</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_3">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>90</y>
-         <width>47</width>
-         <height>13</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>До</string>
-       </property>
+       <attribute name="label">
+        <string>Page 2</string>
+       </attribute>
+       <widget class="QGroupBox" name="groupBox_2">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>30</y>
+          <width>171</width>
+          <height>311</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>Анализы</string>
+        </property>
+        <widget class="QListWidget" name="analysis_list">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>20</y>
+           <width>131</width>
+           <height>151</height>
+          </rect>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="analisys_select_btn">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>180</y>
+           <width>131</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Просмотреть</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="analysis_create_btn">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>220</y>
+           <width>131</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Создать</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="analysis_delete_btn">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>260</y>
+           <width>131</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Удалить</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QGroupBox" name="groupBox_3">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>350</y>
+          <width>171</width>
+          <height>201</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>Графики</string>
+        </property>
+        <widget class="QPushButton" name="tb_graph_btn">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>160</y>
+           <width>75</width>
+           <height>23</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Построить</string>
+         </property>
+        </widget>
+        <widget class="QComboBox" name="comboBox">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>20</y>
+           <width>151</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <item>
+          <property name="text">
+           <string>Радиальные</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Линейный по времени</string>
+          </property>
+         </item>
+        </widget>
+        <widget class="QLineEdit" name="graph_start_edit">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>40</x>
+           <y>60</y>
+           <width>121</width>
+           <height>21</height>
+          </rect>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="graph_end_edit">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>40</x>
+           <y>90</y>
+           <width>121</width>
+           <height>21</height>
+          </rect>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_2">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>60</y>
+           <width>47</width>
+           <height>13</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>От</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_3">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>90</y>
+           <width>47</width>
+           <height>13</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>До</string>
+         </property>
+        </widget>
+       </widget>
       </widget>
      </widget>
-    </widget>
-   </widget>
+    </item>
+    <item row="0" column="1" rowspan="2" colspan="2">
+     <layout class="QGridLayout" name="graph_layout">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+     </layout>
+    </item>
+    <item row="1" column="2">
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ваганов Владислав &lt;/p&gt;&lt;p&gt;Ершов Дмитрий&lt;/p&gt;&lt;p&gt;Попович Иван&lt;/p&gt;&lt;p&gt;ИРИТ-РТФ, РИ-300022&lt;/p&gt;&lt;p&gt;2022&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QMenuBar" name="menubar">
