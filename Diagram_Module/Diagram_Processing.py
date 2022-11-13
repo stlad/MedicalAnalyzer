@@ -102,7 +102,11 @@ class MplCanvas(FigureCanvas):
     def __init__(self, parent=None, width=1, height=1, dpi=100, fig=None):
         if fig is None:
             return
+        self.Figure = fig
         super(MplCanvas, self).__init__(fig)
+
+    def __del__(self):
+        plt.close(self.Figure)
 
 '''d = DiagramProcessor()
 

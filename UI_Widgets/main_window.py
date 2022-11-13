@@ -6,7 +6,7 @@ from  UI_Widgets.CreatePatient_window import *
 from UI_Widgets.Analysis_Window import *
 from Diagram_Module.Diagram_Processing import *
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT
-
+from matplotlib import pyplot as plt
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -28,13 +28,17 @@ class MainWindow(QMainWindow):
         self.patient_create_btn.clicked.connect(lambda :self.open_patient_creation())
         self.patient_delete_btn.clicked.connect(lambda: self.delete_chosen_patient())
         self.patient_select_btn.clicked.connect(lambda: self.get_selected_patient_id())
-        self.patients_list.currentItemChanged.connect(lambda : (self.get_selected_patient_id())) #,self.update_patients_toolbox_name()))
+        self.patients_list.currentItemChanged.connect(lambda : (self.get_selected_patient_id()))
         self.analysis_create_btn.clicked.connect(lambda :self.create_analysis())
-        self.analysis_list.currentItemChanged.connect(lambda: (self.get_selected_analysis_id()))#,self.update_analysis_toolbox_name()))
+        self.analysis_list.currentItemChanged.connect(lambda: (self.get_selected_analysis_id()))
         self.analysis_delete_btn.clicked.connect(lambda :self.delete_chosen_analysis())
         self.analisys_select_btn.clicked.connect(lambda:self.open_analysis_creation())
         self.tb_graph_btn.clicked.connect(lambda:self.create_radars())
         self.comboBox.currentIndexChanged.connect(lambda: self.graph_preparation())
+
+        self.toolBox.setItemText(0, 'Пациенты')
+        self.toolBox.setItemText(1, 'Анализы и графики')
+
         self.show()
 
     def graph_preparation(self):
@@ -145,6 +149,7 @@ class MainWindow(QMainWindow):
             for col in range(self.graph_layout.columnCount()):
                 w = self.graph_layout.itemAtPosition(row, col)
                 if w is not None:
+                    #plt.close(w.widget().Figure)
                     w.widget().deleteLater()
 
         pat_id = self.current_patient_id
