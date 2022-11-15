@@ -48,7 +48,7 @@ def all_parameters_to_sql(filename):
     with open(filename, 'w') as file:
         file.write(lines)
 
-def create_db_from_sql_sript(filename):
+def execute_sql(filename):
     with open(filename) as f:
         sql = f.read()
 
