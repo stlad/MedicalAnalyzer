@@ -1,5 +1,6 @@
 from DB_Module.db_module import *
 import json
+import psycopg2
 
 # пациент [ID, имя, фамилия, отчество, дата рождения, диаг, диаг2, гены, пол, возраст]
 # анализ [ID, ID_пациента, дата]
@@ -81,7 +82,39 @@ def dump_patient_to_json(patients_ids: list, filename='db.json'):
         file.write(json_data)
 
 
-dump_patient_to_json([5,6])
+def load_data_from_json(filename='db.json'):
+    with open(filename, 'r', encoding='utf-8') as file:
+        data =  json.loads(file.read())
+    con = MainDBController._create_connection_to_DB()
+    for patient in data:
+        patient_info = patient['DATA']
+        with con.cursor() as cur:
+            sql=' '.join([f"insert into patients(surname, name,patronymic,birthday,main_diagnosis,concomitant_diagnosis,genes, gender)",
+                f"values('{patient_info[1]}','{patient_info[0]}','{patient_info[2]}','{patient_info[3]}', '{patient_info[4]}', '{patient_info[5]}', '{patient_info[6]}', '{patient_info[7]}')",
+                f"returning patient_id"])
+            cur.execute(sql)
+            patient_id = cur.fetchone()[0]
+            cur.commit()
+
+        for anal_date in patient['ANALYSIS']:
+            print(1)
+            with con.cursor() as cur:
+                sql = ' '.join([f"insert into Analysis(owner_id,analysis_date)",
+                            f"values({patient_id},'{anal_date}')",
+                            f"returning analysis_id"])
+                cur.execute(sql)
+                analysis_id = cur.fetchone()[0]
+                cur.commit()
+            for params in patient['ANALYSIS'][anal_date]:
+                MainDBController.InsertListOfParametersByAnalysisId(analysis_id, params)
+
+
+
+dump_patient_to_json([10,12])
+#load_data_from_json()
+
+
+
 #all_patients_to_sql("patients_backup.sql")
 #all_analysis_to_sql("analysis_backup.sql")
 #all_parameters_to_sql("parameter_res_backup.sql")
