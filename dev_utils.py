@@ -94,23 +94,28 @@ def load_data_from_json(filename='db.json'):
                 f"returning patient_id"])
             cur.execute(sql)
             patient_id = cur.fetchone()[0]
-            cur.commit()
+            con.commit()
 
         for anal_date in patient['ANALYSIS']:
-            print(1)
             with con.cursor() as cur:
                 sql = ' '.join([f"insert into Analysis(owner_id,analysis_date)",
                             f"values({patient_id},'{anal_date}')",
                             f"returning analysis_id"])
                 cur.execute(sql)
                 analysis_id = cur.fetchone()[0]
-                cur.commit()
-            for params in patient['ANALYSIS'][anal_date]:
-                MainDBController.InsertListOfParametersByAnalysisId(analysis_id, params)
+                con.commit()
+            MainDBController.InsertListOfParametersByAnalysisId(analysis_id, patient['ANALYSIS'][anal_date])
 
 
+def dump_all_patients_to_json():
+    patients = MainDBController.GetAllPatients()
+    patients_ids = [patient[0] for patient in patients]
+    dump_patient_to_json(patients_ids, filename='aa.json')
 
-dump_patient_to_json([10,12])
+
+#dump_all_patients_to_json()
+
+#dump_patient_to_json([5])
 #load_data_from_json()
 
 
