@@ -3,8 +3,6 @@ import datetime, json
 from utilits import *
 from Diagram_Module.diagrams import *
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT, FigureCanvasQTAgg as FigureCanvas
-from matplotlib.figure import Figure
-from PyQt5.QtWidgets import QSizePolicy
 
 
 
@@ -13,11 +11,10 @@ from PyQt5.QtWidgets import QSizePolicy
 # каталог [ID, название, ед, от, до]
 # параметр [ID, ID_по_каталогу, значение, ID_анализа, отклонение]
 # datetime.date(1957, 1, 1)
-
-class DiagramProcessor:
+class PatientDataProcessor:
     def __init__(self):
-        self.prepared_data = {}
         self.catalog = MainDBController.GetAllParameterCatalog()
+        self.prepared_data = {}
 
     def fill_patients(self, ids: list):
         #patients=  MainDBController.GetAllPatients()
@@ -58,11 +55,15 @@ class DiagramProcessor:
         return True
 
 
+class DiagramProcessor:
+    def __init__(self):
+        self.data_processor = PatientDataProcessor()
+
     def MakeRadar(self, patient_id:int, analysis_date:datetime):
-        analysis_dct = self.fill_patients([patient_id])
-        self.fill_patient_with_dates(analysis_dct,patient_id, [analysis_date])
+        analysis_dct = self.data_processor.fill_patients([patient_id])
+        self.data_processor.fill_patient_with_dates(analysis_dct,patient_id, [analysis_date])
         try:
-            t,b = make_radars_from_dic(self.prepared_data)
+            t,b = make_radars_from_dic(self.data_processor.prepared_data)
         except KeyError:
             print('Не заполнены анализы')
             return
@@ -71,12 +72,12 @@ class DiagramProcessor:
         return t_canvas, b_canvas
 
     def MakeTimeDiagram(self, patient_id:int, start_date:datetime, end_date:datetime):
-        analysis_dct = self.fill_patients([patient_id])
+        analysis_dct = self.data_processor.fill_patients([patient_id])
         dates = MainDBController.GetAllAnalysisBetweenDates(patient_id,start_date,end_date)
         dates = [date[2] for date in dates]
-        self.fill_patient_with_dates(analysis_dct,patient_id, dates)
+        self.data_processor.fill_patient_with_dates(analysis_dct,patient_id, dates)
         try:
-            t,b = make_time_diagrams_from_dic(self.prepared_data)
+            t,b = make_time_diagrams_from_dic(self.data_processor.prepared_data)
         except KeyError:
             print('Не заполнены анализы')
             return
@@ -86,16 +87,16 @@ class DiagramProcessor:
 
 
     def GetJsonByPatient(self, patient_id:int):
-        analysis_dct = self.fill_patients([patient_id])
+        analysis_dct = self.data_processor.fill_patients([patient_id])
         dates = MainDBController.GetAllAnalysisByPatientID(patient_id)
         dates = [date[2] for date in dates]
-        self.fill_patient_with_dates(analysis_dct,patient_id, dates)
-        print(self.prepared_data)
-        return self.prepared_data
+        self.data_processor.fill_patient_with_dates(analysis_dct,patient_id, dates)
+        print(self.data_processor.prepared_data)
+        return self.data_processor.prepared_data
 
     def _save_to_json(self, filename):
         with open(filename, 'w') as file:
-            file.write(json.dumps(self.prepared_data))
+            file.write(json.dumps(self.data_processor.prepared_data))
 
 
 class MplCanvas(FigureCanvas):
