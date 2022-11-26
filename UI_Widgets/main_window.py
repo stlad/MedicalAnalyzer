@@ -35,11 +35,20 @@ class MainWindow(QMainWindow):
         self.analisys_select_btn.clicked.connect(lambda:self.open_analysis_creation())
         self.tb_graph_btn.clicked.connect(lambda:self.create_radars())
         self.comboBox.currentIndexChanged.connect(lambda: self.graph_preparation())
+        self.diagnosis_btn.clicked.connect(lambda:self.get_diagnosis())
+
 
         self.toolBox.setItemText(0, 'Пациенты')
         self.toolBox.setItemText(1, 'Анализы и графики')
+        self.toolBox.setItemText(2, 'Диагнозы')
 
         self.show()
+
+    def get_diagnosis(self):
+        proc = DiagnosisProcessor()
+        diag = proc.GetDiagnosis()
+        # СДЕЛАТЬ ОБНОВЛЕНИЕ ДИАГНОЗА В БД
+        # СДЕЛАТЬ ВЫВОД в #self.diagnosis_edit().
 
     def graph_preparation(self):
         if self.comboBox.currentIndex()==0:

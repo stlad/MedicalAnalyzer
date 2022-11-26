@@ -26,7 +26,7 @@
          <x>0</x>
          <y>0</y>
          <width>248</width>
-         <height>717</height>
+         <height>690</height>
         </rect>
        </property>
        <attribute name="label">
@@ -101,7 +101,7 @@
          <x>0</x>
          <y>0</y>
          <width>248</width>
-         <height>717</height>
+         <height>690</height>
         </rect>
        </property>
        <attribute name="label">
@@ -266,6 +266,34 @@
           <string>До</string>
          </property>
         </widget>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="page_3">
+       <attribute name="label">
+        <string>Page</string>
+       </attribute>
+       <widget class="QPushButton" name="diagnosis_btn">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>10</y>
+          <width>161</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Составить диагноз</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="diagnosis_edit">
+        <property name="geometry">
+         <rect>
+          <x>2</x>
+          <y>70</y>
+          <width>211</width>
+          <height>21</height>
+         </rect>
+        </property>
        </widget>
       </widget>
      </widget>

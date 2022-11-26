@@ -5,12 +5,13 @@ from Diagram_Module.diagrams import *
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT, FigureCanvasQTAgg as FigureCanvas
 
 
-
 # пациент [ID, имя, фамилия, отчество, дата, рождения, диаг, диаг2, гены, пол, возраст]
 # анализ [ID, ID_пациента, дата]
 # каталог [ID, название, ед, от, до]
 # параметр [ID, ID_по_каталогу, значение, ID_анализа, отклонение]
 # datetime.date(1957, 1, 1)
+
+
 class PatientDataProcessor:
     def __init__(self):
         self.catalog = MainDBController.GetAllParameterCatalog()
@@ -42,8 +43,6 @@ class PatientDataProcessor:
             param_dct['Диагноз'] = patient_diagnosis
             isValid = self.fill_analysis_with_parameters(param_dct, analysis_by_date[0])
 
-
-
     def fill_analysis_with_parameters(self, dct, analysis_id):
         params = MainDBController.GetAllParametersByAnalysisID(analysis_id)
         if(len(params) ==0):
@@ -53,6 +52,13 @@ class PatientDataProcessor:
             dct[param_name]= {}
             dct[param_name]['Результат'] = param[2]
         return True
+
+class DiagnosisProcessor:
+    def __init__(self):
+        self.data_processor = PatientDataProcessor()
+
+    def GetDiagnosis(self):
+        pass
 
 
 class DiagramProcessor:
