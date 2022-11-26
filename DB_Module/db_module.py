@@ -136,7 +136,7 @@ class DBController():
         """Все параметры из каталога"""
         con = self._create_connection_to_DB()
         with con.cursor() as cur:
-            sql = f"select * from parameter_catalog"
+            sql = f"select * from parameter_catalog order by parameter_id"
             cur.execute(sql)
             rows = cur.fetchall()
         return rows
@@ -149,6 +149,23 @@ class DBController():
             rows = cur.fetchall()
         return rows
 
+    def UpdateParameter(self, param_id:int, data:list):
+        '''Изменить параметр. Подается ИД, [откл, значенеи]'''
+        con = self._create_connection_to_DB()
+        with con.cursor() as cur:
+            sql = f"update parameters set devation={data[0]}, value={data[1]} where parameter_id={param_id}"
+            cur.execute(sql)
+            con.commit()
+
+    def UpdatePatientDiagnosis(self, patient_id:int, diag:str):
+        '''Обновить диагноз пацеанта и вернуть его ИД'''
+        con = self._create_connection_to_DB()
+        with con.cursor() as cur:
+            sql = f"update patients set diagnosis = {diag} where patient_id={patient_id} returning patient_id"
+            cur.execute(sql)
+            patient_id = cur.fetchone()[0]
+            con.commit()
+        return patient_id
 
 '''def date_text_to_sql_format(text):
     try:
