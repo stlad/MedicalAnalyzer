@@ -15,6 +15,20 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout" columnstretch="2,10,1">
+    <item row="0" column="1" rowspan="2" colspan="2">
+     <layout class="QGridLayout" name="graph_layout">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+     </layout>
+    </item>
+    <item row="1" column="2">
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ваганов Владислав &lt;/p&gt;&lt;p&gt;Ершов Дмитрий&lt;/p&gt;&lt;p&gt;Попович Иван&lt;/p&gt;&lt;p&gt;ИРИТ-РТФ, РИ-300022&lt;/p&gt;&lt;p&gt;2022&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+    </item>
     <item row="0" column="0">
      <widget class="QToolBox" name="toolBox">
       <property name="currentIndex">
@@ -269,6 +283,14 @@
        </widget>
       </widget>
       <widget class="QWidget" name="page_3">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>248</width>
+         <height>690</height>
+        </rect>
+       </property>
        <attribute name="label">
         <string>Page</string>
        </attribute>
@@ -285,31 +307,17 @@
          <string>Составить диагноз</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="diagnosis_edit">
+       <widget class="QTextEdit" name="diagnosis_edit">
         <property name="geometry">
          <rect>
-          <x>2</x>
+          <x>0</x>
           <y>70</y>
-          <width>211</width>
-          <height>21</height>
+          <width>221</width>
+          <height>281</height>
          </rect>
         </property>
        </widget>
       </widget>
-     </widget>
-    </item>
-    <item row="0" column="1" rowspan="2" colspan="2">
-     <layout class="QGridLayout" name="graph_layout">
-      <property name="spacing">
-       <number>0</number>
-      </property>
-     </layout>
-    </item>
-    <item row="1" column="2">
-     <widget class="QLabel" name="label">
-      <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ваганов Владислав &lt;/p&gt;&lt;p&gt;Ершов Дмитрий&lt;/p&gt;&lt;p&gt;Попович Иван&lt;/p&gt;&lt;p&gt;ИРИТ-РТФ, РИ-300022&lt;/p&gt;&lt;p&gt;2022&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-      </property>
      </widget>
     </item>
    </layout>

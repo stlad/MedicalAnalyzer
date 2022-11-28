@@ -63,10 +63,9 @@ class AnalysisWindow(QWidget):
         for row, param in enumerate( self.params):
             divation = param[4] if param[4]!='None' else ''
             table.setItem(row,1, QTableWidgetItem(divation))
-            table.item(row, 1).setFlags(table.item(row, 1).flags() ^ Qt.ItemIsEditable)
-
-            #Возможно тут стоит сделать замену 0.0 на "-" или ""
             table.setItem(row,2, QTableWidgetItem(str(param[2])))
+
+            table.item(row, 1).setFlags(table.item(row, 1).flags() ^ Qt.ItemIsEditable)
             table.item(row, 2).setFlags(table.item(row, 2).flags() ^ Qt.ItemIsEditable)
 
 

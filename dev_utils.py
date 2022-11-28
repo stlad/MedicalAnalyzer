@@ -107,10 +107,10 @@ def load_data_from_json(filename='db.json'):
             MainDBController.InsertListOfParametersByAnalysisId(analysis_id, patient['ANALYSIS'][anal_date])
 
 
-def dump_all_patients_to_json():
+def dump_all_patients_to_json(filename='patients.json'):
     patients = MainDBController.GetAllPatients()
     patients_ids = [patient[0] for patient in patients]
-    dump_patient_to_json(patients_ids, filename='aa.json')
+    dump_patient_to_json(patients_ids, filename=filename)
 
 
 #dump_all_patients_to_json()

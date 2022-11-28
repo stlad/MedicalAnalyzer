@@ -20,6 +20,7 @@ class MainWindow(QMainWindow):
         self.patients = []
         self.current_patient_id = 0
         self.current_analysis_id = 0
+        self.current_analysis_date = ''
         self.analysis = []
 
         self.diagram_processor = DiagramProcessor()
@@ -46,9 +47,13 @@ class MainWindow(QMainWindow):
 
     def get_diagnosis(self):
         proc = DiagnosisProcessor()
-        diag = proc.GetDiagnosis()
         # СДЕЛАТЬ ОБНОВЛЕНИЕ ДИАГНОЗА В БД
         # СДЕЛАТЬ ВЫВОД в #self.diagnosis_edit().
+        pat_id = self.get_selected_patient_id() #self.current_patient_id
+
+        current_anal_date = self.current_analysis_date
+        diag = proc.GetDiagnosis(pat_id, current_anal_date)
+        self.diagnosis_edit.setText(diag)
 
     def graph_preparation(self):
         if self.comboBox.currentIndex()==0:
@@ -106,6 +111,16 @@ class MainWindow(QMainWindow):
         #print(current_patient[0])
         self.current_patient_id = current_patient[0]
         self.refresh_analysis_list()
+        return self.current_patient_id
+
+    def get_selected_analysis_id(self):
+        index = self.analysis_list.currentRow()
+        current_anal = self.analysis[index]
+        self.current_analysis_id = current_anal[0]
+        if index != -1:
+            self.current_analysis_date = current_anal[2]
+        #print(self.current_analysis_date)
+
 
     def update_patients_toolbox_name(self):
         self.toolBox.setItemText(0,self.patients_list.currentItem().text())
@@ -113,11 +128,7 @@ class MainWindow(QMainWindow):
     def update_analysis_toolbox_name(self):
         self.toolBox.setItemText(1,self.analysis_list.currentItem().text())
 
-    def get_selected_analysis_id(self):
-        index = self.analysis_list.currentRow()
-        current_anal = self.analysis[index]
-        self.current_analysis_id = current_anal[0]
-        #print(self.current_analysis_id)
+
 
     def delete_chosen_patient(self):
         index = self.patients_list.currentRow()

@@ -2,6 +2,7 @@ from DB_Module.db_module import *
 import datetime, json
 from utilits import *
 from Diagram_Module.diagrams import *
+from Diagram_Module.manual_prediction import *
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT, FigureCanvasQTAgg as FigureCanvas
 
 
@@ -57,8 +58,11 @@ class DiagnosisProcessor:
     def __init__(self):
         self.data_processor = PatientDataProcessor()
 
-    def GetDiagnosis(self):
-        pass
+    def GetDiagnosis(self, patient_id:int, analysis_date:datetime):
+        analysis_dct = self.data_processor.fill_patients([patient_id])
+        self.data_processor.fill_patient_with_dates(analysis_dct,patient_id, [analysis_date])
+        diagnosis = get_diagnose(self.data_processor.prepared_data)
+        return diagnosis
 
 
 class DiagramProcessor:
