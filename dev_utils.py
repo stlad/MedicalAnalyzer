@@ -49,68 +49,9 @@ def all_parameters_to_sql(filename):
     with open(filename, 'w') as file:
         file.write(lines)
 
-def execute_sql(filename):
-    with open(filename) as f:
-        sql = f.read()
-
-    con = MainDBController._create_connection_to_DB()
-    with con.cursor() as cur:
-        cur.execute(sql)
-        con.commit()
 
 
-def patient_to_dct(id:int):
-    '''Функция готовит запись о пациенте к формату для передачи'''
-    res = {}
-    res['DATA'] = list(MainDBController.GetPatientByID(id)[0][1:-1])    #пациент без ИД и возраста
-    res['DATA'][3] = str(res['DATA'][3])                                #date перевести в строку
-    analysis = MainDBController.GetAllAnalysisByPatientID(id)
-    res['ANALYSIS'] = {}
-    for anal in analysis:
-        anal_params = MainDBController.GetAllParametersByAnalysisID(anal[0])
-        res['ANALYSIS'][str(anal[2])] = [[param[1], param[2], param[4]] for param in anal_params]
 
-    return res
-
-def dump_patient_to_json(patients_ids: list, filename='db.json'):
-    data = []
-    for id in patients_ids:
-        data.append(patient_to_dct(id))
-
-    json_data =  json.dumps(data, indent=4)
-    with open (filename, 'w', encoding='utf-8') as file:
-        file.write(json_data)
-
-
-def load_data_from_json(filename='db.json'):
-    with open(filename, 'r', encoding='utf-8') as file:
-        data =  json.loads(file.read())
-    con = MainDBController._create_connection_to_DB()
-    for patient in data:
-        patient_info = patient['DATA']
-        with con.cursor() as cur:
-            sql=' '.join([f"insert into patients(surname, name,patronymic,birthday,main_diagnosis,concomitant_diagnosis,genes, gender)",
-                f"values('{patient_info[1]}','{patient_info[0]}','{patient_info[2]}','{patient_info[3]}', '{patient_info[4]}', '{patient_info[5]}', '{patient_info[6]}', '{patient_info[7]}')",
-                f"returning patient_id"])
-            cur.execute(sql)
-            patient_id = cur.fetchone()[0]
-            con.commit()
-
-        for anal_date in patient['ANALYSIS']:
-            with con.cursor() as cur:
-                sql = ' '.join([f"insert into Analysis(owner_id,analysis_date)",
-                            f"values({patient_id},'{anal_date}')",
-                            f"returning analysis_id"])
-                cur.execute(sql)
-                analysis_id = cur.fetchone()[0]
-                con.commit()
-            MainDBController.InsertListOfParametersByAnalysisId(analysis_id, patient['ANALYSIS'][anal_date])
-
-
-def dump_all_patients_to_json(filename='patients.json'):
-    patients = MainDBController.GetAllPatients()
-    patients_ids = [patient[0] for patient in patients]
-    dump_patient_to_json(patients_ids, filename=filename)
 
 
 #dump_all_patients_to_json()
