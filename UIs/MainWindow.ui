@@ -52,7 +52,7 @@
           <x>0</x>
           <y>0</y>
           <width>261</width>
-          <height>311</height>
+          <height>341</height>
          </rect>
         </property>
         <property name="title">
@@ -73,7 +73,7 @@
           <rect>
            <x>20</x>
            <y>190</y>
-           <width>131</width>
+           <width>101</width>
            <height>31</height>
           </rect>
          </property>
@@ -86,7 +86,7 @@
           <rect>
            <x>20</x>
            <y>230</y>
-           <width>131</width>
+           <width>101</width>
            <height>31</height>
           </rect>
          </property>
@@ -99,12 +99,25 @@
           <rect>
            <x>20</x>
            <y>270</y>
-           <width>131</width>
+           <width>101</width>
            <height>31</height>
           </rect>
          </property>
          <property name="text">
           <string>Удалить</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="load_from_file_btn">
+         <property name="geometry">
+          <rect>
+           <x>130</x>
+           <y>190</y>
+           <width>111</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Загрузить из файла</string>
          </property>
         </widget>
        </widget>

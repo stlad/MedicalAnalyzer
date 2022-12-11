@@ -6,7 +6,7 @@ from Diagram_Module.manual_prediction import *
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT, FigureCanvasQTAgg as FigureCanvas
 
 
-# пациент [ID, имя, фамилия, отчество, дата, рождения, диаг, диаг2, гены, пол, возраст]
+# пациент [ID, имя, фамилия, отчество, дата рождения, диаг, диаг2, гены, пол, возраст]
 # анализ [ID, ID_пациента, дата]
 # каталог [ID, название, ед, от, до]
 # параметр [ID, ID_по_каталогу, значение, ID_анализа, отклонение]

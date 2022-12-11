@@ -234,7 +234,9 @@ def execute_sql(filename):
 
 
 MainDBController = DBController()
+#load_data_from_json('parse_res.json')
 
+#[print(i) for i in MainDBController.GetAllPatients()]
 '''
 #print(date_text_to_sql_format('asdasd'))
 rows = MainDBController.GetAllAnalysisByPatientID(5)

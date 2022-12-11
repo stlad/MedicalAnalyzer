@@ -1,6 +1,8 @@
 import os
 from PyQt5.QtWidgets import *
 from  PyQt5.uic import loadUi
+
+import DB_Module.db_module
 from DB_Module.db_module import *
 from  UI_Widgets.CreatePatient_window import *
 from UI_Widgets.Analysis_Window import *
@@ -37,7 +39,7 @@ class MainWindow(QMainWindow):
         self.tb_graph_btn.clicked.connect(lambda:self.create_radars())
         self.comboBox.currentIndexChanged.connect(lambda: self.graph_preparation())
         self.diagnosis_btn.clicked.connect(lambda:self.get_diagnosis())
-
+        self.load_from_file_btn.clicked.connect(lambda :self.load_from_file())
 
         self.toolBox.setItemText(0, 'Пациенты')
         self.toolBox.setItemText(1, 'Анализы и графики')
@@ -45,12 +47,19 @@ class MainWindow(QMainWindow):
 
         self.show()
 
+
+    def load_from_file(self):
+        fname = QFileDialog.getOpenFileName(self, 'Open file', filter="(*.json)")
+        if fname[0]=='':
+            return
+        DB_Module.db_module.load_data_from_json(filename=fname[0])
+
+
     def get_diagnosis(self):
         proc = DiagnosisProcessor()
         # СДЕЛАТЬ ОБНОВЛЕНИЕ ДИАГНОЗА В БД
         # СДЕЛАТЬ ВЫВОД в #self.diagnosis_edit().
         pat_id = self.get_selected_patient_id() #self.current_patient_id
-
         current_anal_date = self.current_analysis_date
         diag = proc.GetDiagnosis(pat_id, current_anal_date)
         self.diagnosis_edit.setText(diag)
@@ -108,6 +117,7 @@ class MainWindow(QMainWindow):
     def get_selected_patient_id(self):
         index = self.patients_list.currentRow()
         current_patient = self.patients[index]
+        print(index, current_patient)
         #print(current_patient[0])
         self.current_patient_id = current_patient[0]
         self.refresh_analysis_list()
@@ -119,6 +129,8 @@ class MainWindow(QMainWindow):
         self.current_analysis_id = current_anal[0]
         if index != -1:
             self.current_analysis_date = current_anal[2]
+        else:
+            current_anal = None
         #print(self.current_analysis_date)
 
 
@@ -169,7 +181,9 @@ class MainWindow(QMainWindow):
             for col in range(self.graph_layout.columnCount()):
                 w = self.graph_layout.itemAtPosition(row, col)
                 if w is not None:
-                    #plt.close(w.widget().Figure)
+                    if 'Figure' in list(w.widget().__dict__.keys()):
+                        #plt.close(w.widget().Figure)
+                       w.widget().Figure.clf()
                     w.widget().deleteLater()
 
         pat_id = self.current_patient_id
