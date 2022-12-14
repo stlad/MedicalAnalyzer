@@ -61,7 +61,12 @@ class MainWindow(QMainWindow):
         # СДЕЛАТЬ ВЫВОД в #self.diagnosis_edit().
         pat_id = self.get_selected_patient_id() #self.current_patient_id
         current_anal_date = self.current_analysis_date
-        diag = proc.GetDiagnosis(pat_id, current_anal_date)
+        #diag = proc.GetDiagnosis(pat_id, current_anal_date)
+        #print( os.getcwd()+'\Diagram_Module\pse_code.xlsx')
+        try:
+            diag = proc.GetDiagnosis(pat_id, current_anal_date, os.getcwd()+'\Diagram_Module\pse_code.xlsx')
+        except Exception as e :
+            diag = e.args[0]
         self.diagnosis_edit.setText(diag)
 
     def graph_preparation(self):

@@ -34,72 +34,101 @@
 # }
 # CD8 = {'min': 0.5, 'max': 0.9}
 # CD4 = {'min': 0.7, 'max': 1.1}
+import operator
+import pandas as pd
 
-NEU_LYMF = {'min': 1.67, 'max': 1.8}
-NEU_CD3 = {'min': 2.25, 'max': 3.63}
-NEU_CD4 = {'min': 3.0, 'max': 5.0}
-NEU_CD8 = {'min': 9.47, 'max': 12.3}
-# LYMF_CD19 = {'min': 9.6, 'max': 10.0}
-# CD19_CD4 = {'min': 0.16, 'max': 0.31}
-# CD19_CD8 = {'min': 0.53, 'max': 0.77}
+def split_to_conditions_and_unions(string):
+    brackets_counter = 0
+    sub_strings = []
+    unions = []
+    ss_start_idx = -1
+    for i in range(len(string)):
+        if string[i] == '(':
+            if brackets_counter == 0:
+                ss_start_idx = i + 1
+                brackets_counter = 1
+                while brackets_counter > 0 and i < len(string):
+                    i += 1
+                    if string[i] == '(':
+                        brackets_counter += 1
+                    elif string[i] == ')':
+                        brackets_counter -= 1
+                        if brackets_counter == 0:
+                            sub_strings.append(string[ss_start_idx:(i - 1)])
+                            ss_start_idx = -1
+        elif brackets_counter == 0 and string[i] == ')':
+            raise Exception(
+                "Ошибка: Закрывающая скобочка без открывающей.")
+        elif string[i] != ' ':
+            if string.startswith('and', i):
+                if ss_start_idx != -1:
+                    sub_strings.append(string[ss_start_idx:(i - 1)])
+                    ss_start_idx = -1
+                unions.append('and')
+                i += 2
+            elif string.startswith('or', i):
+                if ss_start_idx != -1:
+                    sub_strings.append(string[ss_start_idx:(i - 1)])
+                    ss_start_idx = -1
+                unions.append('or')
+                i += 1
+            elif ss_start_idx == -1:
+                ss_start_idx = i
+            elif i == len(string) - 1:
+                sub_strings.append(string[ss_start_idx:i])
+    return sub_strings, unions
 
 
-def get_ovid(analysis):
-    b_lymf = analysis['Общие В-лимфоциты (CD45+CD19+)']['Результат']
-    if b_lymf <= 0.039:
-        return 4
-    elif b_lymf <= 0.06:
-        return 3
-    elif b_lymf <= 0.11:
-        return 2
-    elif b_lymf <= 0.2:
-        return 1
-    elif b_lymf <= 0.5:
-        return 0
-    else:
-        return -1
-
-
-def check_tnk_b_sum(analysis):
-    b_lymf = analysis['Общие В-лимфоциты (CD45+CD19+)']['Результат']
-    tnk = analysis['Общие NK-клетки (CD45+CD3-CD16+56+)']['Результат']
-    s = tnk + b_lymf
-    if s < 0.2:
-        return False
-    else:
-        return True
-
-
-def T_cells_is_sick(analysis):
-    NEU = analysis['Нейтрофилы (NEU)']['Результат']
-    LYMF = analysis['Лимфоциты (LYMF)']['Результат']
-    CD3 = analysis['Общие T-лимфоциты (CD45+CD3+)']['Результат']
-    CD4 = analysis['Т-хелперы (CD45+CD3+CD4+)']['Результат']
-    CD8 = analysis['Т-цитотоксические лимфоциты (CD45+CD3+СD8+)']['Результат']
-    return NEU_LYMF['min'] <= NEU / LYMF <= NEU_LYMF['max'] and NEU_CD3['min'] <= NEU / CD3 <= NEU_CD3['max'] and \
-           NEU_CD4['min'] <= NEU / CD4 <= NEU_CD4['max'] and NEU_CD8['min'] <= NEU / CD8 <= NEU_CD8['max']
-
-
-def get_diagnose(data):
+# Нет обработки ошибочного ввода
+def get_val(element, data):
     patient = data[list(data.keys())[0]]
     analysis = patient[list(patient.keys())[0]]
-    ovid = get_ovid(analysis)
-    if ovid > 0:
-        if check_tnk_b_sum(analysis):
-            return 'ОВИД {}. Можно компенсировать.'.format(ovid)
-        else:
-            return 'ОВИД {}. Требуется наблюдение инфекционной реакции.'.format(ovid)
-    CD4 = analysis['Т-хелперы (CD45+CD3+CD4+)']['Результат']
-    CD8 = analysis['Т-цитотоксические лимфоциты (CD45+CD3+СD8+)']['Результат']
-    if T_cells_is_sick(analysis) and CD4/CD8 > 1:
-        if 0.05 <= CD4 <= 0.09:
-            return 'ТКИД 4 степени - гематологический диагноз'
-        elif CD4 <= 0.2:
-            return 'ТКИД 3 степени - стимулировать т клеточное звено'
-        elif CD4 <= 0.5:
-            return 'ТКИД 2 степени - стимулировать т клеточное звено и наблюдать за отклонением (восстановилось или нет)'
-        elif CD4 > 0.5:
-            return 'Хорошо (пациент скомпенсирован по Т-звену) и сдает иммунограм через 6 мес.'
-    if ovid < 0:
-        return 'Требуется дополнительный анализ. В 40 лет и старше множественная аллергия, ревматоидные артриты, бронхоэктатическая болень и в интервале 20 лет переходит в В-лимфому'
-    return 'Требуется дополнительный анализ.'
+    analysis_keys = list(analysis.keys())
+    try:
+        return float(element)
+    except ValueError:
+        for a in analysis_keys:
+            if a.__contains__(element):
+                return float(analysis[a]['Результат'])
+
+
+def evaluate_condition(condition, data):
+    operators = {
+        '<': operator.lt,
+        '<=': operator.le,
+        '==': operator.eq,
+        '!=': operator.ne,
+        '>': operator.gt,
+        '>=': operator.ge
+    }
+    for i in range(len(condition)):
+        for o in list(operators.keys()):
+            if condition.startswith(o):
+                left = get_val(condition[0:(i - 1)].replace(' ', ''), data)
+                right = get_val(condition[(i + len(o)):].replace(' ', ''), data)
+                return operators[o](left, right)
+    raise Exception("Ошибка: неправильный оператор сравнения.")
+
+
+def get_condition_result(condition, data):
+    conditions = [condition]
+    unions = []
+    if condition.__contains__('and') or condition.__contains__('or'):
+        conditions, unions = split_to_conditions_and_unions(condition)
+        result = get_condition_result(conditions[0])
+        for i in range(1, len(conditions)):
+            if unions[i - 1] == 'and':
+                result = result and get_condition_result(conditions[i])
+            else:
+                result = result or get_condition_result(conditions[i])
+        return result
+    else:
+        return evaluate_condition(condition, data)
+
+
+def predict_by_xlsx(path, dct):
+    data = pd.read_excel(path)
+    for i in range(len(data['Диагноз'])):
+        if get_condition_result(data['Выражение'][i], dct):
+            return data['Диагноз'][i]
+    return 'Требуется дополнительный анализ данных с использованием нейронной сети.'

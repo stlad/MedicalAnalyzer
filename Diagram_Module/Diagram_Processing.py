@@ -1,3 +1,5 @@
+import os
+
 from DB_Module.db_module import *
 import datetime, json
 from utilits import *
@@ -58,10 +60,10 @@ class DiagnosisProcessor:
     def __init__(self):
         self.data_processor = PatientDataProcessor()
 
-    def GetDiagnosis(self, patient_id:int, analysis_date:datetime):
+    def GetDiagnosis(self, patient_id:int, analysis_date:datetime, xlsx_path):
         analysis_dct = self.data_processor.fill_patients([patient_id])
         self.data_processor.fill_patient_with_dates(analysis_dct,patient_id, [analysis_date])
-        diagnosis = get_diagnose(self.data_processor.prepared_data)
+        diagnosis = predict_by_xlsx(xlsx_path,self.data_processor.prepared_data)
         return diagnosis
 
 
