@@ -17,6 +17,7 @@ class MainWindow(QMainWindow):
 
     def initUI(self):
         loadUi('UIs\MainWindow.ui', self)
+        self.setWindowTitle('Medical Analyzer')
         self.child_windows = []
 
         self.patients = []
@@ -32,8 +33,13 @@ class MainWindow(QMainWindow):
         self.patient_delete_btn.clicked.connect(lambda: self.delete_chosen_patient())
         self.patient_select_btn.clicked.connect(lambda: self.get_selected_patient_id())
         self.patients_list.currentItemChanged.connect(lambda : (self.get_selected_patient_id()))
+        self.patients_list.currentItemChanged.connect(lambda:self.update_toolbox_pat_name())
+
         self.analysis_create_btn.clicked.connect(lambda :self.create_analysis())
         self.analysis_list.currentItemChanged.connect(lambda: (self.get_selected_analysis_id()))
+        self.analysis_list.currentItemChanged.connect(lambda: self.update_toolbox_analysis_name())
+
+
         self.analysis_delete_btn.clicked.connect(lambda :self.delete_chosen_analysis())
         self.analisys_select_btn.clicked.connect(lambda:self.open_analysis_creation())
         self.tb_graph_btn.clicked.connect(lambda:self.create_radars())
@@ -47,6 +53,22 @@ class MainWindow(QMainWindow):
 
         self.show()
 
+    def update_toolbox_pat_name(self):
+        index = self.patients_list.currentRow()
+        if index < 0:
+            self.toolBox.setItemText(0, 'Пациенты')
+            return
+        pat = [p for p in self.patients if p[0]==self.current_patient_id][0]
+        name, sur, patr = pat[1], pat[2], pat[3]
+        self.toolBox.setItemText(0, f'{sur} {name} {patr}')
+
+    def update_toolbox_analysis_name(self):
+        index = self.analysis_list.currentRow()
+        if index < 0:
+            self.toolBox.setItemText(1, 'Анализы')
+            return
+        analysis = [a for a in self.analysis if a[0]==self.current_analysis_id][0]
+        self.toolBox.setItemText(1, f'{str(analysis[2])}')
 
     def load_from_file(self):
         fname = QFileDialog.getOpenFileName(self, 'Open file', filter="(*.json)")
@@ -122,7 +144,7 @@ class MainWindow(QMainWindow):
     def get_selected_patient_id(self):
         index = self.patients_list.currentRow()
         current_patient = self.patients[index]
-        print(index, current_patient)
+        #print(index, current_patient)
         #print(current_patient[0])
         self.current_patient_id = current_patient[0]
         self.refresh_analysis_list()
