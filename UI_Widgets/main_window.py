@@ -1,3 +1,4 @@
+import gc
 import os
 from PyQt5.QtWidgets import *
 from  PyQt5.uic import loadUi
@@ -210,7 +211,9 @@ class MainWindow(QMainWindow):
                 if w is not None:
                     if 'Figure' in list(w.widget().__dict__.keys()):
                         #plt.close(w.widget().Figure)
-                       w.widget().Figure.clf()
+                        #plt.figure().close('all')
+                        fig = w.widget().Figure.clf()
+                        plt.close() # можно убрать (если рисуются окошки)
                     w.widget().deleteLater()
 
         pat_id = self.current_patient_id

@@ -72,6 +72,7 @@ class DiagramProcessor:
         self.data_processor = PatientDataProcessor()
 
     def MakeRadar(self, patient_id:int, analysis_date:datetime):
+        self.data_processor = PatientDataProcessor()
         analysis_dct = self.data_processor.fill_patients([patient_id])
         self.data_processor.fill_patient_with_dates(analysis_dct,patient_id, [analysis_date])
         try:
@@ -84,6 +85,7 @@ class DiagramProcessor:
         return t_canvas, b_canvas
 
     def MakeTimeDiagram(self, patient_id:int, start_date:datetime, end_date:datetime):
+        self.data_processor = PatientDataProcessor()
         analysis_dct = self.data_processor.fill_patients([patient_id])
         dates = MainDBController.GetAllAnalysisBetweenDates(patient_id,start_date,end_date)
         dates = [date[2] for date in dates]
@@ -118,8 +120,8 @@ class MplCanvas(FigureCanvas):
         self.Figure = fig
         super(MplCanvas, self).__init__(fig)
 
-    def __del__(self):
-        plt.close(self.Figure)
+    '''def __del__(self):
+        plt.close(self.Figure)'''
 
 '''d = DiagramProcessor()
 

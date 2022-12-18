@@ -122,9 +122,13 @@ def make_time_diagram(arr, dates, labels, diagram_type, name):
         if i % 3 >= 1:
             linestyle = 'dashed'
         ax.plot(dates, arr[i], label=labels[i], color=colors[i // 3], linestyle=linestyle)
+    '''ax.legend(bbox_to_anchor=(1.01, 1), loc='upper left', borderaxespad=0)
+    plt.xticks(rotation=40)
+    plt.title("Пациент: {}\nГрафик: {}".format(name, diagram_type), pad=25)'''
     ax.legend(bbox_to_anchor=(1.01, 1), loc='upper left', borderaxespad=0)
     plt.xticks(rotation=40)
-    plt.title("Пациент: {}\nГрафик: {}".format(name, diagram_type), pad=25)
+    plt.title("Пациент: {}\nГрафик: {}".format(name, diagram_type), pad=0)
+    plt.subplots_adjust(left=-0.001, right=0.85, top=0.9, bottom=0.17)
     return fig
 
 
