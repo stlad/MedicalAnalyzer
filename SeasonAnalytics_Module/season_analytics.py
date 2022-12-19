@@ -6,7 +6,7 @@ catalog = MainDBController.GetAllParameterCatalog()
 
 def get_main_table(patient_id):
     patientProcessor = PatientDataProcessor()
-    dates = [d[2] for d in MainDBController.GetAllAnalysisByPatientID(5)]
+    dates = [d[2] for d in MainDBController.GetAllAnalysisByPatientID(patient_id)]
 
     analysis_dct = patientProcessor.fill_patients([patient_id])
     patientProcessor.fill_patient_with_dates(analysis_dct, patient_id, dates)
@@ -72,7 +72,7 @@ def _get_avg_param_df(df):
         cnt+=1
     return avg_df
 
-class SeasonAnazator():
+class SeasonAnalyzer():
     def __init__(self, patient_id):
         self.id = patient_id
         self.main_df = get_main_table(self.id)
@@ -87,4 +87,17 @@ class SeasonAnazator():
         self.avg_df.to_excel(excel_writer=writer, sheet_name='Среднее')
         writer.close()
 
-SeasonAnazator(5).write_xlsx('out1.xlsx')
+#SeasonAnalyzer(5).write_xlsx('out1.xlsx')
+
+
+
+
+'''df = get_main_table(5)
+au_df, sp_df = _get_season_tables(df)
+avg_df = _get_avg_param_df(df)'''
+
+#write_patient_stats_to_xlsx('out.xlsx', [df, au_df,sp_df,avg_df])
+#df = make_season_table(5)
+#adf = _get_season_tables(df)
+#df.to_excel('out.xlsx', sheet_name='Main')
+#write_patient_stats_to_xlsx('out.xlsx', 5)

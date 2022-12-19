@@ -10,6 +10,8 @@ from UI_Widgets.Analysis_Window import *
 from Diagram_Module.Diagram_Processing import *
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT
 from matplotlib import pyplot as plt
+from UI_Widgets.Season_window import SeasonWindow
+from SeasonAnalytics_Module.season_analytics import SeasonAnalyzer
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -32,7 +34,9 @@ class MainWindow(QMainWindow):
         self.refresh_all_lists()
         self.patient_create_btn.clicked.connect(lambda :self.open_patient_creation())
         self.patient_delete_btn.clicked.connect(lambda: self.delete_chosen_patient())
-        self.patient_select_btn.clicked.connect(lambda: self.get_selected_patient_id())
+
+        self.patient_select_btn.clicked.connect(lambda: self.open_season_analyzer())
+
         self.patients_list.currentItemChanged.connect(lambda : (self.get_selected_patient_id()))
         self.patients_list.currentItemChanged.connect(lambda:self.update_toolbox_pat_name())
 
@@ -53,6 +57,15 @@ class MainWindow(QMainWindow):
         self.toolBox.setItemText(2, 'Диагнозы')
 
         self.show()
+
+    def open_season_analyzer(self):
+        print(self.current_patient_id)
+        if self.current_patient_id <=0:
+            return
+        s_analyzer = SeasonAnalyzer(self.current_patient_id)
+        season_window = SeasonWindow(self, s_analyzer)
+        self.child_windows.append(season_window)
+        season_window.show()
 
     def update_toolbox_pat_name(self):
         index = self.patients_list.currentRow()

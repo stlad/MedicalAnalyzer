@@ -113,6 +113,7 @@ class DiagramProcessor:
             file.write(json.dumps(self.data_processor.prepared_data))
 
 
+
 class MplCanvas(FigureCanvas):
     def __init__(self, parent=None, width=1, height=1, dpi=100, fig=None):
         if fig is None:

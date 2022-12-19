@@ -3,6 +3,7 @@ from copy import copy
 
 import numpy as np
 import pylab as pl
+import pandas as pd
 from matplotlib import pyplot as plt
 
 
@@ -316,3 +317,29 @@ def save_and_close(fig, dir_path, diagram_type):
         os.mkdir(dir_path)
     fig.savefig("{}.png".format(dir_path, diagram_type), bbox_inches='tight')
     plt.close(fig)
+
+
+
+
+def MakeSeasonDiagrams(data, rmin, rmax, season):
+    fig, ax = plt.subplots(figsize=(3, data.shape[0]))
+    param_name = data.columns[1]
+    rmin_arr = [rmin] * data.shape[0]
+    rmax_arr = [rmax] * data.shape[0]
+
+    if data.shape[0] != 0:
+        ax.plot(data['Дата'], data[param_name], label = param_name, color='green', linestyle='solid')
+        ax.plot(data['Дата'], rmin_arr, label = 'мин значение нормы', color='red', linestyle='solid')
+        ax.plot(data['Дата'], rmax_arr, label = 'макс значение нормы', color='red', linestyle='solid')
+
+    ax.legend(bbox_to_anchor=(1.01, 1), loc='upper left', borderaxespad=0)
+    plt.xticks(rotation=40)
+
+    s = 'Весна' if season==0 else 'Осень'
+
+    plt.title(f'Параметр: {param_name}; Сезон: {s}')
+    plt.subplots_adjust(left=-0.001, right=0.85, top=0.9, bottom=0.17)
+
+    return fig
+
+

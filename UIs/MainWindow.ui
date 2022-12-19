@@ -68,24 +68,11 @@
           </rect>
          </property>
         </widget>
-        <widget class="QPushButton" name="patient_select_btn">
-         <property name="geometry">
-          <rect>
-           <x>20</x>
-           <y>190</y>
-           <width>101</width>
-           <height>31</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Выбрать</string>
-         </property>
-        </widget>
         <widget class="QPushButton" name="patient_create_btn">
          <property name="geometry">
           <rect>
            <x>20</x>
-           <y>230</y>
+           <y>190</y>
            <width>101</width>
            <height>31</height>
           </rect>
@@ -98,7 +85,7 @@
          <property name="geometry">
           <rect>
            <x>20</x>
-           <y>270</y>
+           <y>230</y>
            <width>101</width>
            <height>31</height>
           </rect>
@@ -293,6 +280,19 @@
           <string>До</string>
          </property>
         </widget>
+       </widget>
+       <widget class="QPushButton" name="patient_select_btn">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>570</y>
+          <width>121</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Анализ по сезонам</string>
+        </property>
        </widget>
       </widget>
       <widget class="QWidget" name="page_3">
