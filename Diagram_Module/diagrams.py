@@ -3,9 +3,8 @@ from copy import copy
 
 import numpy as np
 import pylab as pl
-import pandas as pd
 from matplotlib import pyplot as plt
-
+import pandas as pd
 
 def reduce_dec_num(val):
     return math.ceil(val * 10) / 10
@@ -115,7 +114,7 @@ def make_radars(data, name, date, age, diagnos):
     return fig, fig1
 
 
-def make_time_diagram(arr, dates, labels, diagram_type, name):
+def make_time_diagram(arr, dates, labels, diagram_type, name, spring_idxs, automn_idxs, over_idxs, season_over_idxs):
     fig, ax = plt.subplots(figsize=(len(arr), len(dates)))
     colors = ['blue', 'green', 'red', 'orange', 'purple', 'black', 'yellow']
     for i in range(len(arr)):
@@ -123,9 +122,15 @@ def make_time_diagram(arr, dates, labels, diagram_type, name):
         if i % 3 >= 1:
             linestyle = 'dashed'
         ax.plot(dates, arr[i], label=labels[i], color=colors[i // 3], linestyle=linestyle)
-    '''ax.legend(bbox_to_anchor=(1.01, 1), loc='upper left', borderaxespad=0)
-    plt.xticks(rotation=40)
-    plt.title("Пациент: {}\nГрафик: {}".format(name, diagram_type), pad=25)'''
+    for i in range(len(arr)):
+        for j in range(len(over_idxs[i])):
+            ax.plot(dates[over_idxs[i][j]], arr[i][over_idxs[i][j]], "s", color=colors[i // 3])
+        for j in range(len(season_over_idxs[i])):
+            ax.plot(dates[season_over_idxs[i][j]], arr[i][season_over_idxs[i][j]], "*", markersize=11, color=colors[i // 3])
+    for i in range(len(spring_idxs)):
+        ax.axvspan(spring_idxs[i] - 0.5, spring_idxs[i] + 0.5, facecolor='g', alpha=0.05)
+    for i in range(len(automn_idxs)):
+        ax.axvspan(automn_idxs[i] - 0.5, automn_idxs[i] + 0.5, facecolor='orange', alpha=0.05)
     ax.legend(bbox_to_anchor=(1.01, 1), loc='upper left', borderaxespad=0)
     plt.xticks(rotation=40)
     plt.title("Пациент: {}\nГрафик: {}".format(name, diagram_type), pad=0)
@@ -142,17 +147,93 @@ def prepare_data(json_path):
 def make_time_diagrams(data, dates, name):
     keys = list(data['t'].keys())
     arr = []
-    for key in keys:
-        arr.append(data['t'][key])
+    over = []
+    season_over = []
+    spring_idxs = []
+    automn_idxs = []
 
-    fig = make_time_diagram(arr, dates, keys, 'Т-клеточное звено', name)
+    for i in range(len(keys)):
+        if i % 3 == 0:
+            vals = data['t'][keys[i]]
+            vals_mins = data['t'][keys[i + 1]]
+            vals_maxs = data['t'][keys[i + 2]]
+            arr.append(data['t'][keys[i]])
+            arr.append(data['t'][keys[i + 1]])
+            arr.append(data['t'][keys[i + 2]])
+            over.append([])
+            over.append([])
+            over.append([])
+            season_over.append([])
+            season_over.append([])
+            season_over.append([])
+            for j in range(len(data['t'][keys[i]])):
+                delta = vals_maxs[0] - vals_mins[0]
+                if ['01','02','03','04','05','06'].__contains__(dates[j].split('-')[1]):
+                    #spring
+                    spring_idxs.append(j)
+                    if vals[j] > vals_maxs[0] + delta * 0.25:
+                        season_over[i].append(j)
+                    elif vals[j] > vals_maxs[0]:
+                        over[i].append(j)
+                    elif vals[j] < vals_mins[0]:
+                        season_over[i].append(j)
+                else:
+                    #automn
+                    automn_idxs.append(j)
+                    if vals[j] < vals_mins[0] - delta * 0.25:
+                        season_over[i].append(j)
+                    elif vals[j] > vals_maxs[0]:
+                        season_over[i].append(j)
+                    elif vals[j] < vals_mins[0]:
+                        over[i].append(j)
+    # for key in keys:
+    #     arr.append(data['t'][key])
+
+    fig = make_time_diagram(arr, dates, keys, 'Т-клеточное звено', name, spring_idxs, automn_idxs, over, season_over)
     # save_and_close(fig, path,  'Т-клеточное звено')
 
     keys = list(data['b'].keys())
     arr = []
-    for key in keys:
-        arr.append(data['b'][key])
-    fig1 = make_time_diagram(arr, dates, keys, 'B-клеточное звено', name)
+    over = []
+    season_over = []
+    spring_idxs = []
+    automn_idxs = []
+
+    for i in range(len(keys)):
+        if i % 3 == 0:
+            vals = data['b'][keys[i]]
+            vals_mins = data['b'][keys[i + 1]]
+            vals_maxs = data['b'][keys[i + 2]]
+            arr.append(data['b'][keys[i]])
+            arr.append(data['b'][keys[i + 1]])
+            arr.append(data['b'][keys[i + 2]])
+            over.append([])
+            over.append([])
+            over.append([])
+            season_over.append([])
+            season_over.append([])
+            season_over.append([])
+            for j in range(len(data['b'][keys[i]])):
+                delta = vals_maxs[0] - vals_mins[0]
+                if ['01', '02', '03', '04', '05', '06'].__contains__(dates[j].split('-')[1]):
+                    # spring
+                    spring_idxs.append(j)
+                    if vals[j] > vals_maxs[0] + delta * 0.25:
+                        season_over[i].append(j)
+                    elif vals[j] > vals_maxs[0]:
+                        over[i].append(j)
+                    elif vals[j] < vals_mins[0]:
+                        season_over[i].append(j)
+                else:
+                    # automn
+                    automn_idxs.append(j)
+                    if vals[j] < vals_mins[0] - delta * 0.25:
+                        season_over[i].append(j)
+                    elif vals[j] > vals_maxs[0]:
+                        season_over[i].append(j)
+                    elif vals[j] < vals_mins[0]:
+                        over[i].append(j)
+    fig1 = make_time_diagram(arr, dates, keys, 'B-клеточное звено', name, spring_idxs, automn_idxs, over, season_over)
     # save_and_close(fig1, path, 'B-клеточное звено')
     return fig, fig1
 
@@ -317,8 +398,6 @@ def save_and_close(fig, dir_path, diagram_type):
         os.mkdir(dir_path)
     fig.savefig("{}.png".format(dir_path, diagram_type), bbox_inches='tight')
     plt.close(fig)
-
-
 
 
 def MakeSeasonDiagrams(data, rmin, rmax, season):
