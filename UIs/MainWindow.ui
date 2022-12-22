@@ -15,19 +15,12 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout" columnstretch="2,10,1">
-    <item row="0" column="1" rowspan="2" colspan="2">
+    <item row="0" column="1" rowspan="3" colspan="2">
      <layout class="QGridLayout" name="graph_layout">
       <property name="spacing">
        <number>0</number>
       </property>
      </layout>
-    </item>
-    <item row="1" column="2">
-     <widget class="QLabel" name="label">
-      <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ваганов Владислав &lt;/p&gt;&lt;p&gt;Ершов Дмитрий&lt;/p&gt;&lt;p&gt;Попович Иван&lt;/p&gt;&lt;p&gt;ИРИТ-РТФ, РИ-300022&lt;/p&gt;&lt;p&gt;2022&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-      </property>
-     </widget>
     </item>
     <item row="0" column="0">
      <widget class="QToolBox" name="toolBox">
@@ -39,7 +32,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>248</width>
+         <width>249</width>
          <height>690</height>
         </rect>
        </property>
@@ -114,7 +107,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>248</width>
+         <width>249</width>
          <height>690</height>
         </rect>
        </property>
@@ -291,7 +284,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>Анализ по сезонам</string>
+         <string>Сезонная динамика</string>
         </property>
        </widget>
       </widget>
@@ -300,7 +293,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>248</width>
+         <width>249</width>
          <height>690</height>
         </rect>
        </property>
@@ -331,6 +324,21 @@
         </property>
        </widget>
       </widget>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;	Ваганов Владислав &lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;	Ершов Дмитрий&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;	Попович Иван&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;	ИРИТ-РТФ, РИ-300022&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;	2022&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
      </widget>
     </item>
    </layout>

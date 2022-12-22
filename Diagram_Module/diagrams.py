@@ -91,7 +91,8 @@ def make_radars(data, name, date, age, diagnos):
         "Дата сдачи анализов: {}\n"
         "Диагноз: {}\n"
         "График: {}".format(
-            name,
+            name, #ТУТ ИСПОЛЬЗУЮТСЯ ИНИЦИАЛЫ ДЛЯ ЗАЩИТЫ
+            #'. '.join([i[0] for i in name.split()]),
             age, get_age_ending(age),
             date,
             diagnos,
@@ -105,7 +106,8 @@ def make_radars(data, name, date, age, diagnos):
         "Дата сдачи анализов: {}\n"
         "Диагноз: {}\n"
         "График: {}".format(
-            name,
+            name, #ТУТ ИСПОЛЬЗУЮТСЯ ИНИЦИАЛЫ ДЛЯ ЗАЩИТЫ
+            #'. '.join([i[0] for i in name.split()]),
             age, get_age_ending(age),
             date,
             diagnos,
@@ -133,7 +135,7 @@ def make_time_diagram(arr, dates, labels, diagram_type, name, spring_idxs, autom
         ax.axvspan(automn_idxs[i] - 0.5, automn_idxs[i] + 0.5, facecolor='orange', alpha=0.05)
     ax.legend(bbox_to_anchor=(1.01, 1), loc='upper left', borderaxespad=0)
     plt.xticks(rotation=40)
-    plt.title("Пациент: {}\nГрафик: {}".format(name, diagram_type), pad=0)
+    plt.title("Пациент: {}\nГрафик: {}".format(name[0], diagram_type), pad=0)#ТУТ ИСПОЛЬЗУЮТСЯ ИНИЦИАЛЫ ДЛЯ ЗАЩИТЫ было name[0]
     plt.subplots_adjust(left=-0.001, right=0.85, top=0.9, bottom=0.17)
     return fig
 
@@ -401,23 +403,23 @@ def save_and_close(fig, dir_path, diagram_type):
 
 
 def MakeSeasonDiagrams(data, rmin, rmax, season):
-    fig, ax = plt.subplots(figsize=(3, data.shape[0]))
+    fig, ax = plt.subplots(figsize=( 10,10))
     param_name = data.columns[1]
     rmin_arr = [rmin] * data.shape[0]
     rmax_arr = [rmax] * data.shape[0]
 
     if data.shape[0] != 0:
         ax.plot(data['Дата'], data[param_name], label = param_name, color='green', linestyle='solid')
-        ax.plot(data['Дата'], rmin_arr, label = 'мин значение нормы', color='red', linestyle='solid')
-        ax.plot(data['Дата'], rmax_arr, label = 'макс значение нормы', color='red', linestyle='solid')
+        ax.plot(data['Дата'], rmin_arr, label = 'мин. значение нормы', color='red', linestyle='solid')
+        ax.plot(data['Дата'], rmax_arr, label = 'макс. значение нормы', color='red', linestyle='solid')
 
     ax.legend(bbox_to_anchor=(1.01, 1), loc='upper left', borderaxespad=0)
     plt.xticks(rotation=40)
 
     s = 'Весна' if season==0 else 'Осень'
 
-    plt.title(f'Параметр: {param_name}; Сезон: {s}')
-    plt.subplots_adjust(left=-0.001, right=0.85, top=0.9, bottom=0.17)
+    plt.title(f'Сезон: {s}', x=1.1, y=0)
+    plt.subplots_adjust(left=-0.001, right=0.85, top=1, bottom=0.17)
 
     return fig
 
