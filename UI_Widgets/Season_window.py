@@ -24,7 +24,9 @@ class SeasonWindow(QWidget):
         self.save_btn.clicked.connect(lambda : self._save_analyzer_to_xlsx())
         self.draw_btn.clicked.connect(lambda :self.draw_graphs())
         self._fill_catalog_box()
-        self.name_edit.setText(self.SeasonAnalyzer.main_df['Пациент'].iloc[0])
+        name = self.SeasonAnalyzer.main_df['Пациент'].iloc[0]
+        #self.name_edit.setText('. '.join([i[0] for i in name.split()])) #ТУТ ИСПОЛЬЗУЮТСЯ ИНИЦИАЛЫ ДЛЯ ЗАЩИТЫ
+        self.name_edit.setText(name)
 
     def _fill_catalog_box(self):
         for param in self.catalog:
@@ -57,7 +59,7 @@ class SeasonWindow(QWidget):
         rmax = catalog_data[4]
 
         automn_canvas = MplCanvas(fig = MakeSeasonDiagrams(automn_data, rmin, rmax, 1))
-        spring_canvas =MplCanvas(fig = MakeSeasonDiagrams(spring_data, rmin, rmax, 0))
+        spring_canvas = MplCanvas(fig = MakeSeasonDiagrams(spring_data, rmin, rmax, 0))
 
         toolbar = NavigationToolbar2QT(automn_canvas, self)
         self.graph_layout.addWidget(toolbar, 0, 0)

@@ -29,7 +29,7 @@ class AnalysisWindow(QWidget):
     def save_to_db(self):
         result_list = []
         for index,parameter in enumerate(self.catalog):
-            deviation = None if self.tableWidget.item(index, 1)==None else self.tableWidget.item(index, 1).text()
+            deviation = None if self.tableWidget.item(index, 1) == None else self.tableWidget.item(index, 1).text()
 
             cell = self.tableWidget.item(index, 2)
             if cell == None:
@@ -84,14 +84,19 @@ class AnalysisWindow(QWidget):
             table.item(row, 3).setFlags(table.item(row, 3).flags() ^ Qt.ItemIsEditable)
             table.item(row, 4).setFlags(table.item(row, 4).flags() ^ Qt.ItemIsEditable)
             table.item(row, 5).setFlags(table.item(row, 5).flags() ^ Qt.ItemIsEditable)
+        header = table.horizontalHeader()
+        header.setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)
+        header.setSectionResizeMode(3, QHeaderView.ResizeMode.Stretch)
+        header.setSectionResizeMode(4, QHeaderView.ResizeMode.Stretch)
+        header.setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)
 
     def fill_patient_info(self):
-        self.surname_edit.setText(self.patient[2])
-        self.name_edit.setText(self.patient[1])
-        self.patron_edit.setText(self.patient[3])
+        self.surname_edit.setText(self.patient[2])   #ТУТ ИСПОЛЬЗУЮТСЯ ИНИЦИАЛЫ ДЛЯ ЗАЩИТЫ
+        self.name_edit.setText(self.patient[1])      #ТУТ ИСПОЛЬЗУЮТСЯ ИНИЦИАЛЫ ДЛЯ ЗАЩИТЫ
+        self.patron_edit.setText(self.patient[3])    #ТУТ ИСПОЛЬЗУЮТСЯ ИНИЦИАЛЫ ДЛЯ ЗАЩИТЫ
         self.gender_edit.setText(self.patient[8])
         self.birthday_edit.setText(date_sql_to_text_format(str(self.patient[4])))
-        print(self.analysis)
+        #print(self.analysis)
         #s = (self.patient[4] -  self.analysis[2])
         age = int((self.analysis[2] - self.patient[4]).days/ 365)
         self.age_edit.setText(f'{age} полных лет')

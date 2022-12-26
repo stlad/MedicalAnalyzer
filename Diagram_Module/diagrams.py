@@ -135,7 +135,7 @@ def make_time_diagram(arr, dates, labels, diagram_type, name, spring_idxs, autom
         ax.axvspan(automn_idxs[i] - 0.5, automn_idxs[i] + 0.5, facecolor='orange', alpha=0.05)
     ax.legend(bbox_to_anchor=(1.01, 1), loc='upper left', borderaxespad=0)
     plt.xticks(rotation=40)
-    plt.title("Пациент: {}\nГрафик: {}".format(name[0], diagram_type), pad=0)#ТУТ ИСПОЛЬЗУЮТСЯ ИНИЦИАЛЫ ДЛЯ ЗАЩИТЫ было name[0]
+    plt.title("Пациент: {}\nГрафик: {}".format( name[0], diagram_type), pad=0)#ТУТ ИСПОЛЬЗУЮТСЯ ИНИЦИАЛЫ ДЛЯ ЗАЩИТЫ было '. '.join([i[0] for i in name.split()])
     plt.subplots_adjust(left=-0.001, right=0.85, top=0.9, bottom=0.17)
     return fig
 
