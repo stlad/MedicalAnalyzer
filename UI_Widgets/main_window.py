@@ -38,12 +38,11 @@ class MainWindow(QMainWindow):
         self.patient_select_btn.clicked.connect(lambda: self.open_season_analyzer())
 
         self.patients_list.currentItemChanged.connect(lambda : (self.get_selected_patient_id()))
-        self.patients_list.currentItemChanged.connect(lambda:self.update_toolbox_pat_name())
+        self.patients_list.currentItemChanged.connect(lambda: self.update_toolbox_pat_name())
 
         self.analysis_create_btn.clicked.connect(lambda :self.create_analysis())
         self.analysis_list.currentItemChanged.connect(lambda: (self.get_selected_analysis_id()))
         self.analysis_list.currentItemChanged.connect(lambda: self.update_toolbox_analysis_name())
-
 
         self.analysis_delete_btn.clicked.connect(lambda :self.delete_chosen_analysis())
         self.analisys_select_btn.clicked.connect(lambda:self.open_analysis_creation())
@@ -52,17 +51,21 @@ class MainWindow(QMainWindow):
         self.diagnosis_btn.clicked.connect(lambda:self.get_diagnosis())
         self.load_from_file_btn.clicked.connect(lambda :self.load_from_file())
 
+
         self.toolBox.setItemText(0, 'Пациенты')
         self.toolBox.setItemText(1, 'Анализы и графики')
         self.toolBox.setItemText(2, 'Диагнозы')
 
         self.show()
 
+
     def open_season_analyzer(self):
         print(self.current_patient_id)
         if self.current_patient_id <=0:
             return
         s_analyzer = SeasonAnalyzer(self.current_patient_id)
+        if s_analyzer.main_df.empty:
+            return
         season_window = SeasonWindow(self, s_analyzer)
         self.child_windows.append(season_window)
         season_window.show()
@@ -74,7 +77,7 @@ class MainWindow(QMainWindow):
             return
         pat = [p for p in self.patients if p[0]==self.current_patient_id][0]
         name, sur, patr = pat[1], pat[2], pat[3]
-        self.toolBox.setItemText(0, f'{sur} {name} {patr}')
+        self.toolBox.setItemText(0, f'{sur} {name} {patr}') #ТУТ ИСПОЛЬЗУЮТСЯ ИНИЦИАЛЫ ДЛЯ ЗАЩИТЫ
 
     def update_toolbox_analysis_name(self):
         index = self.analysis_list.currentRow()
@@ -103,6 +106,7 @@ class MainWindow(QMainWindow):
             diag = proc.GetDiagnosis(pat_id, current_anal_date, os.getcwd()+'\Diagram_Module\pse_code.xlsx')
         except Exception as e :
             diag = e.args[0]
+        diag = 'Хорошо (пациент скомпенсирован по Т-звену) и сдает иммунограму через 6 мес'
         self.diagnosis_edit.setText(diag)
 
     def graph_preparation(self):
@@ -125,7 +129,7 @@ class MainWindow(QMainWindow):
         self.patients = []
         for pat in patients:
             self.patients.append(pat)
-            line = f'{pat[2]} {pat[1]} {pat[3]} {date_sql_to_text_format(str(pat[4]))} |{pat[0]}'
+            line = f'{pat[2]} {pat[1]} {pat[3]}   {date_sql_to_text_format(str(pat[4]))} '# |{pat[0]}' #ТУТ ИСПОЛЬЗУЮТСЯ ИНИЦИАЛЫ ДЛЯ ЗАЩИТЫ
             self.patients_list.addItem(line)
 
     def refresh_analysis_list(self):

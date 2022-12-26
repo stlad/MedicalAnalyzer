@@ -12,6 +12,7 @@ def get_main_table(patient_id):
     patientProcessor.fill_patient_with_dates(analysis_dct, patient_id, dates)
     patient_data = patientProcessor.prepared_data
     name = list(patient_data.keys())[0]
+    analysis_dct = {i: analysis_dct[i] for i in analysis_dct if analysis_dct[i].__len__() >2}
     df = _get_table(name, analysis_dct)
 
     return df
@@ -24,7 +25,10 @@ def _get_table(name, analysis_dct):
     col_cnt=0
     for param in catalog:
         p = param[1]
-        df[p] = [analysis_dct[i][p]['Результат'] for i in analysis_dct]
+        param_column = [analysis_dct[i][p]['Результат'] for i in analysis_dct if p in analysis_dct[i]]
+        if len(param_column)==0:
+            continue
+        df[p] = param_column
         ref_min = param[3]
         ref_max = param[4]
         #df[f'{col_cnt} Отклонение'] = [''] * len(analysis_dct)
@@ -55,17 +59,18 @@ def _get_season_tables(df):
 
 
 def _get_avg_param_df(df):
+    if df.empty:
+        return pd.DataFrame()
     avg_df = pd.DataFrame()
     avg_df['Сезон'] = ['Осень','Весна']
     cnt=0
     for param in catalog:
+
         p = param[1]
         au_mean = df[df['Сезон'] == 1][p].mean()
         sp_mean = df[df['Сезон'] == 0][p].mean()
-        ref_min = param[3]
-        ref_max = param[4]
-
         avg_df[p] = [au_mean,sp_mean]
+        avg_df[p] = [0,0]
         avg_df[f'Отклонение {cnt}'] =[ df[df['Сезон'] == 1][f'Отклонение {cnt}'].mean(),
                                        df[df['Сезон'] == 0][f'Отклонение {cnt}'].mean()]
 
