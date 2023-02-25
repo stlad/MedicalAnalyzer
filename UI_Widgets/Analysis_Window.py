@@ -11,8 +11,8 @@ class AnalysisWindow(QWidget):
         super().__init__()
         self.patient = patient
         self.analysis = analysis
-        print(self.patient)
-        print(self.analysis)
+        #print(self.patient)
+        #print(self.analysis)
         self.initUI()
 
     def initUI(self):
@@ -24,6 +24,9 @@ class AnalysisWindow(QWidget):
         self.fill_table_widget_from_catalog()
         self.get_parameters()
         self.save_btn.clicked.connect(lambda :self.save_to_db())
+
+
+
         #print(self.params)
 
     def save_to_db(self):
