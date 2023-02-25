@@ -1,6 +1,6 @@
 import pandas as pd
-from  Diagram_Module.Diagram_Processing import PatientDataProcessor
-from DB_Module.db_module import *
+from FunctionalModules.Diagram_Module.Diagram_Processing import PatientDataProcessor
+from FunctionalModules.DB_Module.db_module import *
 
 catalog = MainDBController.GetAllParameterCatalog()
 

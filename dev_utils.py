@@ -1,6 +1,5 @@
-from DB_Module.db_module import *
-import json
-import psycopg2
+from FunctionalModules.DB_Module.db_module import *
+
 
 # пациент [ID, имя, фамилия, отчество, дата рождения, диаг, диаг2, гены, пол, возраст]
 # анализ [ID, ID_пациента, дата]

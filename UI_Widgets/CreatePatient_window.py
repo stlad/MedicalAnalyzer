@@ -1,9 +1,9 @@
-import os
-from PyQt5.QtWidgets import *
 from UI_Widgets.main_window import *
 from  PyQt5.uic import loadUi
-from DB_Module.db_module import *
+from PyQt5.QtWidgets import QWidget
+from FunctionalModules.DB_Module.db_module import *
 from utilits import *
+
 
 
 class CreatePatientWindow(QWidget):

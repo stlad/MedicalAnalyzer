@@ -1,11 +1,8 @@
-import os
-
-from DB_Module.db_module import *
-import datetime, json
+from FunctionalModules.DB_Module.db_module import *
 from utilits import *
-from Diagram_Module.diagrams import *
-from Diagram_Module.manual_prediction import *
-from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT, FigureCanvasQTAgg as FigureCanvas
+from FunctionalModules.Diagram_Module.diagrams import *
+from FunctionalModules.Diagram_Module.manual_prediction import *
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 
 # пациент [ID, имя, фамилия, отчество, дата рождения, диаг, диаг2, гены, пол, возраст]

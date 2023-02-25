@@ -1,13 +1,7 @@
-import os
-from PyQt5.QtWidgets import *
-from  PyQt5.uic import loadUi
-from DB_Module.db_module import *
 from  UI_Widgets.CreatePatient_window import *
-from PyQt5.QtCore import Qt
-from utilits import *
-from SeasonAnalytics_Module.season_analytics import SeasonAnalyzer
-from Diagram_Module.Diagram_Processing import MplCanvas
-from Diagram_Module.diagrams import MakeSeasonDiagrams
+from FunctionalModules.SeasonAnalytics_Module.season_analytics import SeasonAnalyzer
+from FunctionalModules.Diagram_Module.Diagram_Processing import MplCanvas
+from FunctionalModules.Diagram_Module.diagrams import MakeSeasonDiagrams
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT
 
 class SeasonWindow(QWidget):

@@ -1,17 +1,11 @@
-import gc
-import os
-from PyQt5.QtWidgets import *
-from  PyQt5.uic import loadUi
-
-import DB_Module.db_module
-from DB_Module.db_module import *
+import FunctionalModules.DB_Module.db_module
 from  UI_Widgets.CreatePatient_window import *
 from UI_Widgets.Analysis_Window import *
-from Diagram_Module.Diagram_Processing import *
+from FunctionalModules.Diagram_Module.Diagram_Processing import *
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT
 from matplotlib import pyplot as plt
 from UI_Widgets.Season_window import SeasonWindow
-from SeasonAnalytics_Module.season_analytics import SeasonAnalyzer
+from FunctionalModules.SeasonAnalytics_Module.season_analytics import SeasonAnalyzer
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -54,7 +48,7 @@ class MainWindow(QMainWindow):
 
         self.toolBox.setItemText(0, 'Пациенты')
         self.toolBox.setItemText(1, 'Анализы и графики')
-        self.toolBox.setItemText(2, 'Диагнозы')
+        self.toolBox.setItemText(2, 'Рекомендации')
 
         self.show()
 
@@ -91,7 +85,7 @@ class MainWindow(QMainWindow):
         fname = QFileDialog.getOpenFileName(self, 'Open file', filter="(*.json)")
         if fname[0]=='':
             return
-        DB_Module.db_module.load_data_from_json(filename=fname[0])
+        FunctionalModules.DB_Module.db_module.load_data_from_json(filename=fname[0])
 
 
     def get_diagnosis(self):
@@ -103,10 +97,11 @@ class MainWindow(QMainWindow):
         #diag = proc.GetDiagnosis(pat_id, current_anal_date)
         #print( os.getcwd()+'\Diagram_Module\pse_code.xlsx')
         try:
-            diag = proc.GetDiagnosis(pat_id, current_anal_date, os.getcwd()+'\Diagram_Module\pse_code.xlsx')
+            diag = proc.GetDiagnosis(pat_id, current_anal_date, os.getcwd()+'\Diagram_Module\diagnoses.xlsx')
         except Exception as e :
-            diag = e.args[0]
-        diag = 'Хорошо (пациент скомпенсирован по Т-звену) и сдает иммунограму через 6 мес'
+            #diag = e.args[0]
+            diag = 'Параметры не соответствуют ни одному из условий для рекомендаций.'
+        #diag = 'Хорошо (пациент скомпенсирован по Т-звену) и сдает иммунограму через 6 мес'
         self.diagnosis_edit.setText(diag)
 
     def graph_preparation(self):
