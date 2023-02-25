@@ -1,13 +1,11 @@
-from Analysis import Analysis
-from Patient import Patient
-from FunctionalModules.DB_Module.db_module import *
+from Models.Analysis import Analysis
+
 
 # каталог [ID, название, ед, от, до]
 # параметр [ID, ID_по_каталогу, значение, ID_анализа, отклонение]
 
 
-class Parameter():
-
+class Parameter:
     def __init__(self, analysis:Analysis, param:list, catalog_line:list):
         self.from_DB_lists(analysis, param, catalog_line)
 
@@ -23,6 +21,8 @@ class Parameter():
         self.ref_min = catalog_line[3]
         self.ref_max = catalog_line[4]
 
+        if self.own_analysis is None:
+            return
         self.own_analysis.add_parameter(self)
 
 

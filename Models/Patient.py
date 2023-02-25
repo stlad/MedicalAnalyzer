@@ -28,3 +28,4 @@ class Patient:
 
     def add_analysis(self, a):
         self.analysis.append(a)
+

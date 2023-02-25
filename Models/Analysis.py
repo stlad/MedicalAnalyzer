@@ -12,6 +12,9 @@ class Analysis:
         self._original_data = anal
         self.id = anal[0]
         self.analysis_date = anal[2]
+
+        if self.patient is None:
+            return
         self.patient.add_analysis(self)
 
     def to_DB_list(self):

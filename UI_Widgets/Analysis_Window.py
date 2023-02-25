@@ -1,9 +1,14 @@
 from PyQt5.QtWidgets import *
 from  PyQt5.uic import loadUi
+
+import Models.Parameters
 from FunctionalModules.DB_Module.db_module import *
+from FunctionalModules.Report_Module.DocxReports import DocxReporter
 from  UI_Widgets.CreatePatient_window import *
 from PyQt5.QtCore import Qt
 from utilits import *
+from Models.ModelFactory import PackOneAnalysisByLists
+
 
 class AnalysisWindow(QWidget):
     def __init__(self, patient:list, analysis:list):
@@ -23,10 +28,19 @@ class AnalysisWindow(QWidget):
         self.fill_table_widget_from_catalog()
         self.get_parameters()
         self.save_btn.clicked.connect(lambda :self.save_to_db())
+        self.docBtn.clicked.connect(lambda: self.docx_report())
 
 
 
-        #print(self.params)
+
+    def docx_report(self):
+        analysis_to_report = PackOneAnalysisByLists(self.patient, self.analysis, self.params, self.catalog)
+        form = DocxReporter(analysis_to_report)
+        name, type = QFileDialog.getSaveFileName(self, 'Save File', '', '(*.docx)')
+        if name == '':
+            return
+        form.save_to_file(name)
+
 
     def save_to_db(self):
         result_list = []
@@ -57,6 +71,7 @@ class AnalysisWindow(QWidget):
             return
         else:
             self.save_btn.setEnabled(False)
+            self.docBtn.setEnabled(True)
             self.is_saved_label.setText('Сохранено')
             self._fill_table_with_existing_params()
 
