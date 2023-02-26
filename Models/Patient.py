@@ -29,3 +29,11 @@ class Patient:
     def add_analysis(self, a):
         self.analysis.append(a)
 
+    def to_json(self):
+        res = {}
+        for anal in self.analysis:
+            res[str(anal.analysis_date)] = anal.to_json()
+        return {f'{self.surname} {self.name} {self.patronymic}': res}
+
+
+

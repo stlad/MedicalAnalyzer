@@ -26,5 +26,9 @@ class Parameter:
         self.own_analysis.add_parameter(self)
 
 
+    def to_json(self):
+        return {'Результат': self.value}
+
+
 
 

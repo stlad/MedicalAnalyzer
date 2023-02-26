@@ -23,5 +23,11 @@ class Analysis:
     def add_parameter(self, param):
         self.parameters.append(param)
 
-
+    def to_json(self):
+        res = {}
+        res['Возраст'] = self.patient.get_age_by_date(self.analysis_date)
+        res['Диагноз'] = self.patient.diag
+        for param in self.parameters:
+            res[param.name] = param.to_json()
+        return res
 
