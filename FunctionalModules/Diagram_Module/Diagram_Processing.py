@@ -3,7 +3,8 @@ from utilits import *
 from FunctionalModules.Diagram_Module.diagrams import *
 from FunctionalModules.Diagram_Module.manual_prediction import *
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-
+from Models.ModelFactory import *
+from Models.Patient import Patient
 
 # пациент [ID, имя, фамилия, отчество, дата рождения, диаг, диаг2, гены, пол, возраст]
 # анализ [ID, ID_пациента, дата]
@@ -65,15 +66,9 @@ class DiagnosisProcessor:
 
 
 class DiagramProcessor:
-    def __init__(self):
-        self.data_processor = PatientDataProcessor()
-
-    def MakeRadar(self, patient_id:int, analysis_date:datetime):
-        self.data_processor = PatientDataProcessor()
-        analysis_dct = self.data_processor.fill_patients([patient_id])
-        self.data_processor.fill_patient_with_dates(analysis_dct,patient_id, [analysis_date])
+    def MakeRadar(self, patient:Patient, analysis_date:datetime):
         try:
-            t,b = make_radars_from_dic(self.data_processor.prepared_data)
+            t, b = make_radars_from_dic(patient.to_json(analysis_date))
         except KeyError:
             print('Не заполнены анализы')
             return
@@ -81,14 +76,9 @@ class DiagramProcessor:
         b_canvas = MplCanvas(fig=b)
         return t_canvas, b_canvas
 
-    def MakeTimeDiagram(self, patient_id:int, start_date:datetime, end_date:datetime):
-        self.data_processor = PatientDataProcessor()
-        analysis_dct = self.data_processor.fill_patients([patient_id])
-        dates = MainDBController.GetAllAnalysisBetweenDates(patient_id,start_date,end_date)
-        dates = [date[2] for date in dates]
-        self.data_processor.fill_patient_with_dates(analysis_dct,patient_id, dates)
+    def MakeTimeDiagram(self, patient:Patient, start_date:datetime, end_date:datetime):
         try:
-            t,b = make_time_diagrams_from_dic(self.data_processor.prepared_data)
+            t,b = make_time_diagrams_from_dic(patient.to_json(start_date,end_date))
         except KeyError:
             print('Не заполнены анализы')
             return
@@ -118,16 +108,3 @@ class MplCanvas(FigureCanvas):
         self.Figure = fig
         super(MplCanvas, self).__init__(fig)
 
-    '''def __del__(self):
-        plt.close(self.Figure)'''
-
-'''d = DiagramProcessor()
-
-d.GetJsonByPatient(5)
-d._save_to_json('analysis.json')'''
-#print(list(d.prepared_data.keys()))
-#cat = MainDBController.GetAllParameterCatalog()
-#for index, param in enumerate(cat):
-#    print(index, param)
-
-#3 2 8 10 12 9

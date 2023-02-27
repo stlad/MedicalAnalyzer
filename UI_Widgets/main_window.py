@@ -6,6 +6,8 @@ from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT
 from matplotlib import pyplot as plt
 from UI_Widgets.Season_window import SeasonWindow
 from FunctionalModules.SeasonAnalytics_Module.season_analytics import SeasonAnalyzer
+from Models.ModelFactory import *
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -213,10 +215,7 @@ class MainWindow(QMainWindow):
         self.refresh_analysis_list()
 
 
-    def create_radars(self):
-        #for i in reversed(range(self.graph_layout.count())):
-        #    self.graph_layout.itemAt(i).widget().deleteLater()
-
+    def _clear_graphs(self):
         for row in range(self.graph_layout.rowCount()):
             for col in range(self.graph_layout.columnCount()):
                 w = self.graph_layout.itemAtPosition(row, col)
@@ -228,14 +227,19 @@ class MainWindow(QMainWindow):
                         plt.close() # можно убрать (если рисуются окошки)
                     w.widget().deleteLater()
 
+    def create_radars(self):
+        self._clear_graphs()
+
+
         pat_id = self.current_patient_id
         index = self.analysis_list.currentRow()
 
+        current_patient = CreateFullPatientFromDB(pat_id)
         if self.comboBox.currentIndex() == 0:
             if index ==-1:
                 return
             current_anal_date = self.analysis[index][2]
-            figs = self.diagram_processor.MakeRadar(pat_id, current_anal_date)
+            figs = self.diagram_processor.MakeRadar(current_patient, current_anal_date)
             try:
                 toolbar = NavigationToolbar2QT(figs[0],self)
                 self.graph_layout.addWidget(toolbar, 1, 0)
@@ -249,7 +253,7 @@ class MainWindow(QMainWindow):
         else:
             start_date =str_to_date(self.graph_start_edit.text())
             end_date =str_to_date(self.graph_end_edit.text())
-            figs = self.diagram_processor.MakeTimeDiagram(pat_id, start_date,end_date)
+            figs = self.diagram_processor.MakeTimeDiagram(current_patient, start_date,end_date)
             try:
                 toolbar = NavigationToolbar2QT(figs[0],self)
                 self.graph_layout.addWidget(toolbar, 0, 0)
