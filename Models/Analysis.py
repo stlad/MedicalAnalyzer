@@ -31,3 +31,6 @@ class Analysis:
             res[param.name] = param.to_json()
         return res
 
+    def __str__(self):
+        return str(self.analysis_date)
+

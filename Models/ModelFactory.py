@@ -1,3 +1,5 @@
+import datetime
+
 from Models.Analysis import Analysis
 from Models.Patient import Patient
 from Models.Parameters import Parameter
@@ -24,3 +26,6 @@ def PackOneAnalysisByLists(pat:list, anal:list, params:list, full_catalog:list):
     for i in range(len(params)):
         param = Parameter(anaysis, params, full_catalog[i])
     return anaysis
+
+
+
