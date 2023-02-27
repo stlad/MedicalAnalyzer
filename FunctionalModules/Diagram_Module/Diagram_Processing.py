@@ -86,8 +86,9 @@ class DiagramProcessor:
         b_canvas = MplCanvas(fig=b)
         return t_canvas, b_canvas
 
-
-    def GetJsonByPatient(self, patient_id:int):
+    def _GetJsonByPatient(self, patient_id:int):
+        """Устарел. Не испльзуй"""
+        self.data_processor = PatientDataProcessor()
         analysis_dct = self.data_processor.fill_patients([patient_id])
         dates = MainDBController.GetAllAnalysisByPatientID(patient_id)
         dates = [date[2] for date in dates]

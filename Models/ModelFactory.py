@@ -24,7 +24,7 @@ def PackOneAnalysisByLists(pat:list, anal:list, params:list, full_catalog:list):
     patient = Patient(pat)
     anaysis = Analysis(patient, anal)
     for i in range(len(params)):
-        param = Parameter(anaysis, params, full_catalog[i])
+        param = Parameter(anaysis, params[i], full_catalog[i])
     return anaysis
 
 

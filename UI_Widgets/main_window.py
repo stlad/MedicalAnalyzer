@@ -173,7 +173,6 @@ class MainWindow(QMainWindow):
             self.current_analysis_date = current_anal[2]
         else:
             current_anal = None
-        #print(self.current_analysis_date)
 
 
     def update_patients_toolbox_name(self):
@@ -229,8 +228,6 @@ class MainWindow(QMainWindow):
 
     def create_radars(self):
         self._clear_graphs()
-
-
         pat_id = self.current_patient_id
         index = self.analysis_list.currentRow()
 
@@ -239,28 +236,36 @@ class MainWindow(QMainWindow):
             if index ==-1:
                 return
             current_anal_date = self.analysis[index][2]
-            figs = self.diagram_processor.MakeRadar(current_patient, current_anal_date)
-            try:
-                toolbar = NavigationToolbar2QT(figs[0],self)
-                self.graph_layout.addWidget(toolbar, 1, 0)
-                self.graph_layout.addWidget(figs[0], 0, 0)
-
-                toolbar1 = NavigationToolbar2QT(figs[1], self)
-                self.graph_layout.addWidget(toolbar1, 1, 1)
-                self.graph_layout.addWidget(figs[1], 0, 1)
-            except TypeError:
-                print('невозможно построить графики')
+            self._draw_radars(current_patient, current_anal_date)
         else:
-            start_date =str_to_date(self.graph_start_edit.text())
-            end_date =str_to_date(self.graph_end_edit.text())
-            figs = self.diagram_processor.MakeTimeDiagram(current_patient, start_date,end_date)
-            try:
-                toolbar = NavigationToolbar2QT(figs[0],self)
-                self.graph_layout.addWidget(toolbar, 0, 0)
-                self.graph_layout.addWidget(figs[0], 1, 0)
+            self._draw_time_diagrams(current_patient)
 
-                toolbar1 = NavigationToolbar2QT(figs[1], self)
-                self.graph_layout.addWidget(toolbar1, 2, 0)
-                self.graph_layout.addWidget(figs[1], 3, 0)
-            except TypeError:
-                print('невозможно построить графики')
+
+    def _draw_radars(self, patient, current_anal_date):
+        figs = self.diagram_processor.MakeRadar(patient, current_anal_date)
+        try:
+            toolbar = NavigationToolbar2QT(figs[0], self)
+            self.graph_layout.addWidget(toolbar, 1, 0)
+            self.graph_layout.addWidget(figs[0], 0, 0)
+
+            toolbar1 = NavigationToolbar2QT(figs[1], self)
+            self.graph_layout.addWidget(toolbar1, 1, 1)
+            self.graph_layout.addWidget(figs[1], 0, 1)
+        except TypeError:
+            print('невозможно построить графики')
+
+
+    def _draw_time_diagrams(self, patient):
+        start_date = str_to_date(self.graph_start_edit.text())
+        end_date = str_to_date(self.graph_end_edit.text())
+        figs = self.diagram_processor.MakeTimeDiagram(patient, start_date, end_date)
+        try:
+            toolbar = NavigationToolbar2QT(figs[0], self)
+            self.graph_layout.addWidget(toolbar, 0, 0)
+            self.graph_layout.addWidget(figs[0], 1, 0)
+
+            toolbar1 = NavigationToolbar2QT(figs[1], self)
+            self.graph_layout.addWidget(toolbar1, 2, 0)
+            self.graph_layout.addWidget(figs[1], 3, 0)
+        except TypeError:
+            print('невозможно построить графики')
