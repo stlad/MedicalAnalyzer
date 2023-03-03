@@ -107,12 +107,12 @@ class MainWindow(QMainWindow):
         self.diagnosis_edit.setText(diag)
 
     def graph_preparation(self):
-        if self.comboBox.currentIndex()==0:
-            self.graph_start_edit.setEnabled(False)
-            self.graph_end_edit.setEnabled(False)
-        else:
+        if self.comboBox.currentIndex()==1:
             self.graph_start_edit.setEnabled(True)
             self.graph_end_edit.setEnabled(True)
+        else:
+            self.graph_start_edit.setEnabled(False)
+            self.graph_end_edit.setEnabled(False)
 
 
     def refresh_all_lists(self):
@@ -237,6 +237,12 @@ class MainWindow(QMainWindow):
                 return
             current_anal_date = self.analysis[index][2]
             self._draw_radars(current_patient, current_anal_date)
+
+        elif self.comboBox.currentIndex() == 2:
+            if index ==-1:
+                return
+            current_anal_date = self.analysis[index][2]
+            self._draw_triangle_diagramms(current_patient, current_anal_date)
         else:
             self._draw_time_diagrams(current_patient)
 
@@ -269,3 +275,13 @@ class MainWindow(QMainWindow):
             self.graph_layout.addWidget(figs[1], 3, 0)
         except TypeError:
             print('невозможно построить графики')
+
+    def _draw_triangle_diagramms(self, patient, current_anal_date):
+        fig = self.diagram_processor.MakeTriangleDiagram(patient, current_anal_date)
+        try:
+            toolbar = NavigationToolbar2QT(fig, self)
+            self.graph_layout.addWidget(toolbar, 1, 0)
+            self.graph_layout.addWidget(fig, 0, 0)
+        except TypeError:
+            print('невозможно построить графики')
+

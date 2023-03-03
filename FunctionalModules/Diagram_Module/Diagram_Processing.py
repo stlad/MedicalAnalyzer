@@ -86,6 +86,18 @@ class DiagramProcessor:
         b_canvas = MplCanvas(fig=b)
         return t_canvas, b_canvas
 
+    def MakeTriangleDiagram(self, patient:Patient, analysis_date:datetime):
+        try:
+            f = make_triangle_radar_from_dic(patient.to_json(analysis_date))
+        except KeyError:
+            print('Не заполнены анализы')
+            return
+        f_canvas = MplCanvas(fig=f)
+        return f_canvas
+
+
+
+
     def _GetJsonByPatient(self, patient_id:int):
         """Устарел. Не испльзуй"""
         self.data_processor = PatientDataProcessor()

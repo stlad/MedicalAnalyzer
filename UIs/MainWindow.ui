@@ -235,6 +235,11 @@ p, li { white-space: pre-wrap; }
            <string>Линейный по времени</string>
           </property>
          </item>
+         <item>
+          <property name="text">
+           <string>Цитокиновые пары</string>
+          </property>
+         </item>
         </widget>
         <widget class="QLineEdit" name="graph_start_edit">
          <property name="enabled">

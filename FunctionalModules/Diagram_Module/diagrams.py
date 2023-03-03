@@ -6,6 +6,7 @@ import pylab as pl
 from matplotlib import pyplot as plt
 import pandas as pd
 
+
 def reduce_dec_num(val):
     return math.ceil(val * 10) / 10
 
@@ -91,8 +92,8 @@ def make_radars(data, name, date, age, diagnos):
         "Дата сдачи анализов: {}\n"
         "Диагноз: {}\n"
         "График: {}".format(
-            name, #ТУТ ИСПОЛЬЗУЮТСЯ ИНИЦИАЛЫ ДЛЯ ЗАЩИТЫ
-            #'. '.join([i[0] for i in name.split()]),
+            name,  # ТУТ ИСПОЛЬЗУЮТСЯ ИНИЦИАЛЫ ДЛЯ ЗАЩИТЫ
+            # '. '.join([i[0] for i in name.split()]),
             age, get_age_ending(age),
             date,
             diagnos,
@@ -106,8 +107,8 @@ def make_radars(data, name, date, age, diagnos):
         "Дата сдачи анализов: {}\n"
         "Диагноз: {}\n"
         "График: {}".format(
-            name, #ТУТ ИСПОЛЬЗУЮТСЯ ИНИЦИАЛЫ ДЛЯ ЗАЩИТЫ
-            #'. '.join([i[0] for i in name.split()]),
+            name,  # ТУТ ИСПОЛЬЗУЮТСЯ ИНИЦИАЛЫ ДЛЯ ЗАЩИТЫ
+            # '. '.join([i[0] for i in name.split()]),
             age, get_age_ending(age),
             date,
             diagnos,
@@ -128,14 +129,16 @@ def make_time_diagram(arr, dates, labels, diagram_type, name, spring_idxs, autom
         for j in range(len(over_idxs[i])):
             ax.plot(dates[over_idxs[i][j]], arr[i][over_idxs[i][j]], "s", color=colors[i // 3])
         for j in range(len(season_over_idxs[i])):
-            ax.plot(dates[season_over_idxs[i][j]], arr[i][season_over_idxs[i][j]], "*", markersize=11, color=colors[i // 3])
+            ax.plot(dates[season_over_idxs[i][j]], arr[i][season_over_idxs[i][j]], "*", markersize=11,
+                    color=colors[i // 3])
     for i in range(len(spring_idxs)):
         ax.axvspan(spring_idxs[i] - 0.5, spring_idxs[i] + 0.5, facecolor='g', alpha=0.05)
     for i in range(len(automn_idxs)):
         ax.axvspan(automn_idxs[i] - 0.5, automn_idxs[i] + 0.5, facecolor='orange', alpha=0.05)
     ax.legend(bbox_to_anchor=(1.01, 1), loc='upper left', borderaxespad=0)
     plt.xticks(rotation=40)
-    plt.title("Пациент: {}\nГрафик: {}".format( name[0], diagram_type), pad=0)#ТУТ ИСПОЛЬЗУЮТСЯ ИНИЦИАЛЫ ДЛЯ ЗАЩИТЫ было '. '.join([i[0] for i in name.split()])
+    plt.title("Пациент: {}\nГрафик: {}".format(name[0], diagram_type),
+              pad=0)  # ТУТ ИСПОЛЬЗУЮТСЯ ИНИЦИАЛЫ ДЛЯ ЗАЩИТЫ было name[0]
     plt.subplots_adjust(left=-0.001, right=0.85, top=0.9, bottom=0.17)
     return fig
 
@@ -170,8 +173,8 @@ def make_time_diagrams(data, dates, name):
             season_over.append([])
             for j in range(len(data['t'][keys[i]])):
                 delta = vals_maxs[0] - vals_mins[0]
-                if ['01','02','03','04','05','06'].__contains__(dates[j].split('-')[1]):
-                    #spring
+                if ['01', '02', '03', '04', '05', '06'].__contains__(dates[j].split('-')[1]):
+                    # spring
                     spring_idxs.append(j)
                     if vals[j] > vals_maxs[0] + delta * 0.25:
                         season_over[i].append(j)
@@ -180,7 +183,7 @@ def make_time_diagrams(data, dates, name):
                     elif vals[j] < vals_mins[0]:
                         season_over[i].append(j)
                 else:
-                    #automn
+                    # automn
                     automn_idxs.append(j)
                     if vals[j] < vals_mins[0] - delta * 0.25:
                         season_over[i].append(j)
@@ -385,6 +388,56 @@ def dic_prepare_data(data):
     return name, diagnoses, dates, ages, line_data, radars_data
 
 
+# def make_triangle_radar(min, ref, max):
+#     fig, ax = plt.subplot(figsize=(6, 6))
+#     ax.plot(min,
+#             data=min,
+#             label='min')
+#     ax.plot(ref,
+#             data=ref,
+#             label='ref')
+#     ax.plot(max,
+#             data=max,
+#             label='max')
+#
+#     ax.legend(loc='best', title='Legend')
+#     ax.set(title='Radial Diagram', xlabel='x-axis', ylabel='y-axis')
+#     return fig
+
+
+def make_triangle_radar_from_dic(data):
+    name = list(data.keys())[0]
+    analysis_by_date = data[name]
+    date = list(analysis_by_date.keys())[0]
+    analysis = analysis_by_date[date]
+    fno_min = 0
+    infer_min = 0
+    inlik_min = 0
+    if analysis['CD3+TNFa+(спонтанный)']['Результат'] == 0:
+        fno_ref = 0
+    else:
+        fno_ref = analysis['CD3+TNFa+(стимулированный)']['Результат'] / analysis['CD3+TNFa+(спонтанный)']['Результат']
+    if analysis['CD3+IFNy+(спонтанный)']['Результат'] == 0:
+        infer_ref = 0
+    else:
+        infer_ref = analysis['CD3+IFNy+(стимулированный)']['Результат'] / analysis['CD3+IFNy+(спонтанный)']['Результат']
+    if analysis['CD3+IL2+(спонтанный)']['Результат'] == 0:
+        inlik_ref = 0
+    else:
+        inlik_ref = analysis['CD3+IL2+(стимулированный)']['Результат'] / analysis['CD3+IL2+(спонтанный)']['Результат']
+    fno_max = 0.942 / 0.9
+    infer_max = 0.377 / 0.5
+    inlik_max = 0.651 / 0.1
+    data = {
+        'min': [fno_min, infer_min, inlik_min],
+        'res': [fno_ref, infer_ref, inlik_ref],
+        'max': [fno_max, infer_max, inlik_max],
+        'names': ['ФНО', 'Интерферон', 'Интерликин']
+    }
+    title = '{}\n{}\nЦитокиновые пары'.format(name, date)
+    return make_radar_diagram(data, title)
+
+
 def make_radars_from_dic(data):
     name, diagnoses, dates, ages, line_data, radars_data = dic_prepare_data(data)
     return make_radars(radars_data[0], name, dates[0], ages[0], diagnoses[0])
@@ -403,24 +456,22 @@ def save_and_close(fig, dir_path, diagram_type):
 
 
 def MakeSeasonDiagrams(data, rmin, rmax, season):
-    fig, ax = plt.subplots(figsize=( 10,10))
+    fig, ax = plt.subplots(figsize=(10, 10))
     param_name = data.columns[1]
     rmin_arr = [rmin] * data.shape[0]
     rmax_arr = [rmax] * data.shape[0]
 
     if data.shape[0] != 0:
-        ax.plot(data['Дата'], data[param_name], label = param_name, color='green', linestyle='solid')
-        ax.plot(data['Дата'], rmin_arr, label = 'мин. значение нормы', color='red', linestyle='solid')
-        ax.plot(data['Дата'], rmax_arr, label = 'макс. значение нормы', color='red', linestyle='solid')
+        ax.plot(data['Дата'], data[param_name], label=param_name, color='green', linestyle='solid')
+        ax.plot(data['Дата'], rmin_arr, label='мин. значение нормы', color='red', linestyle='solid')
+        ax.plot(data['Дата'], rmax_arr, label='макс. значение нормы', color='red', linestyle='solid')
 
     ax.legend(bbox_to_anchor=(1.01, 1), loc='upper left', borderaxespad=0)
     plt.xticks(rotation=40)
 
-    s = 'Весна' if season==0 else 'Осень'
+    s = 'Весна' if season == 0 else 'Осень'
 
     plt.title(f'Сезон: {s}', x=1.1, y=0)
     plt.subplots_adjust(left=-0.001, right=0.85, top=1, bottom=0.17)
 
     return fig
-
-
