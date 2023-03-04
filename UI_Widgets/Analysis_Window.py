@@ -21,13 +21,19 @@ class AnalysisWindow(QWidget):
 
     def initUI(self):
         loadUi('UIs\AnalysisViewWindow.ui', self)
+        self.params = []
         self.child_windows = []
         self.can_be_editied = True
         self.fill_patient_info()
         self.catalog = MainDBController.GetAllParameterCatalog()
         self.fill_table_widget_from_catalog()
         self.get_parameters()
-        self.save_btn.clicked.connect(lambda :self.save_to_db())
+
+        if len(self.params)==0:
+            self.save_btn.clicked.connect(lambda :self.save_to_db())
+        else:
+            self.save_btn.clicked.connect(lambda :self.update_db())
+
         self.docBtn.clicked.connect(lambda: self.docx_report())
 
 
@@ -62,6 +68,23 @@ class AnalysisWindow(QWidget):
         self.is_saved_label.setText('Сохранено')
 
 
+    def update_db(self):
+        result_list = []
+        if len(self.params) ==0:
+            print('Ошибка: нет параметров')
+            return
+        for index, parameter in enumerate(self.params):
+            cell = self.tableWidget.item(index, 2)
+            if cell == None:
+                val = 0
+            else:
+                try:
+                    val = float(cell.text())
+                except ValueError:
+                    print('В колонке значение должны быть только числа!')
+            result_list.append([parameter[0], val])
+
+        MainDBController.UpdateListOfParameters(result_list)
 
     def get_parameters(self):
         self.params = MainDBController.GetAllParametersByAnalysisID(self.analysis[0])
@@ -70,7 +93,7 @@ class AnalysisWindow(QWidget):
             self.is_saved_label.setText('Не сохранено')
             return
         else:
-            self.save_btn.setEnabled(False)
+            #self.save_btn.setEnabled(False)
             self.docBtn.setEnabled(True)
             self.is_saved_label.setText('Сохранено')
             self._fill_table_with_existing_params()
@@ -82,8 +105,8 @@ class AnalysisWindow(QWidget):
             table.setItem(row,1, QTableWidgetItem(divation))
             table.setItem(row,2, QTableWidgetItem(str(param[2])))
 
-            table.item(row, 1).setFlags(table.item(row, 1).flags() ^ Qt.ItemIsEditable)
-            table.item(row, 2).setFlags(table.item(row, 2).flags() ^ Qt.ItemIsEditable)
+            #table.item(row, 1).setFlags(table.item(row, 1).flags() ^ Qt.ItemIsEditable)
+            #table.item(row, 2).setFlags(table.item(row, 2).flags() ^ Qt.ItemIsEditable)
 
 
 
@@ -97,10 +120,10 @@ class AnalysisWindow(QWidget):
             table.setItem(row,3, QTableWidgetItem(str(parameter[2])))
             table.setItem(row,4, QTableWidgetItem(str(parameter[3])))
             table.setItem(row,5, QTableWidgetItem(str(parameter[4])))
-            table.item(row, 0).setFlags(table.item(row, 0).flags() ^ Qt.ItemIsEditable)
-            table.item(row, 3).setFlags(table.item(row, 3).flags() ^ Qt.ItemIsEditable)
-            table.item(row, 4).setFlags(table.item(row, 4).flags() ^ Qt.ItemIsEditable)
-            table.item(row, 5).setFlags(table.item(row, 5).flags() ^ Qt.ItemIsEditable)
+            #table.item(row, 0).setFlags(table.item(row, 0).flags() ^ Qt.ItemIsEditable)
+            #table.item(row, 3).setFlags(table.item(row, 3).flags() ^ Qt.ItemIsEditable)
+            #table.item(row, 4).setFlags(table.item(row, 4).flags() ^ Qt.ItemIsEditable)
+            #table.item(row, 5).setFlags(table.item(row, 5).flags() ^ Qt.ItemIsEditable)
         header = table.horizontalHeader()
         header.setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)
         header.setSectionResizeMode(3, QHeaderView.ResizeMode.Stretch)

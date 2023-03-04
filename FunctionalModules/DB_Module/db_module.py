@@ -83,6 +83,16 @@ class DBController():
                 cur.execute(sql)
                 con.commit()
 
+    def UpdateListOfParameters(self, parameters_list):
+        """Обновить параметры в БД
+        :parameter parameters_list [[parameter_id, new_value]]"""
+        con = self._create_connection_to_DB()
+        with con.cursor() as cur:
+            for index, param in enumerate(parameters_list):
+                sql = f"update parameter_results set value={param[1]} where result_id={param[0]}"
+                cur.execute(sql)
+                con.commit()
+
     def GetAllParametersByAnalysisID(self, id:int):
         """Получить список всех пациентов в базе"""
         con = self._create_connection_to_DB()
@@ -234,17 +244,3 @@ def execute_sql(filename):
 
 
 MainDBController = DBController()
-#load_data_from_json('parse_res.json')
-
-#[print(i) for i in MainDBController.GetAllPatients()]
-'''
-#print(date_text_to_sql_format('asdasd'))
-rows = MainDBController.GetAllAnalysisByPatientID(5)
-
-for r in rows:
-    print(r)'''
-#MainBDUser.InsertPatinet(['Пучков','Дмитрий','Юрьевич','1961-11-25','что-то страшное','что-тоужасное',''])
-#print(MainDBController.GetAllPatients())
-#print(MainDBController.GetAllAnalysisByPatinetIDandDate(2,'2001-11-10'))
-
-#print(MainDBController.GetAllAnalysisByPatientID(5))
