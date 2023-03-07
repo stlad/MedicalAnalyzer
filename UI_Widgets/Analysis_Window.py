@@ -21,6 +21,7 @@ class AnalysisWindow(QWidget):
 
     def initUI(self):
         loadUi('UIs\AnalysisViewWindow.ui', self)
+        self.setWindowTitle(f'Анализ: {self.patient[2]}')
         self.params = []
         self.child_windows = []
         self.can_be_editied = True
@@ -35,8 +36,6 @@ class AnalysisWindow(QWidget):
             self.save_btn.clicked.connect(lambda :self.update_db())
 
         self.docBtn.clicked.connect(lambda: self.docx_report())
-
-
 
 
     def docx_report(self):
@@ -64,7 +63,6 @@ class AnalysisWindow(QWidget):
             result_list.append([parameter[0], val, deviation])
         MainDBController.InsertListOfParametersByAnalysisId(self.analysis[0], result_list)
 
-        self.save_btn.setEnabled(False)
         self.is_saved_label.setText('Сохранено')
 
 
@@ -85,6 +83,7 @@ class AnalysisWindow(QWidget):
             result_list.append([parameter[0], val])
 
         MainDBController.UpdateListOfParameters(result_list)
+        self.is_saved_label.setText('Обновлено')
 
     def get_parameters(self):
         self.params = MainDBController.GetAllParametersByAnalysisID(self.analysis[0])

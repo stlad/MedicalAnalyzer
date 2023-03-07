@@ -1,10 +1,16 @@
+import os
+
 from docx import Document
 from copy import deepcopy
+
+from matplotlib import *
+
 from FunctionalModules.DB_Module.db_module import *
 from utilits import  date_sql_to_text_format
 from Models.Patient import Patient
 from Models.Analysis import Analysis
-
+from FunctionalModules.Diagram_Module.Diagram_Processing import DiagramProcessor
+from docx.shared import Mm
 
 class DocxReporter:
 
@@ -12,9 +18,15 @@ class DocxReporter:
         self.patient = analysis.patient
         self.analysis = analysis
 
-        self.doc = self._get_classic_table()
+        self.doc = self._get_report()
 
 
+    def _get_report(self):
+        doc = self._get_classic_table()
+        doc = self._add_graphs(doc)
+
+
+        return doc
 
     def _get_table_from_template(self):
         doc = Document('FunctionalModules/Report_Module/form_template.docx')
@@ -50,7 +62,37 @@ class DocxReporter:
                 i+=1
             tbl.rows[i].cells[0].text = param.name
             tbl.rows[i].cells[1].text = str(param.value)
-            i+=1
+            i += 1
+
+    def _add_graphs(self, document :Document):
+        d_processor = DiagramProcessor()
+        t,b = self._get_radar_graphs(d_processor)
+        triangle = self._get_triangle_graph(d_processor)
+        self._add_figure_to_doc(document, t, 'Т_клеточное звено.png')
+        self._add_figure_to_doc(document, b, 'В_клеточное звено.png')
+        self._add_figure_to_doc(document, triangle, 'цитокиновые пары.png')
+        return document
+
+    def _add_figure_to_doc(self, doc:Document, fig, img_name):
+        fig.savefig(img_name)
+        p = doc.add_paragraph()
+        run = p.add_run('')
+        run.add_picture(img_name, height=Mm(150))
+        os.remove(img_name)
+
+
+
+
+    def _get_radar_graphs(self, diagram_processor: DiagramProcessor):
+        t,b = diagram_processor.MakeRadar(self.patient, self.analysis.analysis_date)
+        return t.Figure, b.Figure
+
+    def _get_lineargraph(self,diagram_processor: DiagramProcessor):
+        pass
+
+    def _get_triangle_graph(self,diagram_processor: DiagramProcessor):
+        g = diagram_processor.MakeTriangleDiagram(self.patient, self.analysis.analysis_date)
+        return g.Figure
 
 
     def save_to_file(self, filename):
