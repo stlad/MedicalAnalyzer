@@ -68,9 +68,13 @@ class DocxReporter:
         d_processor = DiagramProcessor()
         t,b = self._get_radar_graphs(d_processor)
         triangle = self._get_triangle_graph(d_processor)
+        linear = self._get_lineargraph(d_processor)
         self._add_figure_to_doc(document, t, 'Т_клеточное звено.png')
         self._add_figure_to_doc(document, b, 'В_клеточное звено.png')
+        self._add_figure_to_doc(document, linear[0], 'ф.png')
+        self._add_figure_to_doc(document, linear[1], 'as.png')
         self._add_figure_to_doc(document, triangle, 'цитокиновые пары.png')
+
         return document
 
     def _add_figure_to_doc(self, doc:Document, fig, img_name):
@@ -81,14 +85,15 @@ class DocxReporter:
         os.remove(img_name)
 
 
-
-
     def _get_radar_graphs(self, diagram_processor: DiagramProcessor):
         t,b = diagram_processor.MakeRadar(self.patient, self.analysis.analysis_date)
         return t.Figure, b.Figure
 
-    def _get_lineargraph(self,diagram_processor: DiagramProcessor):
-        pass
+    def _get_lineargraph(self, diagram_processor: DiagramProcessor):
+        figs = diagram_processor.MakeTimeDiagram(self.patient,
+                                                 self.patient.analysis[0].analysis_date,
+                                                 self.patient.analysis[-1].analysis_date)
+        return figs[0].Figure, figs[1].Figure
 
     def _get_triangle_graph(self,diagram_processor: DiagramProcessor):
         g = diagram_processor.MakeTriangleDiagram(self.patient, self.analysis.analysis_date)

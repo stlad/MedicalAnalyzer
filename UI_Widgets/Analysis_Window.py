@@ -7,7 +7,7 @@ from FunctionalModules.Report_Module.DocxReports import DocxReporter
 from  UI_Widgets.CreatePatient_window import *
 from PyQt5.QtCore import Qt
 from utilits import *
-from Models.ModelFactory import PackOneAnalysisByLists
+from Models.ModelFactory import PackOneAnalysisByLists, CreateFullPatientFromDB
 
 
 class AnalysisWindow(QWidget):
@@ -15,8 +15,6 @@ class AnalysisWindow(QWidget):
         super().__init__()
         self.patient = patient
         self.analysis = analysis
-        #print(self.patient)
-        #print(self.analysis)
         self.initUI()
 
     def initUI(self):
@@ -38,9 +36,11 @@ class AnalysisWindow(QWidget):
         self.docBtn.clicked.connect(lambda: self.docx_report())
 
 
+
     def docx_report(self):
-        analysis_to_report = PackOneAnalysisByLists(self.patient, self.analysis, self.params, self.catalog)
-        form = DocxReporter(analysis_to_report)
+        #analysis_to_report = PackOneAnalysisByLists(self.patient, self.analysis, self.params, self.catalog)
+        current_patient = CreateFullPatientFromDB(self.patient[0])
+        form = DocxReporter(current_patient.find_alalysis_by_date(self.analysis[2]))
         name, type = QFileDialog.getSaveFileName(self, 'Save File', '', '(*.docx)')
         if name == '':
             return

@@ -55,3 +55,11 @@ class Patient:
         return f'{self.surname} {self.name} {self.patronymic}'
 
 
+    def find_alalysis_by_date(self, an_date):
+        for analysis in self.analysis:
+            if analysis.analysis_date == an_date:
+                return analysis
+        raise IndexError('Такого анализа нет в списке')
+
+
+
