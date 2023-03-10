@@ -97,7 +97,7 @@ class DBController():
         """Получить список всех пациентов в базе"""
         con = self._create_connection_to_DB()
         with con.cursor() as cur:
-            sql = f"select * from parameter_results where analysis_id = {id}"
+            sql = f"select * from parameter_results where analysis_id = {id} order by parameter_id" # ОЧЕНЬ ОПАСНЫЙ МОМЕНТ. ВОЗМОЖНЫ БАГИ ПОСЛЕ ДОБАВЛЕНИЯ СОРТИРОВКИ
             cur.execute(sql)
             rows = cur.fetchall()
         return rows
