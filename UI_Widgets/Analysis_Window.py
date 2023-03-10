@@ -27,18 +27,43 @@ class AnalysisWindow(QWidget):
         self.catalog = MainDBController.GetAllParameterCatalog()
         self.fill_table_widget_from_catalog()
         self.get_parameters()
-
         if len(self.params)==0:
             self.save_btn.clicked.connect(lambda :self.save_to_db())
         else:
             self.save_btn.clicked.connect(lambda :self.update_db())
 
         self.docBtn.clicked.connect(lambda: self.docx_report())
+        self.tableWidget.itemChanged.connect(lambda: self._auto_update_pair_cells())
+
+
+
+    def _auto_update_pair_cells(self):
+        row = self.tableWidget.currentRow()
+        if row == 18 or row== 19:
+            self._fill_cytockine_pair(18,19,20)
+        elif row == 21 or row== 22:
+            self._fill_cytockine_pair(21,22,23)
+        elif row == 24 or row== 25:
+            self._fill_cytockine_pair(24,25,26)
+        else:
+            return
+
+    def _fill_cytockine_pair(self, stim_row, spon_row, index_row):
+
+        stim = float(self.tableWidget.item(stim_row, 2).text())
+        spon = float(self.tableWidget.item(spon_row, 2).text())
+        if spon != 0:
+            cytocine_index = str(stim / spon)
+            self.tableWidget.setCurrentCell(index_row,2)
+            r = self.tableWidget.currentRow()
+            self.tableWidget.setItem(index_row, 2, QTableWidgetItem(cytocine_index))
+            print(1)
+
+
 
 
 
     def docx_report(self):
-        #analysis_to_report = PackOneAnalysisByLists(self.patient, self.analysis, self.params, self.catalog)
         current_patient = CreateFullPatientFromDB(self.patient[0])
         form = DocxReporter(current_patient.find_alalysis_by_date(self.analysis[2]))
         name, type = QFileDialog.getSaveFileName(self, 'Save File', '', '(*.docx)')
