@@ -26,4 +26,3 @@ def PackOneAnalysisByLists(pat:list, anal:list, params:list, full_catalog:list):
     for i in range(len(params)):
         param = Parameter(anaysis, params[i], full_catalog[i])
     return anaysis
-

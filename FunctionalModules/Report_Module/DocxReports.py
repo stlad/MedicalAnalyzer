@@ -71,8 +71,8 @@ class DocxReporter:
         linear = self._get_lineargraph(d_processor)
         self._add_figure_to_doc(document, t, 'Т_клеточное звено.png')
         self._add_figure_to_doc(document, b, 'В_клеточное звено.png')
-        self._add_figure_to_doc(document, linear[0], 'ф.png')
-        self._add_figure_to_doc(document, linear[1], 'as.png')
+        #self._add_figure_to_doc(document, linear[0], 'ф.png')
+        #self._add_figure_to_doc(document, linear[1], 'as.png')
         self._add_figure_to_doc(document, triangle, 'цитокиновые пары.png')
 
         return document

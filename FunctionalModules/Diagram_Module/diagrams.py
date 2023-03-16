@@ -56,6 +56,35 @@ def get_age_ending(age):
     return 'лет'
 
 
+def make_triangle_radar_diagram(data, title):
+    names = data['names']
+    fig = pl.figure(figsize=(6, 6))
+    vals = (data['res'], data['max'])
+    labels = ('Результаты', "Верхние референтные значения")
+    colors = ("r", "g")
+    ranges = []
+    graph_max = []
+    for i in range(len(data['res'])):
+        graph_max.append(math.ceil(max((data['res'][i], data['max'][i]))))
+        ranges.append([])
+        for j in range(5):
+            ranges[i].append(round((j + 1) * (graph_max[i] / 5), 2))
+
+    titles = list(names)
+
+    radar = Radar(fig, titles, ranges)
+    for i in range(len(vals)):
+        prepared_vals = []
+        naming_vals = []
+        for j in range(len(vals[i])):
+            prepared_vals.append(vals[i][j] / graph_max[j] * 5)
+            naming_vals.append(round(vals[i][j], 2))
+        radar.plot(prepared_vals, naming_vals, graph_max, "-", lw=2, color=colors[i], alpha=1, label=labels[i])
+    radar.ax.legend(loc='best', bbox_to_anchor=(0.5, 0., 0.5, 0.5))
+    pl.title(title, pad=40)
+    return fig
+
+
 def make_radar_diagram(data, title):
     names = data['names']
     fig = pl.figure(figsize=(6, 6))
@@ -388,54 +417,33 @@ def dic_prepare_data(data):
     return name, diagnoses, dates, ages, line_data, radars_data
 
 
-# def make_triangle_radar(min, ref, max):
-#     fig, ax = plt.subplot(figsize=(6, 6))
-#     ax.plot(min,
-#             data=min,
-#             label='min')
-#     ax.plot(ref,
-#             data=ref,
-#             label='ref')
-#     ax.plot(max,
-#             data=max,
-#             label='max')
-#
-#     ax.legend(loc='best', title='Legend')
-#     ax.set(title='Radial Diagram', xlabel='x-axis', ylabel='y-axis')
-#     return fig
-
-
 def make_triangle_radar_from_dic(data):
     name = list(data.keys())[0]
     analysis_by_date = data[name]
     date = list(analysis_by_date.keys())[0]
     analysis = analysis_by_date[date]
-    fno_min = 0
-    infer_min = 0
-    inlik_min = 0
     if analysis['CD3+TNFa+(спонтанный)']['Результат'] == 0:
-        fno_ref = 0
+        fno_res = 0
     else:
-        fno_ref = analysis['CD3+TNFa+(стимулированный)']['Результат'] / analysis['CD3+TNFa+(спонтанный)']['Результат']
+        fno_res = analysis['CD3+TNFa+(стимулированный)']['Результат'] / analysis['CD3+TNFa+(спонтанный)']['Результат']
     if analysis['CD3+IFNy+(спонтанный)']['Результат'] == 0:
-        infer_ref = 0
+        infer_res = 0
     else:
-        infer_ref = analysis['CD3+IFNy+(стимулированный)']['Результат'] / analysis['CD3+IFNy+(спонтанный)']['Результат']
+        infer_res = analysis['CD3+IFNy+(стимулированный)']['Результат'] / analysis['CD3+IFNy+(спонтанный)']['Результат']
     if analysis['CD3+IL2+(спонтанный)']['Результат'] == 0:
-        inlik_ref = 0
+        inlik_res = 0
     else:
-        inlik_ref = analysis['CD3+IL2+(стимулированный)']['Результат'] / analysis['CD3+IL2+(спонтанный)']['Результат']
+        inlik_res = analysis['CD3+IL2+(стимулированный)']['Результат'] / analysis['CD3+IL2+(спонтанный)']['Результат']
     fno_max = 0.942 / 0.9
     infer_max = 0.377 / 0.5
     inlik_max = 0.651 / 0.1
     data = {
-        'min': [fno_min, infer_min, inlik_min],
-        'res': [fno_ref, infer_ref, inlik_ref],
+        'res': [fno_res, infer_res, inlik_res],
         'max': [fno_max, infer_max, inlik_max],
         'names': ['ФНО', 'Интерферон', 'Интерликин']
     }
     title = '{}\n{}\nЦитокиновые пары'.format(name, date)
-    return make_radar_diagram(data, title)
+    return make_triangle_radar_diagram(data, title)
 
 
 def make_radars_from_dic(data):
