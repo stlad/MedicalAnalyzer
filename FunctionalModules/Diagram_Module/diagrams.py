@@ -58,7 +58,7 @@ def get_age_ending(age):
 
 def make_triangle_radar_diagram(data, title):
     names = data['names']
-    fig = pl.figure(figsize=(6, 6))
+    fig = pl.figure(figsize=(7, 7))
     vals = (data['res'], data['max'])
     labels = ('Результаты', "Верхние референтные значения")
     colors = ("r", "g")
@@ -87,7 +87,7 @@ def make_triangle_radar_diagram(data, title):
 
 def make_radar_diagram(data, title):
     names = data['names']
-    fig = pl.figure(figsize=(6, 6))
+    fig = pl.figure(figsize=(9,9))
     vals = (data['min'], data['res'], data['max'])
     labels = ("Нижние референтные значения", 'Результаты', "Верхние референтные значения")
     colors = ("g", "r", "g")
