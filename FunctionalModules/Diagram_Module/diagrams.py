@@ -59,13 +59,13 @@ def get_age_ending(age):
 def make_triangle_radar_diagram(data, title):
     names = data['names']
     fig = pl.figure(figsize=(7, 7))
-    vals = (data['res'], data['max'])
-    labels = ('Результаты', "Верхние референтные значения")
-    colors = ("r", "g")
+    vals = (data['min'], data['res'], data['max'])
+    labels = ("Нижние референтные значения", 'Результаты', "Верхние референтные значения")
+    colors = ("g", "r", "g")
     ranges = []
     graph_max = []
     for i in range(len(data['res'])):
-        graph_max.append(math.ceil(max((data['res'][i], data['max'][i]))))
+        graph_max.append(math.ceil(max((data['min'][i], data['res'][i], data['max'][i]))))
         ranges.append([])
         for j in range(5):
             ranges[i].append(round((j + 1) * (graph_max[i] / 5), 2))
@@ -79,7 +79,11 @@ def make_triangle_radar_diagram(data, title):
         for j in range(len(vals[i])):
             prepared_vals.append(vals[i][j] / graph_max[j] * 5)
             naming_vals.append(round(vals[i][j], 2))
-        radar.plot(prepared_vals, naming_vals, graph_max, "-", lw=2, color=colors[i], alpha=1, label=labels[i])
+
+        if i == 1:
+            radar.plot(prepared_vals, vals[i], graph_max, "-", lw=2, color=colors[i], alpha=1, label=labels[i])
+        else:
+            radar.plot(prepared_vals, vals[i], graph_max, "--", lw=2, color=colors[i], alpha=1, label=labels[i])
     radar.ax.legend(loc='best', bbox_to_anchor=(0.5, 0., 0.5, 0.5))
     pl.title(title, pad=40)
     return fig
@@ -106,7 +110,11 @@ def make_radar_diagram(data, title):
         prepared_vals = []
         for j in range(len(vals[i])):
             prepared_vals.append(vals[i][j] / graph_max[j] * 5)
-        radar.plot(prepared_vals, vals[i], graph_max, "-", lw=2, color=colors[i], alpha=1, label=labels[i])
+
+        if i == 1:
+            radar.plot(prepared_vals, vals[i], graph_max, "-", lw=2, color=colors[i], alpha=1, label=labels[i])
+        else:
+            radar.plot(prepared_vals, vals[i], graph_max, "--", lw=2, color=colors[i], alpha=1, label=labels[i])
     radar.ax.legend(loc='best', bbox_to_anchor=(0.5, 0., 0.5, 0.5))
     pl.title(title, pad=40)
     return fig
@@ -434,10 +442,14 @@ def make_triangle_radar_from_dic(data):
         inlik_res = 0
     else:
         inlik_res = analysis['CD3+IL2+(стимулированный)']['Результат'] / analysis['CD3+IL2+(спонтанный)']['Результат']
-    fno_max = 0.942 / 0.9
-    infer_max = 0.377 / 0.5
-    inlik_max = 0.651 / 0.1
+    fno_min = 80
+    infer_min = 80
+    inlik_min = 80
+    fno_max = 120 #0.942 / 0.9
+    infer_max = 120 #0.377 / 0.5
+    inlik_max = 120 #0.651 / 0.1
     data = {
+        'min': [fno_min, infer_min, inlik_min],
         'res': [fno_res, infer_res, inlik_res],
         'max': [fno_max, infer_max, inlik_max],
         'names': ['ФНО', 'Интерферон', 'Интерликин']
