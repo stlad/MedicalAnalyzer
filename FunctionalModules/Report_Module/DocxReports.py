@@ -10,6 +10,7 @@ from utilits import  date_sql_to_text_format
 from Models.Patient import Patient
 from Models.Analysis import Analysis
 from FunctionalModules.Diagram_Module.Diagram_Processing import DiagramProcessor
+from FunctionalModules.Diagram_Module.Recommendation_Processing import RecommendationProcessor
 from docx.shared import Mm
 
 class DocxReporter:
@@ -24,6 +25,7 @@ class DocxReporter:
     def _get_report(self):
         doc = self._get_classic_table()
         doc = self._add_graphs(doc)
+        doc = self._add_recommendations(doc)
 
 
         return doc
@@ -77,6 +79,13 @@ class DocxReporter:
 
         return document
 
+    def _add_recommendations(self, doc: Document):
+        rec_proc = RecommendationProcessor()
+        rec = rec_proc.MakeRecommendation(self.patient, self.analysis.analysis_date)
+        p = doc.add_paragraph()
+        run = p.add_run(rec)
+        return doc
+
     def _add_figure_to_doc(self, doc:Document, fig, img_name):
         fig.savefig(img_name)
         p = doc.add_paragraph()
@@ -98,6 +107,8 @@ class DocxReporter:
     def _get_triangle_graph(self,diagram_processor: DiagramProcessor):
         g = diagram_processor.MakeTriangleDiagram(self.patient, self.analysis.analysis_date)
         return g.Figure
+
+
 
 
     def save_to_file(self, filename):
