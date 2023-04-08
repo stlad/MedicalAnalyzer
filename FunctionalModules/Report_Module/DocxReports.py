@@ -10,7 +10,7 @@ from utilits import  date_sql_to_text_format
 from Models.Patient import Patient
 from Models.Analysis import Analysis
 from FunctionalModules.Diagram_Module.Diagram_Processing import DiagramProcessor
-from FunctionalModules.Diagram_Module.Recommendation_Processing import RecommendationProcessor
+from FunctionalModules.Diagnose_Module.Recommendation_Processing import RecommendationProcessor
 from docx.shared import Mm
 
 class DocxReporter:
@@ -83,7 +83,7 @@ class DocxReporter:
         rec_proc = RecommendationProcessor()
         rec = rec_proc.MakeRecommendation(self.patient, self.analysis.analysis_date)
         p = doc.add_paragraph()
-        run = p.add_run(rec)
+        run = p.add_run("Рекомендации: \n\n"+ rec)
         return doc
 
     def _add_figure_to_doc(self, doc:Document, fig, img_name):
