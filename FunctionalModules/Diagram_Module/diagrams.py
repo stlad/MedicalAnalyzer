@@ -433,15 +433,18 @@ def make_triangle_radar_from_dic(data):
     if analysis['CD3+TNFa+(спонтанный)']['Результат'] == 0:
         fno_res = 0
     else:
-        fno_res = analysis['CD3+TNFa+(стимулированный)']['Результат'] / analysis['CD3+TNFa+(спонтанный)']['Результат']
+        #fno_res = analysis['CD3+TNFa+(стимулированный)']['Результат'] / analysis['CD3+TNFa+(спонтанный)']['Результат']
+        fno_res = analysis['Индекс {CD3+TNFa+(стимулированный)/CD3+TNFa+(спонтанный)}']['Результат']
     if analysis['CD3+IFNy+(спонтанный)']['Результат'] == 0:
         infer_res = 0
     else:
-        infer_res = analysis['CD3+IFNy+(стимулированный)']['Результат'] / analysis['CD3+IFNy+(спонтанный)']['Результат']
+        #infer_res = analysis['CD3+IFNy+(стимулированный)']['Результат'] / analysis['CD3+IFNy+(спонтанный)']['Результат']
+        infer_res = analysis['Индекс {CD3+IFNy+(стимулированный)/CD3+IFNy+(спонтанный)}']['Результат']
     if analysis['CD3+IL2+(спонтанный)']['Результат'] == 0:
         inlik_res = 0
     else:
-        inlik_res = analysis['CD3+IL2+(стимулированный)']['Результат'] / analysis['CD3+IL2+(спонтанный)']['Результат']
+        #inlik_res = analysis['CD3+IL2+(стимулированный)']['Результат'] / analysis['CD3+IL2+(спонтанный)']['Результат']
+        inlik_res = analysis['Индекс {CD3+IL2+(стимулированный)/CD3+IL2+(спонтанный)}']['Результат']
     fno_min = 80
     infer_min = 80
     inlik_min = 80

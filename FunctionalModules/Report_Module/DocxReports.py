@@ -59,7 +59,7 @@ class DocxReporter:
 
     def _fill_params(self, tbl):
         i=10
-        for param in self.analysis.parameters:
+        for param in self.analysis.parameters[:-1]: # НЕ используем последнюю строчку с ФНО
             if i==10 or i == 19 or i == 30 :
                 i+=1
             tbl.rows[i].cells[0].text = param.name
@@ -70,11 +70,9 @@ class DocxReporter:
         d_processor = DiagramProcessor()
         t,b = self._get_radar_graphs(d_processor)
         triangle = self._get_triangle_graph(d_processor)
-        linear = self._get_lineargraph(d_processor)
+        #linear = self._get_lineargraph(d_processor)
         self._add_figure_to_doc(document, t, 'Т_клеточное звено.png')
         self._add_figure_to_doc(document, b, 'В_клеточное звено.png')
-        #self._add_figure_to_doc(document, linear[0], 'ф.png')
-        #self._add_figure_to_doc(document, linear[1], 'as.png')
         self._add_figure_to_doc(document, triangle, 'цитокиновые пары.png')
 
         return document

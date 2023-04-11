@@ -45,6 +45,8 @@ class AnalysisWindow(QWidget):
             self._fill_cytockine_pair(21,22,23)
         elif row == 24 or row== 25:
             self._fill_cytockine_pair(24,25,26)
+        elif row ==10 or row==12:
+            self._fill_cytockine_pair(10,12,11)
         else:
             return
 
@@ -53,11 +55,11 @@ class AnalysisWindow(QWidget):
         stim = float(self.tableWidget.item(stim_row, 2).text())
         spon = float(self.tableWidget.item(spon_row, 2).text())
         if spon != 0:
-            cytocine_index = str(stim / spon)
+            cytocine_index = str(round(stim / spon, 2))
             self.tableWidget.setCurrentCell(index_row,2)
             r = self.tableWidget.currentRow()
             self.tableWidget.setItem(index_row, 2, QTableWidgetItem(cytocine_index))
-            print(1)
+
 
 
 
