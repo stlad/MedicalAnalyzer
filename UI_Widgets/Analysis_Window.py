@@ -66,7 +66,9 @@ class AnalysisWindow(QWidget):
 
 
     def docx_report(self):
-        analysis_to_report = PackOneAnalysisByLists(self.patient, self.analysis, self.params, self.catalog)
+        #analysis_to_report = PackOneAnalysisByLists(self.patient, self.analysis, self.params, self.catalog)
+        full_patient = CreateFullPatientFromDB(self.patient[0])
+        analysis_to_report = full_patient.find_alalysis_by_date(self.analysis[2])
         form = DocxReporter(analysis_to_report)
         name, type = QFileDialog.getSaveFileName(self, 'Save File', '', '(*.docx)')
         if name == '':
