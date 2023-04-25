@@ -61,5 +61,14 @@ class Patient:
                 return analysis
         raise IndexError('Такого анализа нет в списке')
 
+    def select_analysis_by_season(self, season):
+        res = []
+        for anal in self.analysis:
+            if anal.season ==season:
+                res.append(anal)
+
+        return res
+
+
 
 

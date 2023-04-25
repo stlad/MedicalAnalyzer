@@ -11,6 +11,7 @@ from Models.Patient import Patient
 from Models.Analysis import Analysis
 from FunctionalModules.Diagram_Module.Diagram_Processing import DiagramProcessor
 from FunctionalModules.Diagnose_Module.Recommendation_Processing import RecommendationProcessor
+from FunctionalModules.Report_Module.ParameterTimeСhanging import ParameterTimeLine
 from docx.shared import Mm
 
 class DocxReporter:
@@ -26,7 +27,25 @@ class DocxReporter:
         doc = self._get_classic_table()
         doc = self._add_graphs(doc)
         doc = self._add_recommendations(doc)
+        doc = self._add_avg_comparation(doc)
 
+        return doc
+
+    def _add_avg_comparation(self, doc:Document):
+        lines = self._calculate_season_dynamics()
+        tbl = doc.tables[1]
+        for index, line in enumerate(lines):
+            row = tbl.rows[index+1]
+            row.cells[0].text = line[0]
+            row.cells[1].text = f'[{line[1]}-{line[2]}]'
+            row.cells[2].text = str(line[3])
+            row.cells[3].text = str(line[4])
+            if line[5] > 0:
+                row.cells[4].text = 'Увеличился'
+            elif line[5] < 0:
+                row.cells[4].text = 'Уменьшился'
+            else:
+                row.cells[4].text = 'Не изменился'
 
         return doc
 
@@ -51,7 +70,7 @@ class DocxReporter:
         tbl.rows[6].cells[1].text = self.patient.genes  # ГЕНЫ 1,2,3
         tbl.rows[7].cells[1].text = self.patient.genes  # ГЕНЫ 1,2,3
         tbl.rows[8].cells[1].text = self.patient.genes  # ГЕНЫ 1,2,3
-        tbl.rows[9].cells[1].text = '0' if self.analysis.analysis_date.month in [3,4,5,6,7,8] else '1'
+        tbl.rows[9].cells[1].text = self.analysis.season #'0' if self.analysis.analysis_date.month in [3,4,5,6,7,8] else '1'
 
         self._fill_params(tbl)
         return doc
@@ -113,3 +132,12 @@ class DocxReporter:
         if self.doc == None:
             return
         self.doc.save(filename)
+
+    def _calculate_season_dynamics(self):
+        ptl = ParameterTimeLine(self.patient, self.analysis)
+        res = []
+        for i in range(len(self.analysis.parameters)):
+            param = self.analysis.parameters[i]
+            line = [param.name, param.ref_min, param.ref_max]  + ptl.get(i, self.analysis.season)
+            res.append(line)
+        return res

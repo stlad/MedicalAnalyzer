@@ -30,5 +30,14 @@ class Parameter:
         return {'Результат': self.value}
 
 
+    def devation_from_interval(self, delta = 0):
+        if self.value > self.ref_max + delta:
+            return self.value - self.ref_max - delta
+        elif self.value < self.ref_min - delta:
+            return  self.valuea - self.ref_min - delta
+        else:
+            return 0
 
 
+    def __str__(self):
+        return f'{self.name}'

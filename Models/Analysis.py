@@ -8,10 +8,12 @@ class Analysis:
         self.from_DB_list(analysis)
         self.parameters = []
 
+
     def from_DB_list(self, anal):
         self._original_data = anal
         self.id = anal[0]
         self.analysis_date = anal[2]
+        self.season = '0' if self.analysis_date.month in [3,4,5,6,7,8] else '1'
 
         if self.patient is None:
             return
