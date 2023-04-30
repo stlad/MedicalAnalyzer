@@ -1,3 +1,5 @@
+import os
+
 from FunctionalModules.Diagram_Module.diagrams import *
 from FunctionalModules.Diagram_Module.manual_prediction import *
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -14,7 +16,7 @@ class RecommendationProcessor():
     def MakeRecommendation(self, patient:Patient, analisys_date:datetime):
         try:
             #recommend = check_statuses(patient.to_json(analisys_date))
-            recommend = check_base_diagnoses('', patient.to_json(analisys_date))
+            recommend = check_base_diagnoses('FunctionalModules/Diagnose_Module/recomendations.xlsx', patient.to_json(analisys_date))
             return recommend
         except KeyError:
             print("Не заполнены анализы")

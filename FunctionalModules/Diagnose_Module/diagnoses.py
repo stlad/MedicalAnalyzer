@@ -1,8 +1,7 @@
 import math
 import operator
-import os
-
 import pandas as pd
+
 
 def add_to_string(str, dic, name):
     result = str
@@ -138,7 +137,7 @@ def check_base_diagnoses(path, data):
             for res in resultsx:
                 result += def_text.format(i, 'по одному диагнозу', res[0], res[1])
     except Exception as e:
-        return result
+        print(e)
     return result
 
 
