@@ -35,17 +35,24 @@ class DocxReporter:
         lines = self._calculate_season_dynamics()
         tbl = doc.tables[1]
         for index, line in enumerate(lines):
+            if index == len(lines)-1:
+                break
             row = tbl.rows[index+1]
+            row.cells[0].width = 20
+            row.cells[1].width = 20
+            row.cells[2].width = 20
+            row.cells[3].width = 20
+
             row.cells[0].text = line[0]
             row.cells[1].text = f'[{line[1]}-{line[2]}]'
             row.cells[2].text = str(line[3])
             row.cells[3].text = str(line[4])
             if line[5] > 0:
-                row.cells[4].text = 'Увеличился'
+                row.cells[4].text = '↑'
             elif line[5] < 0:
-                row.cells[4].text = 'Уменьшился'
+                row.cells[4].text = '↓'
             else:
-                row.cells[4].text = 'Не изменился'
+                row.cells[4].text = '='
 
         return doc
 
@@ -103,9 +110,9 @@ class DocxReporter:
         run = p.add_run("Рекомендации: \n\n"+ rec)
         return doc
 
-    def _add_figure_to_doc(self, doc:Document, fig, img_name):
+    def _add_figure_to_doc(self, doc:Document, fig, img_name ):
         fig.savefig(img_name)
-        p = doc.add_paragraph()
+        p = doc.paragraphs[2] #doc.add_paragraph()
         run = p.add_run('')
         run.add_picture(img_name, height=Mm(150))
         os.remove(img_name)
