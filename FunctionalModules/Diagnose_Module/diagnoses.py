@@ -76,66 +76,67 @@ def check_statuses(data):
     return text_result
 
 
-# Недостаток CD4 –нужно корректировать через стимуляторы Т-клеточного звена (Т-активин и аналоги)
-def check_CD4(data):
-    name = list(data.keys())[0]
-    data = data[name]
-    date = list(data.keys())[0]
-    data = data[date]
-    CD4 = data['Т-хелперы (CD45+CD3+CD4+)']['Результат']
-    if CD4 < 0.7:
-        return True
-    return False
-
-
-# Анализируем НСТ сп и НСТ ст. ТОЛЬКО для весны! Отношение этих значений должно быть 1 к 10 и нет сахарного диабета, то назначать глюкозу и витамин С.
-def check_NST(data):
-    name = list(data.keys())[0]
-    data = data[name]
-    date = list(data.keys())[0]
-    if not date.split('-')[1] in ['03', '04', '05']:
-        return False
-    data = data[date]
-    NST_sp = data['НСТ-тест (спонтанный)']['Результат']
-    NST_st = data['НСТ-тест (стимулированный)']['Результат']
-    if NST_st >= (NST_sp * 10):
-        return True
-    return False
-
-
-# Смотрим ЦИК. Если <50, то назначаем глюкозу+витамин С
-def check_CIK(data):
-    name = list(data.keys())[0]
-    data = data[name]
-    date = list(data.keys())[0]
-    data = data[date]
-    CIK = data['Циркулирующие иммунные комплексы']['Результат']
-    if CIK < 50:
-        return True
-    return False
+# # Недостаток CD4 –нужно корректировать через стимуляторы Т-клеточного звена (Т-активин и аналоги)
+# def check_CD4(data):
+#     name = list(data.keys())[0]
+#     data = data[name]
+#     date = list(data.keys())[0]
+#     data = data[date]
+#     CD4 = data['Т-хелперы (CD45+CD3+CD4+)']['Результат']
+#     if CD4 < 0.7:
+#         return True
+#     return False
+#
+#
+# # Анализируем НСТ сп и НСТ ст. ТОЛЬКО для весны! Отношение этих значений должно быть 1 к 10 и нет сахарного диабета, то назначать глюкозу и витамин С.
+# def check_NST(data):
+#     name = list(data.keys())[0]
+#     data = data[name]
+#     date = list(data.keys())[0]
+#     if not date.split('-')[1] in ['03', '04', '05']:
+#         return False
+#     data = data[date]
+#     NST_sp = data['НСТ-тест (спонтанный)']['Результат']
+#     NST_st = data['НСТ-тест (стимулированный)']['Результат']
+#     if NST_st >= (NST_sp * 10):
+#         return True
+#     return False
+#
+#
+# # Смотрим ЦИК. Если <50, то назначаем глюкозу+витамин С
+# def check_CIK(data):
+#     name = list(data.keys())[0]
+#     data = data[name]
+#     date = list(data.keys())[0]
+#     data = data[date]
+#     CIK = data['Циркулирующие иммунные комплексы']['Результат']
+#     if CIK < 50:
+#         return True
+#     return False
 
 
 def check_base_diagnoses(path, data):
     i = 1
     result = ""
     def_text = "Рекомендация {}:\n\tТип: {}\n\tПричина: {}\n\tРекомендация: {}\n"
-    if check_CD4(data):
-        result += def_text.format(i, 'по одному диагнозу', 'Т-хелперы менее 0.7', 'Т-активин и аналоги)')
-        i += 1
-    if check_NST(data):
-        result += def_text.format(i, 'по одному диагнозу',
-                                  'НСТ-спонтанный в десять или более раз меньше НСТ-стимулированного',
-                                  'при отсутствии диабета, назначать глюкозу и витамин С')
-        i += 1
-    if check_CIK(data):
-        result += def_text.format(i, 'по одному диагнозу', 'циркулирующие иммунные комплексы меньше пятидесяти',
-                                  'назначаются глюкоза и витамин С')
-        i += 1
+    # if check_CD4(data):
+    #     result += def_text.format(i, 'по одному диагнозу', 'Т-хелперы менее 0.7', 'Т-активин и аналоги)')
+    #     i += 1
+    # if check_NST(data):
+    #     result += def_text.format(i, 'по одному диагнозу',
+    #                               'НСТ-спонтанный в десять или более раз меньше НСТ-стимулированного',
+    #                               'при отсутствии диабета, назначать глюкозу и витамин С')
+    #     i += 1
+    # if check_CIK(data):
+    #     result += def_text.format(i, 'по одному диагнозу', 'циркулирующие иммунные комплексы меньше пятидесяти',
+    #                               'назначаются глюкоза и витамин С')
+    #     i += 1
     try:
         resultsx = predict_by_xlsx(path, data)
         if resultsx.__len__() > 0:
             for res in resultsx:
                 result += def_text.format(i, 'по одному диагнозу', res[0], res[1])
+                i += 1
     except Exception as e:
         print(e)
     return result
@@ -193,6 +194,9 @@ def get_val(element, data):
     if element.__contains__('/'):
         sub_el = element.split('/')
         return get_val(sub_el[0], data) / get_val(sub_el[1], data)
+    elif element.__contains__('*'):
+        sub_el = element.split('/')
+        return get_val(sub_el[0], data) * get_val(sub_el[1], data)
     patient = data[list(data.keys())[0]]
     analysis = patient[list(patient.keys())[0]]
     analysis_keys = list(analysis.keys())
@@ -244,6 +248,28 @@ def get_condition_result(condition, data):
         return evaluate_condition(condition, data)
 
 
+def check_for_spring(spring, dct):
+    if not spring:
+        return True
+    name = list(dct.keys())[0]
+    data = dct[name]
+    date = list(data.keys())[0]
+    if not date.split('-')[1] in ['03', '04', '05']:
+        return False
+    return True
+
+
+def check_for_autumn(autumn, dct):
+    if not autumn:
+        return True
+    name = list(dct.keys())[0]
+    data = dct[name]
+    date = list(data.keys())[0]
+    if not date.split('-')[1] in ['09', '10', '11']:
+        return False
+    return True
+
+
 def predict_by_xlsx(path, dct):
     data = pd.read_excel(path)
     variables = {}
@@ -261,6 +287,7 @@ def predict_by_xlsx(path, dct):
                     l = l - len(v_k) + len(variables[v_k])
                     cond = cond[0:j] + variables[v_k] + cond[j + len(v_k):]
             j += 1
-        if get_condition_result(cond, dct):
+        if get_condition_result(cond, dct) and check_for_spring(data['Только весна'] == 'Да', dct) and check_for_autumn(
+                data['Только осень'] == 'Да', dct):
             result.append((data['Причина'][i], data['Рекомендации'][i]))
     return result
