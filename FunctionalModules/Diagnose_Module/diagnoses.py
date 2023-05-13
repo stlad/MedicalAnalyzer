@@ -1,5 +1,3 @@
-import math
-import operator
 import pandas as pd
 
 
@@ -76,61 +74,10 @@ def check_statuses(data):
     return text_result
 
 
-# # Недостаток CD4 –нужно корректировать через стимуляторы Т-клеточного звена (Т-активин и аналоги)
-# def check_CD4(data):
-#     name = list(data.keys())[0]
-#     data = data[name]
-#     date = list(data.keys())[0]
-#     data = data[date]
-#     CD4 = data['Т-хелперы (CD45+CD3+CD4+)']['Результат']
-#     if CD4 < 0.7:
-#         return True
-#     return False
-#
-#
-# # Анализируем НСТ сп и НСТ ст. ТОЛЬКО для весны! Отношение этих значений должно быть 1 к 10 и нет сахарного диабета, то назначать глюкозу и витамин С.
-# def check_NST(data):
-#     name = list(data.keys())[0]
-#     data = data[name]
-#     date = list(data.keys())[0]
-#     if not date.split('-')[1] in ['03', '04', '05']:
-#         return False
-#     data = data[date]
-#     NST_sp = data['НСТ-тест (спонтанный)']['Результат']
-#     NST_st = data['НСТ-тест (стимулированный)']['Результат']
-#     if NST_st >= (NST_sp * 10):
-#         return True
-#     return False
-#
-#
-# # Смотрим ЦИК. Если <50, то назначаем глюкозу+витамин С
-# def check_CIK(data):
-#     name = list(data.keys())[0]
-#     data = data[name]
-#     date = list(data.keys())[0]
-#     data = data[date]
-#     CIK = data['Циркулирующие иммунные комплексы']['Результат']
-#     if CIK < 50:
-#         return True
-#     return False
-
-
 def check_base_diagnoses(path, data):
     i = 1
     result = ""
     def_text = "Рекомендация {}:\n\tТип: {}\n\tПричина: {}\n\tРекомендация: {}\n"
-    # if check_CD4(data):
-    #     result += def_text.format(i, 'по одному диагнозу', 'Т-хелперы менее 0.7', 'Т-активин и аналоги)')
-    #     i += 1
-    # if check_NST(data):
-    #     result += def_text.format(i, 'по одному диагнозу',
-    #                               'НСТ-спонтанный в десять или более раз меньше НСТ-стимулированного',
-    #                               'при отсутствии диабета, назначать глюкозу и витамин С')
-    #     i += 1
-    # if check_CIK(data):
-    #     result += def_text.format(i, 'по одному диагнозу', 'циркулирующие иммунные комплексы меньше пятидесяти',
-    #                               'назначаются глюкоза и витамин С')
-    #     i += 1
     try:
         resultsx = predict_by_xlsx(path, data)
         if resultsx.__len__() > 0:
@@ -145,31 +92,32 @@ def check_base_diagnoses(path, data):
 # Псевдокод..................................................................................................
 
 def split_to_conditions_and_unions(string):
-    brackets_counter = 0
+    # brackets_counter = 0
     sub_strings = []
     unions = []
     ss_start_idx = -1
     i = 0
     while i < len(string):
-        if string[i] == '(':
-            ss_start_idx = i + 1
-            brackets_counter = 1
-            while brackets_counter > 0 and i + 1 < len(string):
-                i += 1
-                if string[i] == '(':
-                    brackets_counter += 1
-                elif string[i] == ')':
-                    brackets_counter -= 1
-                if brackets_counter == 0:
-                    sub_strings.append(string[ss_start_idx:i].replace(' ', ''))
-                    ss_start_idx = -1
-                elif i + 1 >= len(string):
-                    raise Exception(
-                        "Ошибка: Отсутствует закрывающая скобочка.")
-        elif string[i] == ')':
-            raise Exception(
-                "Ошибка: Закрывающая скобочка без открывающей.")
-        elif string[i] != ' ':
+        # if string[i] == '(':
+        #     ss_start_idx = i + 1
+        #     brackets_counter = 1
+        #     while brackets_counter > 0 and i + 1 < len(string):
+        #         i += 1
+        #         if string[i] == '(':
+        #             brackets_counter += 1
+        #         elif string[i] == ')':
+        #             brackets_counter -= 1
+        #         if brackets_counter == 0:
+        #             sub_strings.append(string[ss_start_idx:i].replace(' ', ''))
+        #             ss_start_idx = -1
+        #         elif i + 1 >= len(string):
+        #             raise Exception(
+        #                 "Ошибка: Отсутствует закрывающая скобочка.")
+        # elif string[i] == ')':
+        #     raise Exception(
+        #         "Ошибка: Закрывающая скобочка без открывающей.")
+        # elif string[i] != ' ':
+        if string[i] != ' ':
             if string.startswith('and', i):
                 if ss_start_idx != -1:
                     sub_strings.append(string[ss_start_idx:i].replace(' ', ''))
@@ -190,12 +138,17 @@ def split_to_conditions_and_unions(string):
     return sub_strings, unions
 
 
+def prepare_string_to_compare(str):
+    return str.replace(' ', '').lower().replace('c', 'с').replace('h', 'н').replace('x', 'х').replace('o', 'о')
+
+
 def get_val(element, data):
+    # element = element.replace(' ', '')
     if element.__contains__('/'):
         sub_el = element.split('/')
         return get_val(sub_el[0], data) / get_val(sub_el[1], data)
     elif element.__contains__('*'):
-        sub_el = element.split('/')
+        sub_el = element.split('*')
         return get_val(sub_el[0], data) * get_val(sub_el[1], data)
     patient = data[list(data.keys())[0]]
     analysis = patient[list(patient.keys())[0]]
@@ -204,19 +157,20 @@ def get_val(element, data):
         return float(element)
     except ValueError:
         for a in analysis_keys:
-            a_c = a.replace('С', 'C')
-            if element in a_c:
+            a_с = prepare_string_to_compare(a)
+            element = prepare_string_to_compare(element)
+            if element in a_с:
                 return float(analysis[a]['Результат'])
 
 
 def evaluate_condition(condition, data):
     operators = {
-        '<': operator.lt,
-        '<=': operator.le,
-        '==': operator.eq,
-        '!=': operator.ne,
-        '>': operator.gt,
-        '>=': operator.ge
+        '<=': lambda a, b: float(a) <= float(b),
+        '==': lambda a, b: float(a) == float(b),
+        '!=': lambda a, b: float(a) != float(b),
+        '>=': lambda a, b: float(a) >= float(b),
+        '<': lambda a, b: float(a) < float(b),
+        '>': lambda a, b: float(a) > float(b),
     }
     op = None
     idx = -1
@@ -226,9 +180,11 @@ def evaluate_condition(condition, data):
             op = o
             break
     if op is not None:
-        left = get_val(condition[0:idx].replace(' ', ''), data)
-        right = get_val(condition[(idx + len(op)):].replace(' ', ''), data)
-        return operators[op](left, right)
+        # cond.replace(' ', '')
+        left = get_val(condition[0:idx], data)
+        right = get_val(condition[(idx + len(op)):], data)
+        result = operators[op](left, right)
+        return result
     raise Exception("Ошибка: неправильный оператор сравнения.")
 
 
@@ -238,11 +194,12 @@ def get_condition_result(condition, data):
     if condition.__contains__('and') or condition.__contains__('or'):
         conditions, unions = split_to_conditions_and_unions(condition)
         result = get_condition_result(conditions[0], data)
-        for i in range(1, len(conditions)):
-            if unions[i - 1] == 'and':
-                result = result and get_condition_result(conditions[i], data)
-            else:
-                result = result or get_condition_result(conditions[i], data)
+        if len(conditions) > 1:
+            for i in range(1, len(conditions)):
+                if unions[i - 1] == 'and':
+                    result = result and get_condition_result(conditions[i], data)
+                else:
+                    result = result or get_condition_result(conditions[i], data)
         return result
     else:
         return evaluate_condition(condition, data)
@@ -275,8 +232,12 @@ def predict_by_xlsx(path, dct):
     variables = {}
     result = []
     for i in range(len(data['Переменная'])):
+        if pd.isna(data['Переменная'][i]):
+            break
         variables[data['Переменная'][i]] = data['Значение'][i]
-    for i in range(len(data['Рекомендации'])):
+    for i in range(len(data['Выражение'])):
+        if pd.isna(data['Выражение'][i]):
+            break
         cond = data['Выражение'][i]
         j = 0
         l = len(cond)
@@ -287,7 +248,9 @@ def predict_by_xlsx(path, dct):
                     l = l - len(v_k) + len(variables[v_k])
                     cond = cond[0:j] + variables[v_k] + cond[j + len(v_k):]
             j += 1
-        if get_condition_result(cond, dct) and check_for_spring(data['Только весна'] == 'Да', dct) and check_for_autumn(
-                data['Только осень'] == 'Да', dct):
+
+        if get_condition_result(cond, dct) and (
+                pd.isna(data['Только весна'][i]) or check_for_spring(data['Только весна'][i] == 'Да', dct)
+                and (pd.isna(data['Только осень'][i]) or check_for_autumn(data['Только осень'][i] == 'Да', dct))):
             result.append((data['Причина'][i], data['Рекомендации'][i]))
     return result
