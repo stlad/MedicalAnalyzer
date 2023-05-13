@@ -1,6 +1,7 @@
 import FunctionalModules.DB_Module.db_module
 from  UI_Widgets.CreatePatient_window import *
 from UI_Widgets.Analysis_Window import *
+from UI_Widgets.RecomendationCalculatorWindow import *
 from FunctionalModules.Diagram_Module.Diagram_Processing import *
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT
 from matplotlib import pyplot as plt
@@ -52,7 +53,23 @@ class MainWindow(QMainWindow):
         self.toolBox.setItemText(1, 'Анализы и графики')
         self.toolBox.setItemText(2, 'Рекомендации')
 
+        #self.actionOpenCalculator.triggered.connect(lambda: print("нажато"))
+        self._create_menubar()
+
         self.show()
+
+    def _create_menubar(self):
+        menubar = self.menubar
+        recMenu = menubar.addMenu('Меню')
+        createCalcAction = QAction(self)
+        menubar.addMenu
+        createCalcAction.setText("Калькулятор рекомендаций")
+        createCalcAction.triggered.connect(lambda: self._open_new_window(RecomendationCalculatorWindow(self)))
+        recMenu.addAction(createCalcAction)
+
+    def _open_new_window(self, window):
+        self.child_windows.append(window)
+        window.show()
 
 
     def open_season_analyzer(self):

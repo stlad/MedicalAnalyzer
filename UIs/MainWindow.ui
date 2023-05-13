@@ -359,6 +359,11 @@ p, li { white-space: pre-wrap; }
     </rect>
    </property>
   </widget>
+  <action name="actionOpenCalculator">
+   <property name="text">
+    <string>Калькулятор рекомендаций</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
