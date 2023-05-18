@@ -1,6 +1,7 @@
 import psycopg2
 from utilits import *
 import json
+from Models.CalculatorRule import CalculatorRule
 
 class DBController():
     def __init__(self,database = 'MedicalAnalysis_DB', user = 'postgres', password='admin', host='localhost', port='5432'):
@@ -178,6 +179,50 @@ class DBController():
             con.commit()
         return patient_id
 
+    def GetAllCalcRules(self):
+        con = self._create_connection_to_DB()
+        with con.cursor() as cur:
+            sql = f"select * from calculator_rules"
+            cur.execute(sql)
+            rows = cur.fetchall()
+        result = []
+        for row in rows:
+            result.append(CalculatorRule(row[0],row[1],row[2], row[3],row[4],row[5],row[6],row[7]))
+        return result
+
+    def SaveCalcRule(self, rule:CalculatorRule):
+        con = self._create_connection_to_DB()
+        cur = con.cursor()
+        sql = ' '.join([
+                           f"insert into calculator_rules(expr, cause,recommendation,variable,value,for_sping,for_autumn)",
+                           f"values('{rule.expression}','{rule.cause}','{rule.recommendation}','{rule.variable}', '{rule.value}', '{rule.for_spring}', '{rule.for_autumn}')"])
+        cur.execute(sql)
+        con.commit()
+        cur.close()
+
+    def UpdateCalcRule(self,rule:CalculatorRule):
+        con = self._create_connection_to_DB()
+        with con.cursor() as cur:
+            sql =f"update calculator_rules set expr={rule.expression}, " \
+                 f"cause={rule.cause}," \
+                 f"recommendation={rule.recommendation}," \
+                 f"variable={rule.variable}," \
+                 f"value={rule.value}," \
+                 f"for_sping={rule.for_spring}," \
+                 f"for_autumn={rule.for_autumn}" \
+                 f"where rule_id={rule.db_id}",
+            cur.execute(sql)
+            rule_id = cur.fetchone()[0]
+            con.commit()
+        return rule_id
+
+    def DeleteRule(self, rule:CalculatorRule):
+        con = self._create_connection_to_DB()
+        cur = con.cursor()
+        sql = f"delete from calculator_rules where rule_id ={rule.db_id}"
+        cur.execute(sql)
+        con.commit()
+        cur.close()
 
 
 def patient_to_dct(id:int):
