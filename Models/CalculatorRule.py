@@ -15,8 +15,8 @@ class CalculatorRule:
         self.recommendation = rec
         self.variable = var
         self.value = val
-        self.for_autumn = spr
-        self.for_spring = aut
+        self.for_autumn = aut
+        self.for_spring = spr
 
     def __str__(self):
         return self.expression

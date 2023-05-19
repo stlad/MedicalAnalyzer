@@ -42,8 +42,9 @@ class RecomendationCalculatorWindow(QWidget):
             rule.cause = self.tableWidget.item(row, 1).text()
             rule.recommendation = self.tableWidget.item(row, 2).text()
             rule.variable = self.tableWidget.item(row, 3).text()
-            rule.for_autumn = bool(self.tableWidget.item(row, 4).text())
-            rule.for_spring = bool(self.tableWidget.item(row, 5).text())
+            rule.value = self.tableWidget.item(row, 4).text()
+            rule.for_autumn = bool(self.tableWidget.item(row, 5).text())
+            rule.for_spring = bool(self.tableWidget.item(row, 6).text())
 
             if rule.db_id==0:
                 MainDBController.SaveCalcRule(rule)
@@ -54,6 +55,8 @@ class RecomendationCalculatorWindow(QWidget):
     def _add_row(self):
         row_cnt = self.tableWidget.rowCount()
         self.tableWidget.insertRow(row_cnt)
+        for i in range(7):
+            self.tableWidget.setItem(row_cnt, i, QTableWidgetItem(""))
         self.rules.append(CalculatorRule())
 
 
@@ -75,4 +78,5 @@ class RecomendationCalculatorWindow(QWidget):
         button = dlg.exec()
         if button == QMessageBox.Yes:
             self.tableWidget.removeRow(row)
+            MainDBController.DeleteRule(self.rules[row])
 
