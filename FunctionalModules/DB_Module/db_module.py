@@ -209,8 +209,8 @@ class DBController():
                  f"recommendation='{rule.recommendation}',",
                  f"variable='{rule.variable}'," ,
                  f"value='{rule.value}'," ,
-                 f"for_sping={rule.for_spring if rule.for_spring is not None else str(True)},",
-                 f"for_autumn={rule.for_autumn if rule.for_autumn is not None else str(True)}",
+                 f"for_sping={rule.for_spring},",
+                 f"for_autumn={rule.for_autumn}",
                  f"where rule_id={rule.db_id} ",
                  f"returning rule_id"])
             cur.execute(sql)

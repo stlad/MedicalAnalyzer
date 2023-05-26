@@ -17,13 +17,16 @@ class RecomendationCalculatorWindow(QWidget):
         self.addLineBtn.clicked.connect(lambda: self._add_row())
         self.removeLineBtn.clicked.connect(lambda: self._remove_row())
         self.db_save_btn.clicked.connect(lambda: self._save_to_db())
-        self.add_minus_btn.clicked.connect(lambda : self._add_to_current_cell("[[-]]"))
-        self.add_plus_btn.clicked.connect(lambda : self._add_to_current_cell("[[+]]"))
+        self.add_minus_btn.clicked.connect(lambda : self._add_to_current_cell("[-]"))
+        self.add_plus_btn.clicked.connect(lambda : self._add_to_current_cell("[+]"))
         self._refresh_rules()
 
 
     def _add_to_current_cell(self,item):
         self.tableWidget.currentItem().setText(self.tableWidget.currentItem().text()+item)
+
+
+
 
     def _load_table(self):
         tb = self.tableWidget
@@ -35,8 +38,8 @@ class RecomendationCalculatorWindow(QWidget):
             tb.setItem(row,2, QTableWidgetItem(rule.recommendation))
             tb.setItem(row,3, QTableWidgetItem(rule.variable))
             tb.setItem(row,4, QTableWidgetItem(rule.value))
-            tb.setItem(row,5, QTableWidgetItem(str(rule.for_autumn)))
-            tb.setItem(row,6, QTableWidgetItem(str(rule.for_spring)))
+            tb.setItem(row,5, QTableWidgetItem( 'да' if rule.for_autumn else 'нет'))
+            tb.setItem(row,6, QTableWidgetItem('да' if rule.for_spring else 'нет'))
 
 
     def _save_to_db(self):
@@ -46,8 +49,8 @@ class RecomendationCalculatorWindow(QWidget):
             rule.recommendation = self.tableWidget.item(row, 2).text()
             rule.variable = self.tableWidget.item(row, 3).text()
             rule.value = self.tableWidget.item(row, 4).text()
-            rule.for_autumn = bool(self.tableWidget.item(row, 5).text())
-            rule.for_spring = bool(self.tableWidget.item(row, 6).text())
+            rule.for_autumn = self.tableWidget.item(row, 5).text()=='да'
+            rule.for_spring = self.tableWidget.item(row, 6).text()=='да'
 
             if rule.db_id==0:
                 MainDBController.SaveCalcRule(rule)

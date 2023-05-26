@@ -7,8 +7,8 @@ class CalculatorRule:
                  rec='',
                  var='',
                  val='',
-                 spr=True,
-                 aut=True):
+                 spr=False,
+                 aut=False):
         self.db_id =id
         self.expression =expression
         self.cause = cause
@@ -20,4 +20,3 @@ class CalculatorRule:
 
     def __str__(self):
         return self.expression
-

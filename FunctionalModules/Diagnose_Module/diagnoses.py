@@ -1,5 +1,21 @@
 import pandas as pd
 
+ops = {
+    "and": "[и]",
+    "or": "[или]",
+    "==": "[==]",
+    "<=": "[<=]",
+    ">=": "[>=]",
+    "!=": "[!=]",
+    "<": "[<]",
+    ">": "[>]",
+    "+": "[+]",
+    "-": "[-]",
+    "*": "[*]",
+    "/": "[/]",
+    "^": "[^]",
+}
+
 
 def add_to_string(str, dic, name):
     result = str
@@ -74,12 +90,22 @@ def check_statuses(data):
     return text_result
 
 
-def check_base_diagnoses(path, data):
+def check_diagnoses(conditions, data):
+    conditions_d = {"Выражение": [], "Только весна": [], "Только осень": [], "Причина": [], "Рекомендации": []}
+    var_val = {}
+    for c in conditions:
+        var_val[c.variable] = c.value
+        if c.recommendation != "":
+            conditions_d["Выражение"].append(c.expression)
+            conditions_d["Причина"].append(c.cause)
+            conditions_d["Рекомендации"].append(c.recommendation)
+            conditions_d["Только весна"].append(c.for_spring)
+            conditions_d["Только осень"].append(c.for_autumn)
     i = 1
     result = ""
     def_text = "Рекомендация {}:\n\tТип: {}\n\tПричина: {}\n\tРекомендация: {}\n"
     try:
-        resultsx = predict_by_xlsx(path, data)
+        resultsx = get_diagnose(conditions_d, var_val, data)
         if resultsx.__len__() > 0:
             for res in resultsx:
                 result += def_text.format(i, 'по одному диагнозу', res[0], res[1])
@@ -118,17 +144,17 @@ def split_to_conditions_and_unions(string):
         #         "Ошибка: Закрывающая скобочка без открывающей.")
         # elif string[i] != ' ':
         if string[i] != ' ':
-            if string.startswith('and', i):
+            if string.startswith(ops['and'], i):
                 if ss_start_idx != -1:
                     sub_strings.append(string[ss_start_idx:i].replace(' ', ''))
                     ss_start_idx = -1
-                unions.append('and')
+                unions.append(ops['and'])
                 i += 2
-            elif string.startswith('or', i):
+            elif string.startswith(ops['or'], i):
                 if ss_start_idx != -1:
                     sub_strings.append(string[ss_start_idx:i].replace(' ', ''))
                     ss_start_idx = -1
-                unions.append('or')
+                unions.append(ops['or'])
                 i += 1
             elif ss_start_idx == -1:
                 ss_start_idx = i
@@ -143,13 +169,21 @@ def prepare_string_to_compare(str):
 
 
 def get_val(element, data):
-    # element = element.replace(' ', '')
-    if element.__contains__('/'):
-        sub_el = element.split('/')
+    if element.__contains__(ops['/']):
+        sub_el = element.split(ops['/'])
         return get_val(sub_el[0], data) / get_val(sub_el[1], data)
-    elif element.__contains__('*'):
-        sub_el = element.split('*')
+    elif element.__contains__(ops['*']):
+        sub_el = element.split(ops['*'])
         return get_val(sub_el[0], data) * get_val(sub_el[1], data)
+    elif element.__contains__(ops['+']):
+        sub_el = element.split(ops['+'])
+        return get_val(sub_el[0], data) + get_val(sub_el[1], data)
+    elif element.__contains__(ops['-']):
+        sub_el = element.split(ops['-'])
+        return get_val(sub_el[0], data) - get_val(sub_el[1], data)
+    elif element.__contains__(ops['^']):
+        sub_el = element.split(ops['^'])
+        return get_val(sub_el[0], data) ^ get_val(sub_el[1], data)
     patient = data[list(data.keys())[0]]
     analysis = patient[list(patient.keys())[0]]
     analysis_keys = list(analysis.keys())
@@ -165,12 +199,12 @@ def get_val(element, data):
 
 def evaluate_condition(condition, data):
     operators = {
-        '<=': lambda a, b: float(a) <= float(b),
-        '==': lambda a, b: float(a) == float(b),
-        '!=': lambda a, b: float(a) != float(b),
-        '>=': lambda a, b: float(a) >= float(b),
-        '<': lambda a, b: float(a) < float(b),
-        '>': lambda a, b: float(a) > float(b),
+        ops['<=']: lambda a, b: float(a) <= float(b),
+        ops['==']: lambda a, b: float(a) == float(b),
+        ops['!=']: lambda a, b: float(a) != float(b),
+        ops['>=']: lambda a, b: float(a) >= float(b),
+        ops['<']: lambda a, b: float(a) < float(b),
+        ops['>']: lambda a, b: float(a) > float(b),
     }
     op = None
     idx = -1
@@ -191,12 +225,12 @@ def evaluate_condition(condition, data):
 def get_condition_result(condition, data):
     conditions = [condition]
     unions = []
-    if condition.__contains__('and') or condition.__contains__('or'):
+    if condition.__contains__(ops['and']) or condition.__contains__(ops['or']):
         conditions, unions = split_to_conditions_and_unions(condition)
         result = get_condition_result(conditions[0], data)
         if len(conditions) > 1:
             for i in range(1, len(conditions)):
-                if unions[i - 1] == 'and':
+                if unions[i - 1] == ops['and']:
                     result = result and get_condition_result(conditions[i], data)
                 else:
                     result = result or get_condition_result(conditions[i], data)
@@ -227,30 +261,22 @@ def check_for_autumn(autumn, dct):
     return True
 
 
-def predict_by_xlsx(path, dct):
-    data = pd.read_excel(path)
-    variables = {}
+def get_diagnose(conditions, variables, dct):
     result = []
-    for i in range(len(data['Переменная'])):
-        if pd.isna(data['Переменная'][i]):
-            break
-        variables[data['Переменная'][i]] = data['Значение'][i]
-    for i in range(len(data['Выражение'])):
-        if pd.isna(data['Выражение'][i]):
-            break
-        cond = data['Выражение'][i]
+    for i in range(len(conditions["Выражение"])):
+        cond = conditions['Выражение'][i]
         j = 0
         l = len(cond)
         while j < l:
             for v_k in list(variables.keys()):
-                if j + len(v_k) < l and cond.startswith(v_k, j) and (j + len(v_k) >= len(cond) or (
-                        cond[j + len(v_k)] != '+' and not cond[j + len(v_k)].isnumeric())):
-                    l = l - len(v_k) + len(variables[v_k])
+                if cond.startswith(v_k,j):
+                    j+= len(v_k) -1
                     cond = cond[0:j] + variables[v_k] + cond[j + len(v_k):]
+                    break
             j += 1
 
         if get_condition_result(cond, dct) and (
-                pd.isna(data['Только весна'][i]) or check_for_spring(data['Только весна'][i] == 'Да', dct)
-                and (pd.isna(data['Только осень'][i]) or check_for_autumn(data['Только осень'][i] == 'Да', dct))):
-            result.append((data['Причина'][i], data['Рекомендации'][i]))
+                pd.isna(conditions['Только весна'][i]) or check_for_spring(conditions['Только весна'][i], dct)
+                and (pd.isna(conditions['Только осень'][i]) or check_for_autumn(conditions['Только осень'][i], dct))):
+            result.append((conditions['Причина'][i], conditions['Рекомендации'][i]))
     return result
