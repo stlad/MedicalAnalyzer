@@ -44,6 +44,18 @@ create table parameter_results
 	deviation varchar(10)
 );
 
+create table calculator_rules
+(
+    rule_id serial primary key,
+    expr text,
+    cause text,
+    recommendation text,
+    variable text,
+    value text,
+    for_sping bool,
+    for_autumn bool
+);
+
 insert into parameter_catalog(name, interval_start, interval_end, unit) 
 values
 ('Лейкоциты (WBC)'     										,4.60, 	7.10,	'10E9/л'),
