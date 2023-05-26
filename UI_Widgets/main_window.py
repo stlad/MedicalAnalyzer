@@ -1,4 +1,5 @@
 import FunctionalModules.DB_Module.db_module
+from FunctionalModules.Diagnose_Module.Recommendation_Processing import RecommendationProcessor
 from  UI_Widgets.CreatePatient_window import *
 from UI_Widgets.Analysis_Window import *
 from UI_Widgets.RecomendationCalculatorWindow import *
@@ -108,19 +109,15 @@ class MainWindow(QMainWindow):
 
 
     def get_diagnosis(self):
-        proc = DiagnosisProcessor()
+        proc = RecommendationProcessor()
         # СДЕЛАТЬ ОБНОВЛЕНИЕ ДИАГНОЗА В БД
-        # СДЕЛАТЬ ВЫВОД в #self.diagnosis_edit().
-        pat_id = self.get_selected_patient_id() #self.current_patient_id
+        pat_id = self.get_selected_patient_id()
         current_anal_date = self.current_analysis_date
-        #diag = proc.GetDiagnosis(pat_id, current_anal_date)
-        #print( os.getcwd()+'\Diagram_Module\pse_code.xlsx')
         try:
-            diag = proc.GetDiagnosis(pat_id, current_anal_date, os.getcwd()+'\Diagram_Module\diagnoses.xlsx')
+            diag = proc.MakeRecommendation(CreateFullPatientFromDB(pat_id), current_anal_date)
         except Exception as e :
             #diag = e.args[0]
             diag = 'Параметры не соответствуют ни одному из условий для рекомендаций.'
-        #diag = 'Хорошо (пациент скомпенсирован по Т-звену) и сдает иммунограму через 6 мес'
         self.diagnosis_edit.setText(diag)
 
     def graph_preparation(self):
