@@ -17,10 +17,13 @@ class RecomendationCalculatorWindow(QWidget):
         self.addLineBtn.clicked.connect(lambda: self._add_row())
         self.removeLineBtn.clicked.connect(lambda: self._remove_row())
         self.db_save_btn.clicked.connect(lambda: self._save_to_db())
+        self.add_minus_btn.clicked.connect(lambda : self._add_to_current_cell("[[-]]"))
+        self.add_plus_btn.clicked.connect(lambda : self._add_to_current_cell("[[+]]"))
         self._refresh_rules()
 
 
-
+    def _add_to_current_cell(self,item):
+        self.tableWidget.currentItem().setText(self.tableWidget.currentItem().text()+item)
 
     def _load_table(self):
         tb = self.tableWidget
