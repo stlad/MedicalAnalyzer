@@ -149,17 +149,17 @@ def split_to_conditions_and_unions(string):
                     sub_strings.append(string[ss_start_idx:i].replace(' ', ''))
                     ss_start_idx = -1
                 unions.append(ops['and'])
-                i += 2
+                i += len(ops['and']) - 1
             elif string.startswith(ops['or'], i):
                 if ss_start_idx != -1:
                     sub_strings.append(string[ss_start_idx:i].replace(' ', ''))
                     ss_start_idx = -1
                 unions.append(ops['or'])
-                i += 1
+                i += len(ops['or']) - 1
             elif ss_start_idx == -1:
                 ss_start_idx = i
             elif i == len(string) - 1:
-                sub_strings.append(string[ss_start_idx + len(unions[-1]) - 1:i + 1].replace(' ', ''))
+                sub_strings.append(string[ss_start_idx:].replace(' ', ''))
         i += 1
     return sub_strings, unions
 
