@@ -183,7 +183,7 @@ def get_val(element, data):
         return get_val(sub_el[0], data) - get_val(sub_el[1], data)
     elif element.__contains__(ops['^']):
         sub_el = element.split(ops['^'])
-        return get_val(sub_el[0], data) ^ get_val(sub_el[1], data)
+        return get_val(sub_el[0], data) ** get_val(sub_el[1], data)
     patient = data[list(data.keys())[0]]
     analysis = patient[list(patient.keys())[0]]
     analysis_keys = list(analysis.keys())
@@ -266,17 +266,21 @@ def get_diagnose(conditions, variables, dct):
     for i in range(len(conditions["Выражение"])):
         cond = conditions['Выражение'][i]
         j = 0
-        l = len(cond)
-        while j < l:
+        # l = len(cond)
+        while j < len(cond):
             for v_k in list(variables.keys()):
-                if cond.startswith(v_k,j):
-                    j+= len(v_k) -1
+                # if j + len(v_k) < l and cond.startswith(v_k, j) and (j + len(v_k) >= len(cond) or (
+                #         cond[j + len(v_k)] != ops['+'] and not cond[j + len(v_k)].isnumeric())):
+                #     l = l - len(v_k) + len(variables[v_k])
+                #     cond = cond[0:j] + variables[v_k] + cond[j + len(v_k):]
+                if v_k != "" and cond.startswith(v_k, j):
                     cond = cond[0:j] + variables[v_k] + cond[j + len(v_k):]
+                    j += len(variables[v_k]) - 1
                     break
             j += 1
 
         if get_condition_result(cond, dct) and (
-                pd.isna(conditions['Только весна'][i]) or check_for_spring(conditions['Только весна'][i], dct)
-                and (pd.isna(conditions['Только осень'][i]) or check_for_autumn(conditions['Только осень'][i], dct))):
+                not conditions['Только весна'][i] or check_for_spring(conditions['Только весна'][i], dct)
+                and (not conditions['Только осень'][i] or check_for_autumn(conditions['Только осень'][i], dct))):
             result.append((conditions['Причина'][i], conditions['Рекомендации'][i]))
     return result
