@@ -281,7 +281,7 @@ def dump_all_patients_to_json(filename='patients.json'):
     dump_patient_to_json(patients_ids, filename=filename)
 
 def execute_sql(filename):
-    with open(filename) as f:
+    with open(filename, encoding='utf-8') as f:
         sql = f.read()
 
     con = MainDBController._create_connection_to_DB()
