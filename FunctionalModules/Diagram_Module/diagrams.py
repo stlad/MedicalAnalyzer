@@ -35,17 +35,18 @@ class Radar(object):
             ax.spines["polar"].set_visible(False)
             ax.set_ylim(0, 6.5)
 
-    def plot(self, values, names, maxs, *args, **kw):
+    def plot(self, values, names, add_annotation, *args, **kw):
         angle = np.deg2rad(np.r_[self.angles, self.angles[0]])
         values = np.r_[values, values[0]]
         self.ax.plot(angle, values, *args, **kw)
-        for i in range(len(names)):
-            self.ax.annotate(names[i],
-                             xy=(angle[i], values[i]),  # theta, radius
-                             xytext=(angle[i] + 0.5, values[i]),  # fraction, fraction
-                             arrowprops=dict(facecolor='black', arrowstyle="->", linewidth=1),
-                             fontsize=9,
-                             )
+        if add_annotation:
+            for i in range(len(names)):
+                self.ax.annotate(names[i],
+                                 xy=(angle[i], values[i]),  # theta, radius
+                                 xytext=(angle[i] + 0.5, values[i]),  # fraction, fraction
+                                 arrowprops=dict(facecolor='black', arrowstyle="->", linewidth=1),
+                                 fontsize=10,
+                                 )
 
 
 def get_age_ending(age):
@@ -81,9 +82,9 @@ def make_triangle_radar_diagram(data, title):
             naming_vals.append(round(vals[i][j], 2))
 
         if i == 1:
-            radar.plot(prepared_vals, vals[i], graph_max, "-", lw=2, color=colors[i], alpha=1, label=labels[i])
+            radar.plot(prepared_vals, vals[i], True, "-", lw=2, color=colors[i], alpha=1, label=labels[i])
         else:
-            radar.plot(prepared_vals, vals[i], graph_max, "--", lw=2, color=colors[i], alpha=1, label=labels[i])
+            radar.plot(prepared_vals, vals[i], False, "--", lw=2, color=colors[i], alpha=1, label=labels[i])
     radar.ax.legend(loc='best', bbox_to_anchor=(0.5, 0., 0.5, 0.5))
     pl.title(title, pad=40)
     return fig
@@ -91,7 +92,7 @@ def make_triangle_radar_diagram(data, title):
 
 def make_radar_diagram(data, title):
     names = data['names']
-    fig = pl.figure(figsize=(9,9))
+    fig = pl.figure(figsize=(9, 9))
     vals = (data['min'], data['res'], data['max'])
     labels = ("Нижние референтные значения", 'Результаты', "Верхние референтные значения")
     colors = ("g", "r", "g")
@@ -112,9 +113,9 @@ def make_radar_diagram(data, title):
             prepared_vals.append(vals[i][j] / graph_max[j] * 5)
 
         if i == 1:
-            radar.plot(prepared_vals, vals[i], graph_max, "-", lw=2, color=colors[i], alpha=1, label=labels[i])
+            radar.plot(prepared_vals, vals[i], True, "-", lw=2, color=colors[i], alpha=1, label=labels[i])
         else:
-            radar.plot(prepared_vals, vals[i], graph_max, "--", lw=2, color=colors[i], alpha=1, label=labels[i])
+            radar.plot(prepared_vals, vals[i], False, "--", lw=2, color=colors[i], alpha=1, label=labels[i])
     radar.ax.legend(loc='best', bbox_to_anchor=(0.5, 0., 0.5, 0.5))
     pl.title(title, pad=40)
     return fig
@@ -433,24 +434,24 @@ def make_triangle_radar_from_dic(data):
     if analysis['CD3+TNFa+(спонтанный)']['Результат'] == 0:
         fno_res = 0
     else:
-        #fno_res = analysis['CD3+TNFa+(стимулированный)']['Результат'] / analysis['CD3+TNFa+(спонтанный)']['Результат']
+        # fno_res = analysis['CD3+TNFa+(стимулированный)']['Результат'] / analysis['CD3+TNFa+(спонтанный)']['Результат']
         fno_res = analysis['Индекс {CD3+TNFa+(стимулированный)/CD3+TNFa+(спонтанный)}']['Результат']
     if analysis['CD3+IFNy+(спонтанный)']['Результат'] == 0:
         infer_res = 0
     else:
-        #infer_res = analysis['CD3+IFNy+(стимулированный)']['Результат'] / analysis['CD3+IFNy+(спонтанный)']['Результат']
+        # infer_res = analysis['CD3+IFNy+(стимулированный)']['Результат'] / analysis['CD3+IFNy+(спонтанный)']['Результат']
         infer_res = analysis['Индекс {CD3+IFNy+(стимулированный)/CD3+IFNy+(спонтанный)}']['Результат']
     if analysis['CD3+IL2+(спонтанный)']['Результат'] == 0:
         inlik_res = 0
     else:
-        #inlik_res = analysis['CD3+IL2+(стимулированный)']['Результат'] / analysis['CD3+IL2+(спонтанный)']['Результат']
+        # inlik_res = analysis['CD3+IL2+(стимулированный)']['Результат'] / analysis['CD3+IL2+(спонтанный)']['Результат']
         inlik_res = analysis['Индекс {CD3+IL2+(стимулированный)/CD3+IL2+(спонтанный)}']['Результат']
     fno_min = 80
     infer_min = 80
     inlik_min = 80
-    fno_max = 120 #0.942 / 0.9
-    infer_max = 120 #0.377 / 0.5
-    inlik_max = 120 #0.651 / 0.1
+    fno_max = 120  # 0.942 / 0.9
+    infer_max = 120  # 0.377 / 0.5
+    inlik_max = 120  # 0.651 / 0.1
     data = {
         'min': [fno_min, infer_min, inlik_min],
         'res': [fno_res, infer_res, inlik_res],
