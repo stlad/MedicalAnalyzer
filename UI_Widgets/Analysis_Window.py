@@ -93,6 +93,9 @@ class AnalysisWindow(QWidget):
         MainDBController.InsertListOfParametersByAnalysisId(self.analysis[0], result_list)
 
         self.is_saved_label.setText('Сохранено')
+        self.get_parameters()
+        self.save_btn.clicked.disconnect()
+        self.save_btn.clicked.connect(lambda: self.update_db())
 
 
     def update_db(self):

@@ -13,11 +13,12 @@ def CreateFullPatientFromDB(pat_id:int):
     for anal_list in MainDBController.GetAllAnalysisByPatientID(pat_id):
         current_anal = Analysis(patient, anal_list)
         params_list = MainDBController.GetAllParametersByAnalysisID(current_anal.id)
-        for i in range(len(params_list)):
-            param = Parameter(current_anal, params_list[i], catalog[i])
+        for i in range(len(catalog)):
+            if params_list[0] == params_list[1] and params_list[2] == params_list[3] and params_list[4] == params_list[5]:
+                param = Parameter(current_anal, params_list[i*2], catalog[i])
+            else:
+                param = Parameter(current_anal, params_list[i], catalog[i])
     return patient
-
-
 
 def PackOneAnalysisByLists(pat:list, anal:list, params:list, full_catalog:list):
     '''Создает экземпляр АНАЛИЗА с пиркрепленным пациентом. Используются листы значений из БД. Обращения к базе данных нет'''
