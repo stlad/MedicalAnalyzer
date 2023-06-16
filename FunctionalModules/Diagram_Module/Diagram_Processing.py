@@ -1,3 +1,5 @@
+from PyQt5.QtWidgets import QMessageBox
+
 from FunctionalModules.DB_Module.db_module import *
 from utilits import *
 from FunctionalModules.Diagram_Module.diagrams import *
@@ -69,8 +71,8 @@ class DiagramProcessor:
     def MakeRadar(self, patient:Patient, analysis_date:datetime):
         try:
             t, b = make_radars_from_dic(patient.to_json(analysis_date))
-        except KeyError:
-            print('Не заполнены анализы')
+        except Exception:
+            print('Невозможно построить график по данным анализам')
             return
         t_canvas = MplCanvas(fig=t)
         b_canvas = MplCanvas(fig=b)
@@ -79,8 +81,8 @@ class DiagramProcessor:
     def MakeTimeDiagram(self, patient:Patient, start_date:datetime, end_date:datetime):
         try:
             t,b = make_time_diagrams_from_dic(patient.to_json(start_date,end_date))
-        except KeyError:
-            print('Не заполнены анализы')
+        except Exception:
+            print('Невозможно построить график по данным анализам')
             return
         t_canvas = MplCanvas(fig=t)
         b_canvas = MplCanvas(fig=b)
@@ -89,8 +91,8 @@ class DiagramProcessor:
     def MakeTriangleDiagram(self, patient:Patient, analysis_date:datetime):
         try:
             f = make_triangle_radar_from_dic(patient.to_json(analysis_date))
-        except KeyError:
-            print('Не заполнены анализы')
+        except Exception:
+            print('Невозможно построить график по данным анализам')
             return
         f_canvas = MplCanvas(fig=f)
         return f_canvas

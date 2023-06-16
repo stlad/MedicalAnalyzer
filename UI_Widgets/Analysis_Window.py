@@ -148,6 +148,7 @@ class AnalysisWindow(QWidget):
             table.setItem(row,3, QTableWidgetItem(str(parameter[2])))
             table.setItem(row,4, QTableWidgetItem(str(parameter[3])))
             table.setItem(row,5, QTableWidgetItem(str(parameter[4])))
+            table.setItem(row,2, QTableWidgetItem(str(0)))
             #table.item(row, 0).setFlags(table.item(row, 0).flags() ^ Qt.ItemIsEditable)
             #table.item(row, 3).setFlags(table.item(row, 3).flags() ^ Qt.ItemIsEditable)
             #table.item(row, 4).setFlags(table.item(row, 4).flags() ^ Qt.ItemIsEditable)

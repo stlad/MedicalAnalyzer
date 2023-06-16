@@ -77,7 +77,7 @@ class DocxReporter:
         tbl.rows[6].cells[1].text = self.patient.genes  # ГЕНЫ 1,2,3
         tbl.rows[7].cells[1].text = self.patient.genes  # ГЕНЫ 1,2,3
         tbl.rows[8].cells[1].text = self.patient.genes  # ГЕНЫ 1,2,3
-        tbl.rows[9].cells[1].text = self.analysis.season #'0' if self.analysis.analysis_date.month in [3,4,5,6,7,8] else '1'
+        tbl.rows[9].cells[1].text = self.analysis.season + f' ({"Весна" if self.analysis.analysis_date.month in [3,4,5,6,7,8] else "Осень"})'#'0'  else '1'
 
         self._fill_params(tbl)
         return doc

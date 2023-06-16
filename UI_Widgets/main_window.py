@@ -271,8 +271,9 @@ class MainWindow(QMainWindow):
             toolbar1 = NavigationToolbar2QT(figs[1], self)
             self.graph_layout.addWidget(toolbar1, 1, 1)
             self.graph_layout.addWidget(figs[1], 0, 1)
-        except TypeError:
-            print('невозможно построить графики')
+        except Exception:
+            #print('невозможно построить графики')
+            QMessageBox.about(self, "Ошибка в построении графиков", "Невозможно построить график по данным анализам")
 
 
     def _draw_time_diagrams(self, patient):
@@ -287,8 +288,8 @@ class MainWindow(QMainWindow):
             toolbar1 = NavigationToolbar2QT(figs[1], self)
             self.graph_layout.addWidget(toolbar1, 2, 0)
             self.graph_layout.addWidget(figs[1], 3, 0)
-        except TypeError:
-            print('невозможно построить графики')
+        except Exception:
+            QMessageBox.about(self, "Ошибка в построении графика", "Невозможно построить график по данным анализам")
 
     def _draw_triangle_diagramms(self, patient, current_anal_date):
         fig = self.diagram_processor.MakeTriangleDiagram(patient, current_anal_date)
@@ -296,6 +297,6 @@ class MainWindow(QMainWindow):
             toolbar = NavigationToolbar2QT(fig, self)
             self.graph_layout.addWidget(toolbar, 1, 0)
             self.graph_layout.addWidget(fig, 0, 0)
-        except TypeError:
-            print('невозможно построить графики')
+        except Exception:
+            QMessageBox.about(self, "Ошибка в построении графика", "Невозможно построить график по данным анализам")
 
