@@ -69,7 +69,7 @@ def make_triangle_radar_diagram(data, title):
         graph_max.append(math.ceil(max((data['min'][i], data['res'][i], data['max'][i]))))
         ranges.append([])
         for j in range(5):
-            ranges[i].append(round((j + 1) * (graph_max[i] / 5), 2))
+            ranges[i].append(round((j + 1) * (max(graph_max) / 5), 2))
 
     titles = list(names)
 
@@ -78,7 +78,7 @@ def make_triangle_radar_diagram(data, title):
         prepared_vals = []
         naming_vals = []
         for j in range(len(vals[i])):
-            prepared_vals.append(vals[i][j] / graph_max[j] * 5)
+            prepared_vals.append(vals[i][j] / max(graph_max) * 5)
             naming_vals.append(round(vals[i][j], 2))
 
         if i == 1:
@@ -456,7 +456,7 @@ def make_triangle_radar_from_dic(data):
         'min': [fno_min, infer_min, inlik_min],
         'res': [fno_res, infer_res, inlik_res],
         'max': [fno_max, infer_max, inlik_max],
-        'names': ['ФНО', 'Интерферон', 'Интерликин']
+        'names': ['ФНО', 'Интерферон', 'Интерлейкин 2']
     }
     title = '{}\n{}\nЦитокиновые пары'.format(name, date)
     return make_triangle_radar_diagram(data, title)
