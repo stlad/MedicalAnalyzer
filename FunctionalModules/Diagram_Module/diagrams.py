@@ -122,7 +122,7 @@ def make_radar_diagram(data, title):
 
 
 def make_radars(data, name, date, age, diagnos):
-    diagram_types = ['Показатели В - клеточного звена иммунитета', 'Показатели T - клеточного звена иммунитета']
+    diagram_types = ['Относительные параметры В - клеточного звена иммунитета', 'Относительные параметры T - клеточного звена иммунитета']
     fig = make_radar_diagram(
         data['b'],
         "Пациент: {} \n"
@@ -391,19 +391,19 @@ def dic_prepare_data(data):
         radars_data.append({
             'b': {
                 'min': [
-                    9.6, 1.67, 0.53, 0.16
+                    16, 1.67, 0.53, 0.16
                 ],
                 'res': [
-                    reduce_dec_num(LYMF / CD19),
+                    reduce_dec_num(NEU / CD19),
                     reduce_dec_num(NEU / LYMF),
                     reduce_dec_num(CD19 / CD8),
                     reduce_dec_num(CD19 / CD4),
                 ],
                 'max':
                     [
-                        10, 1.8, 0.77, 0.31
+                        18, 1.8, 0.77, 0.31
                     ],
-                'names': ['LYMF/CD19', 'NEU/LYMF', 'CD19/CD8', 'CD19/CD4']
+                'names': ['NEU/CD19', 'NEU/LYMF', 'CD19/CD8', 'CD19/CD4']
             },
             't': {
                 'min':
@@ -456,7 +456,7 @@ def make_triangle_radar_from_dic(data):
         'min': [fno_min, infer_min, inlik_min],
         'res': [fno_res, infer_res, inlik_res],
         'max': [fno_max, infer_max, inlik_max],
-        'names': ['ФНО', 'Интерферон', 'Интерлейкин 2']
+        'names': ['ФНО', 'Интерферон гамма', 'Интерлейкин 2']
     }
     title = '{}\n{}\nЦитокиновые пары'.format(name, date)
     return make_triangle_radar_diagram(data, title)
